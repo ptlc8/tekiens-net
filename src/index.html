@@ -2,16 +2,57 @@
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<title>tekiens.net</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Tekiens.net</title>
+		<link rel="icon" href="https://cdn.atilla.org/ico/favicon.ico" />
+		<link rel="stylesheet" href="style.css" />
 		<script src="https://ambi.dev/utils.js"></script>
 	</head>
 	<body>
-		<h1>Bienvenue</h1> <i>sur</i> te<b>k</b>chniciens de surface.net
-		<br/>
-		<a href="https://eeisti.fr">>>> La meilleure asso <<<</a>
-		<h2>Associations:</h2>
-		<div id="associations"></div>
-		<script src="index.js"></script>
+		<header>
+			<h1>
+				Tekiens<span class="extension">.net</span>
+			</h1>
+			<nav>
+				<ul>
+					<li> <a href=".">Accueil</a> </li>
+					<li> <a href="assos.html">Associations</a> </li>
+					<li> <a href="https://eeisti.fr" target="_blank">>>> La meilleure asso <<<</a> </li>
+					<li> <a href="events.html">Événements</a> </li>
+					<li> <a href=".#links">Liens de l'école</a> </li>
+					<li> <a href=".#contribute">Participer</a> </li>
+				</ul>
+				<span class="open-button" onclick="this.parentElement.classList.toggle('open')"></span>
+			</nav>
+		</header>
+		<main>
+			<section>
+				<h2>La plateforme</h2>
+				Bienvenue sur tekiens.net, le site de la vie étudiante de CY Tech.
+				<br />
+				Le but de ce site est de centraliser les informations concernant les <a href="assos.html">associations</a> et les <a href="events.html">événements</a> de l'école.
+			</section>
+			<section id="links">
+				<h2>Liens de l'école</h2>
+				<ul>
+					<a href="https://cytech.cyu.fr"> <li>Site de CY Tech</li> </a>
+					<a href="https://mycy.cyu.fr"> <li>MyCY</li> </a>
+					<a href="https://arel.cy-tech.fr"> <li>AREL : plateforme pédagogique</li> </a>
+					<a href="https://services-web.u-cergy.fr/calendar"> <li>Celcat : emplois du temps</li> </a>
+					<a href="https://glpi.cy-tech.fr"> <li>GLPI : support informatique</li> </a>
+					<a href="https://doc.eisti.fr"> <li>Documentation EISTI</li> </a>
+				</ul>
+			</section>
+			<section id="contribute">
+				<h2>Vous souhaitez participer ?</h2>
+				<p>
+					Vous êtes intéressés pour découvrir le code, ou vous voulez simplement participer à l'amélioration de la plateforme ?
+					Rejoignez nous en CY307 ou sur les internets !
+					<br />
+					Le code source est disponible sur <a href="https://gitlab.com/ptlc8/tekiens-net" target="_blank">GitLab</a>.
+				</p>
+			</section>
+		</main>
 	</body>
 </html>
 

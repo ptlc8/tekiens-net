@@ -1,0 +1,91 @@
+:root {
+    font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+body {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+h1 {
+    margin: .5em 1em;
+    display: inline-block;
+}
+h1 .extension {
+    color: orange;
+    text-transform: uppercase;
+    font-size: .8em;
+}
+
+h2 {
+    font-size: 2em;
+    color: orange;
+    margin: .5em 0;
+}
+
+nav {
+    background: #333;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+nav ul {
+    list-style: none;
+}
+nav li {
+    display: inline-block;
+}
+nav li:hover {
+    background-color: #555;
+}
+nav a {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    padding: 1em;
+    cursor: pointer;
+}
+nav .open-button {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 1em;
+    cursor: pointer;
+    color: inherit;
+}
+nav .open-button:before {
+    content: "☰";
+}
+nav.open .open-button:before {
+    content: "✕";
+}
+
+section {
+    padding: 6em 10%;
+}
+section:nth-child(2n) {
+    background-color: #E3F2FD;
+}
+
+@media (max-width: 600px) {
+    nav {
+        height: 0;
+        padding-top: 3em;
+    }
+    nav.open {
+        height: auto;
+    }
+    nav ul {
+        margin: 0;
+    }
+    nav li {
+        display: block;
+    }
+    nav .open-button {
+        display: block;
+    }
+
+    section {
+        padding: 2em 1em;
+    }
+}
