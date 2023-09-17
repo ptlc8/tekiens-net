@@ -3,6 +3,7 @@ sendRequest("GET", "assos.json")
 	var assos = JSON.parse(res);
 	var assosDiv = document.getElementById("associations");
 	for (let asso of assos) {
+		if (asso.end) continue;
 		assosDiv.appendChild(createElement("div", {className: "card asso"}, [
 			createElement("h3", {}, asso.emoji + " " + asso.name[asso.name.length - 1] + " - " + asso.theme),
 			createElement("ul", {}, Object.entries(asso.socials).map(social =>
