@@ -90,3 +90,7 @@ section:nth-child(2n) {
         padding: 2em 1em;
     }
 }
+
+img {
+    object-fit: contain;
+}
