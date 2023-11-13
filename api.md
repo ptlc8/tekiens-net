@@ -49,17 +49,17 @@ Fonctionne aussi avec la méthode 🟠 PATCH.
 - Paramètres :
     - id : identifiant de l'association
     - session : identifiant de la session lié à l'association
-    - id : nouvel identifiant de l'association
-    - names : nouveaux noms de l'association dans l'ordre chronologique séparés par une virgule
-    - logos : nouveaux logos de l'association dans l'ordre chronologique séparés par une virgule
-    - start : nouvelle date de début de l'association
-    - end : nouvelle date de fin de l'association
-    - theme : nouveau thème de l'association
-    - campus : nouveau campus de l'association
-    - room : nouvelle salle de l'association
-    - socials : nouveaux réseaux sociaux de l'association au format JSON
-    - description : nouvelle description de l'association
-    - color : nouvelle couleur de l'association
+    - id : nouvel identifiant de l'association (facultatif)
+    - names : nouveaux noms de l'association dans l'ordre chronologique séparés par une virgule (facultatif)
+    - logos : nouveaux logos de l'association dans l'ordre chronologique séparés par une virgule (facultatif)
+    - start : nouvelle date de début de l'association (facultatif)
+    - end : nouvelle date de fin de l'association (facultatif)
+    - theme : nouveau thème de l'association (facultatif)
+    - campus : nouveau campus de l'association (facultatif)
+    - room : nouvelle salle de l'association (facultatif)
+    - socials : nouveaux réseaux sociaux de l'association au format JSON (facultatif)
+    - description : nouvelle description de l'association (facultatif)
+    - color : nouvelle couleur de l'association (facultatif)
 - Corps de la requête : association au format JSON
 - Fonction api.js : `Api.assos.update(id, asso)`
 
@@ -84,6 +84,16 @@ Récupère tous les événements.
 Ajoute un événement.
 - Paramètres :
     - session : identifiant de la session lié à l'association organisant l'événement
+    - title : titre de l'événement
+    - date : date et heure de l'événement au format SQL
+    - place : lieu de l'événement
+    - poster : affiche de l'événement (facultatif)
+    - description : description de l'événement (facultatif)
+    - price : prix de l'événement (facultatif)
+    - link : lien de l'événement (facultatif)
+    - access : accès à l'événement (facultatif)
+    - status : statut de l'événement (facultatif)
+    - capacity : capacité de l'événement (facultatif)
 - Corps de la requête : événement au format JSON
 - Fonction api.js : `Api.events.create(event)`
 
@@ -101,6 +111,16 @@ Fonctionne aussi avec la méthode 🟠 PATCH.
 - Paramètres :
     - id : identifiant de l'événement
     - session : identifiant de la session lié à l'association organisant l'événement
+    - title : titre de l'événement (facultatif)
+    - date : date et heure de l'événement au format SQL (facultatif)
+    - place : lieu de l'événement (facultatif)
+    - poster : affiche de l'événement (facultatif)
+    - description : description de l'événement (facultatif)
+    - price : prix de l'événement (facultatif)
+    - link : lien de l'événement (facultatif)
+    - access : accès à l'événement (facultatif)
+    - status : statut de l'événement (facultatif)
+    - capacity : capacité de l'événement (facultatif)
 - Corps de la requête : événement au format JSON
 - Fonction api.js : `Api.events.update(id, event)`
 

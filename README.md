@@ -5,11 +5,21 @@ Le but de ce site est de centraliser les informations concernant les association
 
 ## Prérequis
 
-### Linux
+### Debian / Ubuntu
 
 ```sh
 $ apt-get update
-$ apt-get install python3 python3-setuptools python3-venv
+$ apt-get install python3 python3-setuptools python3-venv npm
+$ npm install -g n
+$ n stable
+```
+Installer un système de gestion de base de données :
+```sh
+$ apt-get install mariadb-server
+```
+ou
+```sh
+$ apt-get install mysql-server
 ```
 
 ## Installation
@@ -22,7 +32,17 @@ $ cd front
 $ npm install
 ```
 
-## Compilation du front
+Créer une base de données et y exécuter le script `init.sql`.
+
+Créer un fichier `.env` dans le dossier `src` avec les identifiants de la base de données sous la forme suivante :
+```properties
+DATABASE_HOST=localhost
+DATABASE_USER=tekiens_net
+DATABASE_PASSWORD=supermotdepasse
+DATABASE_NAME=tekiens_net
+```
+
+## Compilation du front-end
 
 ```sh
 $ cd front
