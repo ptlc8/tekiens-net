@@ -1,0 +1,10 @@
+# python compiled files
+/src/__pycache__/
+
+# python environment
+/src/venv/
+
+# env file
+/src/.env
+
+!.gitkeep
