@@ -11,6 +11,8 @@ app.register_blueprint(api, url_prefix='/api')
 
 @app.route('/<path:path>')
 def get_front(path):
+    if path.split('/')[-1].find('.') == -1:
+        path = 'index.html'
     return send_from_directory('front/dist', path)
 
 @app.route('/')
