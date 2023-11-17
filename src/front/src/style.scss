@@ -5,6 +5,7 @@
 
     //color-scheme: light dark;
     //color: rgba(255, 255, 255, 0.87);
+    --accent-color: orange;
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -21,8 +22,35 @@ body {
     min-height: 100vh;
 }
 
+section {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+select,
+input,
+button {
+    border-radius: 4px;
+    padding: 4px 8px;
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, .1);
+    margin-top: 10px;
+    background-color: #fff;
+    border: 0;
+    font: inherit;
+    color: #404040;
+    color: rgba(0, 0, 0, 0.75);
+    box-sizing: border-box;
+}
+
 button {
     cursor: pointer;
-    font-size: inherit;
-    margin: 4px;
+    background-color: var(--accent-color);
+    color: white;
+}
+
+h2 {
+    font-size: 2em;
+    color: var(--accent-color);
+    margin: .5em 0;
 }

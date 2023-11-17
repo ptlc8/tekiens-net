@@ -1,7 +1,27 @@
-<script setup>
+<script>
 import { RouterLink, RouterView } from 'vue-router';
-import Api from './api.js'
+import { useSessionStore } from './stores/session';
 
+export default {
+    setup() {
+        var sessionStore = useSessionStore();
+        return { sessionStore };
+    },
+    computed: {
+        session() {
+            return this.sessionStore.session;
+        }
+    },
+    methods: {
+        logout() {
+            this.sessionStore.setSessionId(null);
+        },
+        async login() {
+            let session = await this.sessions.create(assoId, password);
+            this.sessionStore.setSessionId(session.id);
+        }
+    }
+};
 </script>
 
 <template>
@@ -9,14 +29,37 @@ import Api from './api.js'
         <h1>
             Tekiens<span class="extension">.net</span>
         </h1>
-        <!--<img src="https://ambi.dev/assets/unset.png" />-->
+        <div class="account" tabindex="0">
+            <template v-if="session != null">
+                <div class="header">
+                    <template v-if="session.asso">
+                        <span>{{ session.asso.names.slice(-1)[0] }}</span>
+                        <img :src="session.asso.logos.slice(-1)[0]" />
+                    </template>
+                </div>
+                <RouterLink :to="'/assos/' + session.asso_id" tag="button" custom v-slot="{ navigate }">
+                    <button @click="navigate">Ma page</button>
+                </RouterLink>
+                <RouterLink to="/dashboard" tag="button" custom v-slot="{ navigate }">
+                    <button @click="navigate">Dashboard</button>
+                </RouterLink>
+                <button @click="logout">Se déconnecter</button>
+            </template>
+            <template v-else>
+                <div class="header">
+                    <RouterLink to="login" custom v-slot="{ navigate }">
+                        <button @click="navigate">Se connecter</button>
+                    </RouterLink>
+                </div>
+            </template>
+        </div>
         <nav>
-            <RouterLink to=".">Accueil</RouterLink>
-            <RouterLink to="assos">Associations</RouterLink>
-            <RouterLink to="events">Événements</RouterLink>
-            <RouterLink to=".#links">Liens de l'école</RouterLink>
+            <RouterLink to="/">Accueil</RouterLink>
+            <RouterLink to="/assos">Associations</RouterLink>
+            <RouterLink to="/events">Événements</RouterLink>
+            <RouterLink to="/#links">Liens de l'école</RouterLink>
             <a href="https://archive.tekiens.net" target="_blank">Archives</a>
-            <RouterLink to="about">À propos</RouterLink>
+            <RouterLink to="/about">À propos</RouterLink>
             <span class="open-button" onclick="this.parentElement.classList.toggle('open')"></span>
         </nav>
     </header>
@@ -27,14 +70,58 @@ import Api from './api.js'
 
 <style lang="scss">
 header {
+    position: relative;
+
     h1 {
         margin: .5em 1em;
         display: inline-block;
 
         .extension {
-            color: orange;
+            color: var(--accent-color);
             text-transform: uppercase;
             font-size: .8em;
+        }
+    }
+
+    .account {
+        position: absolute;
+        right: 0;
+        top: 0;
+        max-height: 3em;
+        margin: .5em 1em;
+        padding: .5em 1em;
+        background-color: #eee;
+        border-radius: 8px;
+        z-index: 10;
+        overflow: hidden;
+        transition: max-height .2s;
+        display: flex;
+        flex-direction: column;
+
+        &:hover, &:focus-within {
+            max-height: 12em;
+        }
+
+        .header {
+            height: 3em;
+            flex: 0 0 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1em;
+
+            img {
+                height: 100%;
+                border-radius: 8px;
+            }
+
+            button {
+                margin: 0;
+            }
+
+            + * {
+                margin-top: .5em;
+            }
         }
     }
 

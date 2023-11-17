@@ -15,7 +15,7 @@ const Api = {
     },
     events: {
         get: function () {
-            return sendApiRequest("GET", "events", {}, undefined, "Getting events");
+            return sendApiRequest("GET", "events", {}, "Getting events");
         },
         getOne: function (id) {
             return sendApiRequest("GET", "events/" + encodeURIComponent(id), {}, "Getting event " + id);
@@ -37,19 +37,6 @@ const Api = {
         getOne: function (id) {
             return sendApiRequest("GET", "sessions/" + encodeURIComponent(id), {}, "Getting session");
         }
-    },
-    login: async function (assoId, password) {
-        let session = await this.sessions.create(assoId, password);
-        localStorage.setItem("session", session.id);
-    },
-    logout: function () {
-        localStorage.removeItem("session");
-    },
-    getSession: async function () {
-        let session = await this.sessions.getOne(localStorage.getItem("session"));
-        if (session === null)
-            localStorage.removeItem("session");
-        return session;
     }
 };
 
@@ -65,7 +52,7 @@ function sendApiRequest(method, endpoint, parameters={}, message=undefined) {
                 v instanceof Array ? v.map(i => k + "[]=" + encodeURIComponent(i)).join("&") : k + "=" + encodeURIComponent(v)
             ).join("&");
         var options = { method };
-        fetch("api/" + endpoint + "?" + urlParameters, options)
+        fetch("/api/" + endpoint + "?" + urlParameters, options)
             .then(res => res.json())
             .then(function (response) {
                 if (!response.success) {
