@@ -86,7 +86,7 @@ def put_asso(id):
 
 @api.route('/assos/<id>/events', methods=['GET'])
 def get_asso_events(id):
-    mycursor.execute("SELECT * FROM events WHERE asso_id = %s", (id,))
+    mycursor.execute("SELECT * FROM events WHERE asso_id = %s ORDER BY date", (id,))
     events = mycursor.fetchall()
     return success(events)
 
@@ -95,7 +95,7 @@ def get_asso_events(id):
 
 @api.route('/events', methods=['GET'])
 def get_events():
-    mycursor.execute("SELECT * FROM events")
+    mycursor.execute("SELECT * FROM events ORDER BY date")
     events = mycursor.fetchall()
     return success(events)
 
