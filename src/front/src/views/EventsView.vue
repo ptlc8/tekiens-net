@@ -79,7 +79,7 @@ export default {
                     </div>
                     <div class="infos">
                         <span class="title">{{ event.title }}</span>
-                        <RouterLink :to="'/asssos/' + event.asso_id">{{ event.asso_id }}</RouterLink>
+                        <RouterLink :to="'/assos/' + event.asso_id">{{ event.asso_id }}</RouterLink>
                         {{ new Date(event.date).toLocaleString("FR-fr") }}
                     </div>
                 </RouterLink>

@@ -53,6 +53,14 @@ var router = createRouter({
             }
         },
         {
+            path: '/links',
+            name: 'links',
+            component: () => import('./views/LinksView.vue'),
+            meta: {
+                title: 'Liens de l\'école - Tekiens.net'
+            }
+        },
+        {
             path: '/about',
             name: 'about',
             component: () => import('./views/AboutView.vue'),
