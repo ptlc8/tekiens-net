@@ -37,10 +37,10 @@ export default {
                         <img :src="session.asso.logos.slice(-1)[0]" />
                     </template>
                 </div>
-                <RouterLink :to="'/assos/' + session.asso_id" tag="button" custom v-slot="{ navigate }">
+                <RouterLink :to="'/assos/' + session.asso_id" custom v-slot="{ navigate }">
                     <button @click="navigate">Ma page</button>
                 </RouterLink>
-                <RouterLink to="/dashboard" tag="button" custom v-slot="{ navigate }">
+                <RouterLink to="/dashboard" custom v-slot="{ navigate }">
                     <button @click="navigate">Dashboard</button>
                 </RouterLink>
                 <button @click="logout">Se déconnecter</button>
@@ -57,7 +57,7 @@ export default {
             <RouterLink to="/">Accueil</RouterLink>
             <RouterLink to="/assos">Associations</RouterLink>
             <RouterLink to="/events">Événements</RouterLink>
-            <RouterLink to="/#links">Liens de l'école</RouterLink>
+            <RouterLink to="/links">Liens de l'école</RouterLink>
             <a href="https://archive.tekiens.net" target="_blank">Archives</a>
             <RouterLink to="/about">À propos</RouterLink>
             <span class="open-button" onclick="this.parentElement.classList.toggle('open')"></span>
@@ -66,6 +66,12 @@ export default {
     <main>
         <RouterView />
     </main>
+    <footer>
+        <span></span>
+        <span>
+            Fait par <a href="https://atilla.org" target="_blank">ATILLA</a> avec &lt;3
+        </span>
+    </footer>
 </template>
 
 <style lang="scss">
@@ -143,7 +149,7 @@ header {
             cursor: pointer;
             transition: background-color .2s;
 
-            &:hover {
+            &:hover, &:focus-within {
                 background-color: #444;
             }
 
@@ -189,6 +195,24 @@ header {
         nav .open-button {
             display: block;
         }
+    }
+}
+main {
+    flex: 1;
+}
+footer {
+    display: flex;
+    background-color: var(--accent-color);
+    color: #424242;
+    padding: 2em;
+    
+    > * {
+        margin: auto;
+    }
+
+    a {
+        color: white;
+        text-decoration: none;
     }
 }
 </style>
