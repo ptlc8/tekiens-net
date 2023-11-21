@@ -1,11 +1,13 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router';
 import { useSessionStore } from './stores/session';
+import { ref } from 'vue';
 
 export default {
     setup() {
         var sessionStore = useSessionStore();
-        return { sessionStore };
+        var nav = ref(null);
+        return { sessionStore, nav };
     },
     computed: {
         session() {
@@ -19,6 +21,11 @@ export default {
         async login() {
             let session = await this.sessions.create(assoId, password);
             this.sessionStore.setSessionId(session.id);
+        }
+    },
+    watch: {
+        $route() {
+            this.nav.classList.remove('open');
         }
     }
 };
@@ -53,13 +60,23 @@ export default {
                 </div>
             </template>
         </div>
-        <nav>
+        <nav ref="nav">
             <RouterLink to="/">Accueil</RouterLink>
             <RouterLink to="/assos">Associations</RouterLink>
             <RouterLink to="/events">Événements</RouterLink>
-            <RouterLink to="/links">Liens de l'école</RouterLink>
-            <a href="https://archive.tekiens.net" target="_blank">Archives</a>
+            <a target="_blank" href="https://archive.tekiens.net">Archives</a>
             <RouterLink to="/about">À propos</RouterLink>
+            <div class="school-links">
+                <a>Liens de l'école</a>
+                <div>
+                    <a target="_blank" href="https://cytech.cyu.fr/">Site de CY Tech</a>
+                    <a target="_blank" href="https://mycy.cyu.fr/">MyCY</a>
+                    <a target="_blank" href="https://arel.cy-tech.fr/">AREL : plateforme pédagogique</a>
+                    <a target="_blank" href="https://services-web.u-cergy.fr/calendar">Celcat : emploi du temps</a>
+                    <a target="_blank" href="https://glpi.cy-tech.fr/">GLPI : support informatique</a>
+                    <a target="_blank" href="https://doc.eisti.fr/">Documentation EISTI</a>
+                </div>
+            </div>
             <span class="open-button" onclick="this.parentElement.classList.toggle('open')"></span>
         </nav>
     </header>
@@ -135,7 +152,6 @@ header {
         background: #333;
         color: white;
         position: relative;
-        overflow: hidden;
         display: flex;
         padding: 0 1em;
 
@@ -155,6 +171,26 @@ header {
 
             &.router-link-active {
                 background-color: #555;
+            }
+        }
+
+        .school-links {
+            flex: 1;
+            position: relative;
+
+            > div {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: #333;
+                height: 0;
+                overflow: hidden;
+                z-index: 5;
+            }
+
+            &:hover > div {
+                height: auto;
             }
         }
 
@@ -185,6 +221,11 @@ header {
             padding: 3em 0 0 0;
             margin: 0;
             flex-direction: column;
+            overflow: hidden;
+
+            .school-links > div {
+                position: static;
+            }
         }
         nav.open {
             height: auto;
