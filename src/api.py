@@ -3,6 +3,7 @@ import json
 import os
 from dotenv import load_dotenv
 import mysql.connector
+#from flaskext.mysql import MySQL
 import secrets
 
 load_dotenv()
@@ -10,14 +11,15 @@ load_dotenv()
 
 # database
 
-mydb = mysql.connector.connect(
-    host=os.environ.get('DATABASE_HOST'),
-    user=os.environ.get('DATABASE_USER'),
-    password=os.environ.get('DATABASE_PASS'),
-    database=os.environ.get('DATABASE_NAME'),
-    autocommit=True
-)
-mycursor = mydb.cursor(dictionary=True)
+def get_db():
+    mydb = mysql.connector.connect(
+        host=os.environ.get('DATABASE_HOST'),
+        user=os.environ.get('DATABASE_USER'),
+        password=os.environ.get('DATABASE_PASS'),
+        database=os.environ.get('DATABASE_NAME'),
+        autocommit=True
+    )
+    return mydb
 
 # only use editable columns
 assos_columns = ['id', 'names', 'logos', 'start', 'end', 'theme', 'campus', 'room', 'socials', 'description', 'color']
@@ -55,12 +57,16 @@ def unparse_asso(asso):
 
 @api.route('/assos', methods=['GET'])
 def get_assos():
+    mydb = get_db()
+    mycursor = mydb.cursor(dictionary=True)
     mycursor.execute("SELECT * FROM assos")
     assos = [parse_asso(asso) for asso in mycursor.fetchall()]
     return success(assos)
 
 @api.route('/assos/<id>', methods=['GET'])
 def get_asso(id):
+    mydb = get_db()
+    mycursor = mydb.cursor(dictionary=True)
     mycursor.execute("SELECT * FROM assos WHERE id = %s", (id,))
     result = mycursor.fetchone()
     if not result:
@@ -73,6 +79,8 @@ def put_asso(id):
     session_id = request.args.get('session')
     if not session_id:
         return error('Missing session')
+    mydb = get_db()
+    mycursor = mydb.cursor(dictionary=True)
     mycursor.execute("SELECT * FROM sessions WHERE id = %s AND asso_id = %s", (session_id, id))
     session = mycursor.fetchone()
     if not session:
@@ -86,6 +94,8 @@ def put_asso(id):
 
 @api.route('/assos/<id>/events', methods=['GET'])
 def get_asso_events(id):
+    mydb = get_db()
+    mycursor = mydb.cursor(dictionary=True)
     mycursor.execute("SELECT * FROM events WHERE asso_id = %s ORDER BY date", (id,))
     events = mycursor.fetchall()
     return success(events)
@@ -95,6 +105,8 @@ def get_asso_events(id):
 
 @api.route('/events', methods=['GET'])
 def get_events():
+    mydb = get_db()
+    mycursor = mydb.cursor(dictionary=True)
     mycursor.execute("SELECT * FROM events ORDER BY date")
     events = mycursor.fetchall()
     return success(events)
@@ -107,6 +119,8 @@ def post_event():
     new_event = {k: v for k, v in request.args.items() if k in events_columns}
     if not all([k in new_event for k in events_needed_columns]):
         return error('Missing parameters')
+    mydb = get_db()
+    mycursor = mydb.cursor(dictionary=True)
     mycursor.execute("INSERT INTO events (asso_id" + ''.join([f', {k}' for k in new_event.keys()]) + ") VALUES ((SELECT asso_id FROM sessions WHERE id = %s)" + (', %s' * len(new_event)) + ");", (session, *new_event.values()))
     if not mycursor.rowcount:
         return error('Unauthorized', 403)
@@ -114,6 +128,8 @@ def post_event():
 
 @api.route('/events/<id>', methods=['GET'])
 def get_event(id):
+    mydb = get_db()
+    mycursor = mydb.cursor(dictionary=True)
     mycursor.execute("SELECT * FROM events WHERE id = %s", (id,))
     event = mycursor.fetchone()
     if not event:
@@ -125,6 +141,8 @@ def put_event(id):
     session_id = request.args.get('session')
     if not session_id:
         return error('Missing session')
+    mydb = get_db()
+    mycursor = mydb.cursor(dictionary=True)
     mycursor.execute("SELECT *, (asso_id = (SELECT asso_id FROM sessions WHERE id = %s)) AS editable FROM events WHERE id = %s", (session_id, id,))
     event = mycursor.fetchone()
     if not event:
@@ -143,6 +161,8 @@ def delete_event(id):
     session = request.args.get('session')
     if not session:
         return error('Missing session')
+    mydb = get_db()
+    mycursor = mydb.cursor(dictionary=True)
     mycursor.execute("SELECT *, (asso_id = (SELECT asso_id FROM sessions WHERE id = %s)) AS editable FROM events WHERE id = %s", (session, id,))
     event = mycursor.fetchone()
     if not event:
@@ -157,6 +177,8 @@ def delete_event(id):
 
 @api.route('/sessions/<id>', methods=['GET'])
 def get_sessions(id):
+    mydb = get_db()
+    mycursor = mydb.cursor(dictionary=True)
     mycursor.execute("SELECT * FROM sessions WHERE id = %s", (id,))
     session = mycursor.fetchone()
     if not session:
@@ -169,6 +191,8 @@ def post_session():
     password = request.args.get('password')
     if not asso_id or not password:
         return error('Missing parameters')
+    mydb = get_db()
+    mycursor = mydb.cursor(dictionary=True)
     # TODO: implement password
     #mycursor.execute("SELECT * FROM assos WHERE id = %s AND password = %s", (assoId, password))
     mycursor.execute("SELECT * FROM assos WHERE id = %s", (asso_id,))
