@@ -1,8 +1,11 @@
 <script>
 import Api from '../api';
-import { RouterLink } from 'vue-router';
+import EventPreview from '../components/EventPreview.vue';
 
 export default {
+    components: {
+        EventPreview
+    },
     data() {
         return {
             _events: [],
@@ -58,7 +61,7 @@ export default {
     mounted() {
         this.getEvents();
     }
-}
+};
 </script>
 
 <template>
@@ -73,16 +76,7 @@ export default {
         <div v-for="(events, monday) in getEventsByWeek()" :key="monday">
             <h2>{{ getWeekName(monday) }}</h2>
             <div class="events">
-                <RouterLink v-for="event in events" :key="event.id" :to="'/events/' + event.id" class="event">
-                    <div class="poster">
-                        <img :src="event.poster" :alt="event.title" width="300" />
-                    </div>
-                    <div class="infos">
-                        <span class="title">{{ event.title }}</span>
-                        <RouterLink :to="'/assos/' + event.asso_id">{{ event.asso_id }}</RouterLink>
-                        {{ new Date(event.date).toLocaleString("FR-fr") }}
-                    </div>
-                </RouterLink>
+                <EventPreview v-for="event in events" :key="event.id" :event="event" />
             </div>
         </div>
     </section>
@@ -93,35 +87,5 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-
-    .event {
-        flex: 16em 1 1;
-        max-width: 32em;
-        margin: 0.5em;
-        border-radius: 4px;
-        box-shadow: 0 0 10px 2px rgba(0, 0, 0, .1);
-        overflow: hidden;
-        color: inherit;
-        text-decoration: none;
-
-        .poster {
-            height: 12em;
-            overflow: hidden;
-
-            img {
-                width: 100%;
-            }
-        }
-
-        .infos {
-            display: flex;
-            flex-direction: column;
-            margin: .5em 1em;
-
-            .title {
-                font-weight: bold;
-            }
-        }
-    }
 }
 </style>
