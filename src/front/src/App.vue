@@ -40,8 +40,8 @@ export default {
             <template v-if="session != null">
                 <div class="header">
                     <template v-if="session.asso">
-                        <span>{{ session.asso.names.slice(-1)[0] }}</span>
-                        <img :src="session.asso.logos.slice(-1)[0]" />
+                        <span>{{ session.asso.names[0] }}</span>
+                        <img :src="session.asso.logos[0]" />
                     </template>
                 </div>
                 <RouterLink :to="'/assos/' + session.asso_id" custom v-slot="{ navigate }">
@@ -66,7 +66,7 @@ export default {
             <RouterLink to="/events">Événements</RouterLink>
             <a target="_blank" href="https://archive.tekiens.net">Archives</a>
             <RouterLink to="/about">À propos</RouterLink>
-            <div class="school-links">
+            <div class="school-links" tabindex="0">
                 <a>Liens de l'école</a>
                 <div>
                     <a target="_blank" href="https://cytech.cyu.fr/">Site de CY Tech</a>
@@ -189,7 +189,7 @@ header {
                 z-index: 5;
             }
 
-            &:hover > div {
+            &:hover > div, &:focus-within > div {
                 height: auto;
             }
         }
