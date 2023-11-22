@@ -39,7 +39,7 @@ export default {
         <article>
             <h2>Événements à venir</h2>
             <div class="events">
-                <EventPreview v-for="event in events" :key="event.id" :event="event" />
+                <EventPreview v-for="event in events" :key="event.id" :event="event" :asso="assos.find(a => a.id == event.asso_id)" />
                 <RouterLink to="/events" class="more">Voir tous les événements</RouterLink>
             </div>
         </article>

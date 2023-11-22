@@ -8,6 +8,7 @@ export default {
     },
     data() {
         return {
+            assos: [],
             _events: [],
             error: null,
             //campus: {}
@@ -30,9 +31,12 @@ export default {
                         return campus;
                     }, {});*/
                 })
-                .catch((error) => {
-                    this.error = error;
-                });
+                .catch(error => this.error = error);
+        },
+        getAssos() {
+            Api.assos.get()
+                .then(assos => this.assos = assos)
+                .catch(error => this.error = error);
         },
         getMonday(date) {
             date = new Date(date);
@@ -60,6 +64,7 @@ export default {
     },
     mounted() {
         this.getEvents();
+        this.getAssos();
     }
 };
 </script>
@@ -76,7 +81,7 @@ export default {
         <div v-for="(events, monday) in getEventsByWeek()" :key="monday">
             <h2>{{ getWeekName(monday) }}</h2>
             <div class="events">
-                <EventPreview v-for="event in events" :key="event.id" :event="event" />
+                <EventPreview v-for="event in events" :key="event.id" :event="event" :asso="assos.find(a => a.id == event.asso_id)" />
             </div>
         </div>
     </section>
