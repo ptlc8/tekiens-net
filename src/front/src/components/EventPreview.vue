@@ -40,6 +40,7 @@ export default {
     overflow: hidden;
     color: inherit;
     text-decoration: none;
+    background-color: white;
 
     .poster {
         height: 12em;

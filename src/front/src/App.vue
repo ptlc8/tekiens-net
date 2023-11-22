@@ -33,9 +33,11 @@ export default {
 
 <template>
     <header>
-        <h1>
-            Tekiens<span class="extension">.net</span>
-        </h1>
+        <RouterLink to="/" custom v-slot="{ navigate }">
+            <h1 @click="navigate">
+                Tekiens<span class="extension">.net</span>
+            </h1>
+        </RouterLink>
         <div class="account" tabindex="0">
             <template v-if="session != null">
                 <div class="header">
@@ -98,6 +100,7 @@ header {
     h1 {
         margin: .5em 1em;
         display: inline-block;
+        cursor: pointer;
 
         .extension {
             color: var(--accent-color);
