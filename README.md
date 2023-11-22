@@ -38,7 +38,7 @@ Créer un fichier `.env` dans le dossier `src` avec les identifiants de la base 
 ```properties
 DATABASE_HOST=localhost
 DATABASE_USER=tekiens_net
-DATABASE_PASSWORD=supermotdepasse
+DATABASE_PASS=supermotdepasse
 DATABASE_NAME=tekiens_net
 ```
 
