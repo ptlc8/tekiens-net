@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, g
 import json
 import os
 from dotenv import load_dotenv
@@ -36,6 +36,15 @@ def success(data, status=200):
 def error(message, status=400):
     return json.dumps({'success': False, 'error': message}, default=str), status, {'ContentType': 'application/json'}
 
+@api.url_value_preprocessor
+def url_value_preprocess(endpoint, values):
+    g.args = {}
+    for k in request.args.keys():
+        if k.endswith('[]'):
+            g.args[k[0:-2]] = request.args.getlist(k)
+        else:
+            g.args[k] = request.args.get(k)
+
 
 # assos
 
@@ -60,18 +69,18 @@ def get_assos():
     mycursor = mydb.cursor(dictionary=True)
     sql = "SELECT * FROM assos WHERE 1=1"
     params = ()
-    if 'campus' in request.args:
+    if 'campus' in g.args:
         sql += " AND campus = %s"
-        params += (request.args.get('campus'),)
-    if 'before' in request.args:
+        params += (g.args.get('campus'),)
+    if 'before' in g.args:
         sql += " AND (start < %s OR start IS NULL)"
-        params += (request.args.get('before'),)
-    if 'after' in request.args:
+        params += (g.args.get('before'),)
+    if 'after' in g.args:
         sql += " AND (end > %s OR end IS NULL)"
-        params += (request.args.get('after'),)
-    if 'limit' in request.args:
+        params += (g.args.get('after'),)
+    if 'limit' in g.args:
         sql += " LIMIT %s"
-        params += (int(request.args.get('limit')),)
+        params += (int(g.args.get('limit')),)
     mycursor.execute(sql, params)
     assos = [parse_asso(asso) for asso in mycursor.fetchall()]
     return success(assos)
@@ -89,7 +98,7 @@ def get_asso(id):
 
 @api.route('/assos/<id>', methods=['PUT', 'PATCH'])
 def put_asso(id):
-    session_id = request.args.get('session')
+    session_id = g.args.get('session')
     if not session_id:
         return error('Missing session')
     mydb = get_db()
@@ -98,7 +107,7 @@ def put_asso(id):
     session = mycursor.fetchone()
     if not session:
         return error('Unauthorized', 403)
-    new_asso = unparse_asso({k: v for k, v in request.args.items() if k in assos_columns})
+    new_asso = unparse_asso({k: v for k, v in g.args.items() if k in assos_columns})
     if len(new_asso) == 0:
         return error('Nothing to update', 200)
     sql = "UPDATE assos SET " + ', '.join([f"{k} = %s" for k in new_asso.keys()]) + " WHERE id = %s"
@@ -111,18 +120,18 @@ def get_asso_events(id):
     mycursor = mydb.cursor(dictionary=True)
     sql = "SELECT * FROM events WHERE asso_id = %s"
     params = (id,)
-    if 'before' in request.args:
+    if 'before' in g.args:
         sql += " AND date < %s"
-        params += (request.args.get('before'),)
-    if 'after' in request.args:
+        params += (g.args.get('before'),)
+    if 'after' in g.args:
         sql += " AND date > %s"
-        params += (request.args.get('after'),)
+        params += (g.args.get('after'),)
     sql += " ORDER BY date"
-    if 'desc' in request.args:
+    if 'desc' in g.args:
         sql += " DESC"
-    if 'limit' in request.args:
+    if 'limit' in g.args:
         sql += " LIMIT %s"
-        params += (int(request.args.get('limit')),)
+        params += (int(g.args.get('limit')),)
     mycursor.execute(sql, params)
     events = mycursor.fetchall()
     return success(events)
@@ -136,28 +145,28 @@ def get_events():
     mycursor = mydb.cursor(dictionary=True)
     sql = "SELECT * FROM events WHERE 1=1"
     params = ()
-    if 'before' in request.args:
+    if 'before' in g.args:
         sql += " AND date < %s"
-        params += (request.args.get('before'),)
-    if 'after' in request.args:
+        params += (g.args.get('before'),)
+    if 'after' in g.args:
         sql += " AND date > %s"
-        params += (request.args.get('after'),)
+        params += (g.args.get('after'),)
     sql += " ORDER BY date"
-    if 'desc' in request.args:
+    if 'desc' in g.args:
         sql += " DESC"
-    if 'limit' in request.args:
+    if 'limit' in g.args:
         sql += " LIMIT %s"
-        params += (int(request.args.get('limit')),)
+        params += (int(g.args.get('limit')),)
     mycursor.execute(sql, params)
     events = mycursor.fetchall()
     return success(events)
 
 @api.route('/events', methods=['POST'])
 def post_event():
-    session = request.args.get('session')
+    session = g.args.get('session')
     if not session:
         return error('Missing session')
-    new_event = {k: v for k, v in request.args.items() if k in events_columns}
+    new_event = {k: v for k, v in g.args.items() if k in events_columns}
     if not all([k in new_event for k in events_needed_columns]):
         return error('Missing parameters')
     mydb = get_db()
@@ -179,7 +188,7 @@ def get_event(id):
 
 @api.route('/events/<id>', methods=['PUT', 'PATCH'])
 def put_event(id):
-    session_id = request.args.get('session')
+    session_id = g.args.get('session')
     if not session_id:
         return error('Missing session')
     mydb = get_db()
@@ -190,7 +199,7 @@ def put_event(id):
         return error('Not found', 404)
     if not event['editable']:
         return error('Unauthorized', 403)
-    new_event = {k: v for k, v in request.args.items() if k in events_columns}
+    new_event = {k: v for k, v in g.args.items() if k in events_columns}
     if len(new_event) == 0:
         return error('Nothing to update', 200)
     sql = "UPDATE events SET " + ', '.join([f"{k} = %s" for k in new_event.keys()]) + " WHERE id = %s"
@@ -199,7 +208,7 @@ def put_event(id):
 
 @api.route('/events/<id>', methods=['DELETE'])
 def delete_event(id):
-    session = request.args.get('session')
+    session = g.args.get('session')
     if not session:
         return error('Missing session')
     mydb = get_db()
@@ -228,8 +237,8 @@ def get_sessions(id):
 
 @api.route('/sessions', methods=['POST'])
 def post_session():
-    asso_id = request.args.get('asso')
-    password = request.args.get('password')
+    asso_id = g.args.get('asso')
+    password = g.args.get('password')
     if not asso_id or not password:
         return error('Missing parameters')
     mydb = get_db()
