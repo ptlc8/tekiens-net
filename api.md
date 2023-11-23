@@ -14,17 +14,17 @@ Cette API permet d'effectuer des opérations sur des associations (assos) et des
 
 | Méthode   | URL                                                | Description                                                           |
 |-----------|----------------------------------------------------|-----------------------------------------------------------------------|
-| 🔵 GET    | [/api/assos](#🔵-get-apiassos)                     | Récupère toutes les associations                                      |
-| 🔵 GET    | [/api/assos/{id}](#🔵-get-apiassosid)              | Récupère l'association avec l'identifiant {id}                        |
-| 🟡 PUT    | [/api/assos/{id}](#🟡-put-apiassosid)              | Met à jour l'association avec l'identifiant {id}                      |
-| 🔵 GET    | [/api/assos/{id}/events](#🔵-get-apiassosidevents) | Récupère tous les événements de l'association avec l'identifiant {id} |
-| 🔵 GET    | [/api/events](#🔵-get-apievents)                   | Récupère tous les événements                                          |
-| 🟢 POST   | [/api/events](#🟢-post-apievents)                  | Ajoute un événement                                                   |
-| 🔵 GET    | [/api/events/{id}](#🔵-get-apieventsid)            | Récupère l'événement avec l'identifiant {id}                          |
-| 🟡 PUT    | [/api/events/{id}](#🟡-put-apieventsid)            | Met à jour l'événement avec l'identifiant {id}                        |
-| 🔴 DELETE | [/api/events/{id}](#🔴-delete-apieventsid)         | Supprime l'événement avec l'identifiant {id}                          |
-| 🟢 POST   | [/api/sessions](#🟢-post-apisessions)              | Crée une session lié à une association                                |
-| 🔵 GET    | [/api/sessions/{id}](#🔵-get-apisessionsid)        | Récupère la session avec l'identifiant {id}                           |
+| 🔵 GET    | [/api/assos](#-get-apiassos)                     | Récupère toutes les associations                                      |
+| 🔵 GET    | [/api/assos/{id}](#-get-apiassosid)              | Récupère l'association avec l'identifiant {id}                        |
+| 🟡 PUT    | [/api/assos/{id}](#-put-apiassosid)              | Met à jour l'association avec l'identifiant {id}                      |
+| 🔵 GET    | [/api/assos/{id}/events](#-get-apiassosidevents) | Récupère tous les événements de l'association avec l'identifiant {id} |
+| 🔵 GET    | [/api/events](#-get-apievents)                   | Récupère tous les événements                                          |
+| 🟢 POST   | [/api/events](#-post-apievents)                  | Ajoute un événement                                                   |
+| 🔵 GET    | [/api/events/{id}](#-get-apieventsid)            | Récupère l'événement avec l'identifiant {id}                          |
+| 🟡 PUT    | [/api/events/{id}](#-put-apieventsid)            | Met à jour l'événement avec l'identifiant {id}                        |
+| 🔴 DELETE | [/api/events/{id}](#-delete-apieventsid)         | Supprime l'événement avec l'identifiant {id}                          |
+| 🟢 POST   | [/api/sessions](#-post-apisessions)              | Crée une session lié à une association                                |
+| 🔵 GET    | [/api/sessions/{id}](#-get-apisessionsid)        | Récupère la session avec l'identifiant {id}                           |
 
 
 ## Assos
