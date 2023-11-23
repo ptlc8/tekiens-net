@@ -75,6 +75,30 @@ var router = createRouter({
             meta: {
                 title: 'Dashboard - Tekiens.net'
             }
+        },
+        {
+            path: '/assos/:id/edit',
+            name: 'asso-edit',
+            component: () => import('./views/AssoEditView.vue'),
+            meta: {
+                title: 'Éditer une association - Tekiens.net'
+            }
+        },
+        {
+            path: '/events/create',
+            name: 'event-create',
+            component: () => import('./views/EventCreateView.vue'),
+            meta: {
+                title: 'Créer un événement - Tekiens.net'
+            }
+        },
+        {
+            path: '/events/:id/edit',
+            name: 'event-edit',
+            component: () => import('./views/EventEditView.vue'),
+            meta: {
+                title: 'Éditer un événement - Tekiens.net'
+            }
         }
     ]
 });

@@ -5,10 +5,17 @@ import { mangle } from 'marked-mangle';
 import DOMPurify from 'dompurify';
 import EventPreview from '../components/EventPreview.vue';
 import Switch from '../components/Switch.vue';
+import { useSessionStore } from "../stores/session";
+import { RouterLink } from 'vue-router';
 
 marked.use(mangle(), { breaks: true });
 
 export default {
+    setup() {
+        return {
+            sessionStore: useSessionStore()
+        }
+    },
     data() {
         return {
             asso: {},
@@ -21,7 +28,6 @@ export default {
         Api.assos.getOne(this.$route.params.id)
             .then(asso => this.asso = asso)
             .catch(error => this.error = error);
-        this.updateEvents();
     },
     computed: {
         socials() {
@@ -38,6 +44,12 @@ export default {
         description() {
             if (!this.asso.description) return '';
             return DOMPurify.sanitize(marked.parse(this.asso.description));
+        },
+        editable() {
+            if (!this.sessionStore.session) // not logged in
+                return false;
+            console.log(this.sessionStore.session.asso_id, this.asso.id);
+            return this.sessionStore.session.asso_id == this.asso.id;
         }
     },
     methods: {
@@ -48,6 +60,14 @@ export default {
         }
     },
     watch: {
+        asso() {
+            this.updateEvents();
+        },
+        '$route.params.id'() {
+            Api.assos.getOne(this.$route.params.id)
+                .then(asso => this.asso = asso)
+                .catch(error => this.error = error);
+        },
         showPastEvents() {
             this.updateEvents({ [this.showPastEvents ? 'before' : 'after']: new Date(), desc: this.showPastEvents });
         }
@@ -87,6 +107,15 @@ export default {
                     </div>
                 </div>
                 <div class="infos">
+                    <template v-if="editable">
+                        <RouterLink :to="'/assos/' + asso.id + '/edit'" custom v-slot="{ navigate }">
+                            <button @click="navigate">Éditer l'association</button>
+                        </RouterLink>
+                        <RouterLink to="/events/create" custom v-slot="{ navigate }">
+                            <button @click="navigate">Créer un événement</button>7
+                        </RouterLink>
+                        <hr />
+                    </template>
                     <span v-if="asso.theme">🧩 Thème : {{ asso.theme }}</span>
                     <span v-if="asso.start">🆕 Année de création : {{ asso.start }}</span>
                     <span v-if="asso.end">💥 Année de dissolution : {{ asso.end }}</span>

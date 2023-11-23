@@ -41,11 +41,7 @@ export default {
 
 <style scoped lang="scss">
 .login {
-    display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100%;
 
     input, button {
         width: 24em;

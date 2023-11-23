@@ -22,6 +22,7 @@ body {
     min-width: 320px;
     min-height: 100vh;
 }
+
 #app {
     display: flex;
     flex-direction: column;
@@ -30,9 +31,10 @@ body {
 
 section {
     padding: 2rem 1rem;
-}
-section:nth-child(2n) {
-    background-color: #E3F2FD;
+
+    &:nth-child(2n) {
+        background-color: #E3F2FD;
+    }
 }
 
 article {
@@ -40,13 +42,27 @@ article {
     margin: 0 auto;
 }
 
+
+form {
+    display: flex;
+    flex-direction: column;
+
+    input,
+    button,
+    textarea,
+    select {
+        width: 100%;
+    }
+}
+
 select,
 input,
-button {
+button,
+textarea {
     border-radius: 4px;
     padding: 4px 8px;
     box-shadow: 0 0 10px 2px rgba(0, 0, 0, .1);
-    margin-top: 10px;
+    margin-bottom: 10px;
     background-color: #fff;
     border: 0;
     font: inherit;
@@ -60,6 +76,11 @@ button {
     background-color: var(--accent-color);
     color: white;
 }
+
+textarea {
+    resize: none;
+}
+
 
 h1 {
     font-size: 2.2em;

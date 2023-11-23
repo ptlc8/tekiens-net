@@ -1,0 +1,118 @@
+<script>
+import Api from '../api';
+import { useSessionStore } from "../stores/session";
+import ArrayInput from '../components/ArrayInput.vue';
+import SocialInput from '../components/SocialInput.vue';
+
+export default {
+    setup() {
+        return {
+            sessionStore: useSessionStore()
+        }
+    },
+    data() {
+        return {
+            asso: {},
+            error: null
+        }
+    },
+    mounted() {
+        if (this.isNotGranted)
+            this.$router.push('/assos/' + this.$route.params.id);
+        Api.assos.getOne(this.$route.params.id)
+            .then(asso => this.asso = asso)
+            .catch(error => this.error = error);
+    },
+    methods: {
+        editAsso() {
+            Api.assos.update(this.asso.id, this.asso)
+                .then(() => this.$router.push('/assos/' + this.$route.params.id))
+                .catch(error => this.error = error);
+        }
+    },
+    computed: {
+        isNotGranted() {
+            if (this.sessionStore.session === null) // not logged in
+                return true;
+            if (this.sessionStore.session === undefined || !this.asso.id) // not loaded
+                return undefined;
+            return this.sessionStore.session.asso_id != this.asso.id;
+        },
+        color: {
+            get() {
+                return '#' + Number(this.asso.color).toString(16).padStart(6, '0');
+            },
+            set(value) {
+                this.asso.color = parseInt(value.substr(1), 16);
+            }
+        }
+    },
+    watch: {
+        isNotGranted(isNotGranted) {
+            if (isNotGranted)
+                this.$router.push('/assos/' + this.$route.params.id);
+        }
+    },
+    components: {
+        ArrayInput,
+        SocialInput
+    }
+}
+</script>
+
+<template>
+    <section :style="{ '--accent-color': color }">
+        <article>
+            <h2>Éditer une association</h2>
+            <form @submit.prevent="editAsso">
+                <label for="id">Identifiant (sert à se connecter et s'affiche dans l'URL)</label>
+                <input v-model="asso.id" id="id" name="id" type="text" required maxlength="255" placeholder="super-asso" />
+                <label>Noms</label>
+                <ArrayInput v-model="asso.names" v-slot="{ onInput, value }" default="">
+                    <input @input="onInput" :value="value" name="names[]" type="text" required maxlength="255" placeholder="Super Association" />
+                </ArrayInput>
+                <label for="logos">Url des logos</label>
+                <ArrayInput v-model="asso.logos" v-slot="{ onInput, value }" default="">
+                    <input @input="onInput" :value="value" name="logos[]" type="text" required maxlength="255" placeholder="https://tekiens.net/assets/super-logo.png" />
+                </ArrayInput>
+                <label for="theme">Thème</label>
+                <input v-model="asso.theme" id="theme" name="theme" type="text" required maxlength="255" placeholder="Thème intéressant" />
+                <label for="campus">Campus</label>
+                <input v-model="asso.campus" id="campus" name="campus" type="text" required maxlength="255" placeholder="Cergy" />
+                <label for="room">Local associatif (facultatif)</label>
+                <input v-model="asso.room" id="room" name="room" type="text" maxlength="255" placeholder="CY 211" />
+                <label for="color">Couleur</label>
+                <input v-model="color" id="color" name="color" type="color" placeholder="#000" />
+                <label for="start">Année de création (facultatif)</label>
+                <input v-model="asso.start" id="start" name="start" type="number" placeholder="1983" />
+                <label for="end">Année de dissolution (facultatif)</label>
+                <input v-model="asso.end" id="end" name="end" type="number" placeholder="jamais" />
+                <label for="description">Description (facultatif)</label>
+                <textarea v-model="asso.description" id="description" name="description" rows="12" placeholder="Cette association est intéressante, venez !"></textarea>
+                <label for="socials">Réseaux sociaux (facultatif)</label>
+                <ArrayInput v-model="asso.socials" v-slot="{ onUpdate, value }" default="web:">
+                    <SocialInput @update:modelValue="onUpdate" :modelValue="value" />
+                </ArrayInput>
+                <button type="submit">Publier les modifications</button>
+                <span v-if="error" class="error">{{ error }}</span>
+            </form>
+        </article>
+    </section>
+</template>
+
+<style scoped lang="scss">
+form {
+    label {
+        margin-left: 1em;
+    }
+
+    img {
+        height: 200px;
+        object-fit: contain;
+    }
+
+    .error {
+        color: red;
+    }
+}
+</style>
