@@ -6,7 +6,7 @@ import DOMPurify from 'dompurify';
 import EventPreview from '../components/EventPreview.vue';
 import Switch from '../components/Switch.vue';
 
-marked.use(mangle());
+marked.use(mangle(), { breaks: true });
 
 export default {
     data() {

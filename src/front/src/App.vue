@@ -101,6 +101,8 @@ header {
         margin: .5em 1em;
         display: inline-block;
         cursor: pointer;
+        color: inherit;
+        font-size: 2em;
 
         .extension {
             color: var(--accent-color);
