@@ -56,7 +56,7 @@ export default {
             </template>
             <template v-else>
                 <div class="header">
-                    <RouterLink to="login" custom v-slot="{ navigate }">
+                    <RouterLink :to="'/login?redirect=' + encodeURIComponent($route.fullPath)" custom v-slot="{ navigate }">
                         <button @click="navigate">Se connecter</button>
                     </RouterLink>
                 </div>
