@@ -1,21 +1,21 @@
 const Api = {
     assos: {
-        get: function () {
-            return sendApiRequest("GET", "assos", {}, "Getting assos");
+        get: function (params={}) {
+            return sendApiRequest("GET", "assos", params, "Getting assos");
         },
         getOne: function (id) {
             return sendApiRequest("GET", "assos/" + encodeURIComponent(id), {}, "Getting asso " + id);
         },
-        getEvents: function (id) {
-            return sendApiRequest("GET", "assos/" + encodeURIComponent(id) + "/events", {}, "Getting asso " + id + " events");
+        getEvents: function (id, params={}) {
+            return sendApiRequest("GET", "assos/" + encodeURIComponent(id) + "/events", params, "Getting asso " + id + " events");
         },
         update: function (id, asso, session=localStorage.getItem("session")) {
             return sendApiRequest("PUT", "assos/" + encodeURIComponent(id), { ...asso, session }, "Updating asso " + id);
         },
     },
     events: {
-        get: function () {
-            return sendApiRequest("GET", "events", {}, "Getting events");
+        get: function (params={}) {
+            return sendApiRequest("GET", "events", params, "Getting events");
         },
         getOne: function (id) {
             return sendApiRequest("GET", "events/" + encodeURIComponent(id), {}, "Getting event " + id);
@@ -48,8 +48,13 @@ function sendApiRequest(method, endpoint, parameters={}, message=undefined) {
         }
         var urlParameters = Object.entries(parameters)
             .filter(([_, v]) => v !== null && v !== undefined)
-            .map(([k, v]) =>
-                v instanceof Array ? v.map(i => k + "[]=" + encodeURIComponent(i)).join("&") : k + "=" + encodeURIComponent(v)
+            .map(([k, v]) => 
+                v instanceof Array ?
+                    v.map(i => k + "[]=" + encodeURIComponent(i)).join("&")
+                : v instanceof Date ?
+                    k + "=" + encodeURIComponent(v.toISOString())
+                :
+                    k + "=" + encodeURIComponent(v)
             ).join("&");
         var options = { method };
         fetch("/api/" + endpoint + "?" + urlParameters, options)

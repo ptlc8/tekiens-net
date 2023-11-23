@@ -1,6 +1,6 @@
 # API Tekiens.net
 
-Cette API permet d'effectuer des opérations sur des associations (assos) et des événements (events) à l'aide de différentes méthodes. Elle prend en charge les opérations de lecture, de mise à jour, d'ajout et de suppression d'associations et d'événements, ainsi que la fonction de connexion (login).
+Cette API permet d'effectuer des opérations sur des associations (assos) et des événements (events) à l'aide de différentes méthodes. Elle prend en charge les opérations de lecture, de mise à jour, d'ajout et de suppression d'associations, d'événements et de sessions.
 
 
 ## Sommaire
@@ -32,7 +32,11 @@ Cette API permet d'effectuer des opérations sur des associations (assos) et des
 ### 🔵 `GET /api/assos`
 
 Récupère toutes les associations.
-- Paramètres : aucun
+- Paramètres :
+    - campus : filtre les associations par campus (facultatif)
+    - before : filtre les associations existantes avant l'année spécifiée (facultatif)
+    - after : filtre les associations existantes après l'année spécifiée (facultatif)
+    - limit : limite le nombre d'associations retournées (facultatif)
 - Fonction api.js : `Api.assos.get()` 
 
 ### 🔵 `GET /api/assos/{id}`
@@ -68,6 +72,9 @@ Fonctionne aussi avec la méthode 🟠 PATCH.
 Récupère tous les événements de l'association avec l'identifiant {id}.
 - Paramètres :
     - id : identifiant de l'association
+    - before : filtre les événements avant la date spécifiée, format SQL (facultatif)
+    - after : filtre les événements après la date spécifiée, format SQL (facultatif)
+    - limit : limite le nombre d'événements retournés (facultatif)
 - Fonction api.js : `Api.assos.getEvents(id)`
 
 
@@ -76,7 +83,10 @@ Récupère tous les événements de l'association avec l'identifiant {id}.
 ### 🔵 `GET /api/events`
 
 Récupère tous les événements.
-- Paramètres : aucun
+- Paramètres :
+    - before : filtre les événements avant la date spécifiée, format SQL (facultatif)
+    - after : filtre les événements après la date spécifiée, format SQL (facultatif)
+    - limit : limite le nombre d'événements retournés (facultatif)
 - Fonction api.js : `Api.events.get()`
 
 ### 🟢 `POST /api/events`

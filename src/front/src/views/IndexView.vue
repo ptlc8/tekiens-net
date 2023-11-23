@@ -20,12 +20,12 @@ export default {
     },
     methods: {
         getEvents() {
-            Api.events.get()
-                .then(events => this.events = events.slice(0, 10))
+            Api.events.get({ after: new Date(), limit: 10 })
+                .then(events => this.events = events)
                 .catch(error => this.error = error);
         },
         getAssos() {
-            Api.assos.get()
+            Api.assos.get({ after: new Date().getFullYear() })
                 .then(assos => this.assos = assos)
                 .catch(error => this.error = error);
         }

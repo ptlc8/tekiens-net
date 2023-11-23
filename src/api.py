@@ -3,7 +3,6 @@ import json
 import os
 from dotenv import load_dotenv
 import mysql.connector
-#from flaskext.mysql import MySQL
 import secrets
 
 load_dotenv()
@@ -59,7 +58,21 @@ def unparse_asso(asso):
 def get_assos():
     mydb = get_db()
     mycursor = mydb.cursor(dictionary=True)
-    mycursor.execute("SELECT * FROM assos")
+    sql = "SELECT * FROM assos WHERE 1=1"
+    params = ()
+    if 'campus' in request.args:
+        sql += " AND campus = %s"
+        params += (request.args.get('campus'),)
+    if 'before' in request.args:
+        sql += " AND (start < %s OR start IS NULL)"
+        params += (request.args.get('before'),)
+    if 'after' in request.args:
+        sql += " AND (end > %s OR end IS NULL)"
+        params += (request.args.get('after'),)
+    if 'limit' in request.args:
+        sql += " LIMIT %s"
+        params += (int(request.args.get('limit')),)
+    mycursor.execute(sql, params)
     assos = [parse_asso(asso) for asso in mycursor.fetchall()]
     return success(assos)
 
@@ -96,7 +109,19 @@ def put_asso(id):
 def get_asso_events(id):
     mydb = get_db()
     mycursor = mydb.cursor(dictionary=True)
-    mycursor.execute("SELECT * FROM events WHERE asso_id = %s ORDER BY date", (id,))
+    sql = "SELECT * FROM events WHERE asso_id = %s"
+    params = (id,)
+    if 'before' in request.args:
+        sql += " AND date < %s"
+        params += (request.args.get('before'),)
+    if 'after' in request.args:
+        sql += " AND date > %s"
+        params += (request.args.get('after'),)
+    sql += " ORDER BY date"
+    if 'limit' in request.args:
+        sql += " LIMIT %s"
+        params += (int(request.args.get('limit')),)
+    mycursor.execute(sql, params)
     events = mycursor.fetchall()
     return success(events)
 
@@ -107,7 +132,19 @@ def get_asso_events(id):
 def get_events():
     mydb = get_db()
     mycursor = mydb.cursor(dictionary=True)
-    mycursor.execute("SELECT * FROM events ORDER BY date")
+    sql = "SELECT * FROM events WHERE 1=1"
+    params = ()
+    if 'before' in request.args:
+        sql += " AND date < %s"
+        params += (request.args.get('before'),)
+    if 'after' in request.args:
+        sql += " AND date > %s"
+        params += (request.args.get('after'),)
+    sql += " ORDER BY date"
+    if 'limit' in request.args:
+        sql += " LIMIT %s"
+        params += (int(request.args.get('limit')),)
+    mycursor.execute(sql, params)
     events = mycursor.fetchall()
     return success(events)
 
