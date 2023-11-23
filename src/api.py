@@ -118,6 +118,8 @@ def get_asso_events(id):
         sql += " AND date > %s"
         params += (request.args.get('after'),)
     sql += " ORDER BY date"
+    if 'desc' in request.args:
+        sql += " DESC"
     if 'limit' in request.args:
         sql += " LIMIT %s"
         params += (int(request.args.get('limit')),)
@@ -141,6 +143,8 @@ def get_events():
         sql += " AND date > %s"
         params += (request.args.get('after'),)
     sql += " ORDER BY date"
+    if 'desc' in request.args:
+        sql += " DESC"
     if 'limit' in request.args:
         sql += " LIMIT %s"
         params += (int(request.args.get('limit')),)

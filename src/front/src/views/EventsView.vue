@@ -1,41 +1,50 @@
 <script>
 import Api from '../api';
 import EventPreview from '../components/EventPreview.vue';
+import Switch from '../components/Switch.vue';
 
 export default {
     components: {
-        EventPreview
+        EventPreview,
+        Switch
     },
     data() {
         return {
             assos: [],
             _events: [],
             error: null,
-            //campus: {}
+            selectedCampus: {},
+            showPastEvents: false
         }
     },
     computed: {
         events() {
-            return this._events.filter(event => {
-                return /*this.campus[event.campus] &&*/ new Date(event.date) > new Date();
+            let events = this._events.filter(event => {
+                let campus = this.getAssoById(event.asso_id)?.campus;
+                if (campus && !this.selectedCampus[campus])
+                    return false;
+                return new Date(event.date) > new Date() ? !this.showPastEvents : this.showPastEvents;
             });
+            if (this.showPastEvents)
+                events.reverse();
+            return events;
         }
     },
     methods: {
         getEvents() {
             Api.events.get()
-                .then((events) => {
-                    this._events = events;
-                    /*this.campus = events.reduce((campus, event) => {
-                        campus[event.campus] = true;
-                        return campus;
-                    }, {});*/
-                })
+                .then(events => this._events = events)
                 .catch(error => this.error = error);
         },
         getAssos() {
             Api.assos.get()
-                .then(assos => this.assos = assos)
+                .then(assos => {
+                    this.assos = assos;
+                    this.selectedCampus = assos.reduce((allCampus, asso) => {
+                        allCampus[asso.campus] = true;
+                        return allCampus;
+                    }, {});
+                })
                 .catch(error => this.error = error);
         },
         getMonday(date) {
@@ -59,7 +68,12 @@ export default {
                 return 'Cette semaine';
             if (monday.getTime() == this.getMonday(new Date(new Date().getTime() + 7 * 24*60*60*1000)).getTime())
                 return 'La semaine prochaine';
+            if (monday.getTime() == this.getMonday(new Date(new Date().getTime() - 7 * 24*60*60*1000)).getTime())
+                return 'La semaine dernière';
             return 'Semaine du ' + new Date(monday).toLocaleDateString("FR-fr");
+        },
+        getAssoById(id) {
+            return this.assos.find(asso => asso.id == id);
         }
     },
     mounted() {
@@ -71,23 +85,54 @@ export default {
 
 <template>
     <section>
-        <!--<div class="campus">
-            <template v-for="c, name in campus">
-                <input type="checkbox" v-model="campus[name]" />
-                {{ name }}
-            </template>
-        </div>-->
+        <article class="parameters">
+            <div v-if="Object.keys(selectedCampus).length > 1">
+                Campus :
+                <template v-for="_, campus in selectedCampus">
+                    <label>
+                        {{ campus }}
+                        <input type="checkbox" v-model="selectedCampus[campus]" />
+                    </label>
+                </template>
+            </div>
+            <div>
+                <label>
+                    Afficher les événements passés
+                    <Switch v-model="showPastEvents" class="switch" />
+                </label>
+            </div>
+        </article>
         <span v-if="error">Erreur: {{ error }}</span>
-        <div v-for="(events, monday) in getEventsByWeek()" :key="monday">
+        <article v-for="(events, monday) in getEventsByWeek()" :key="monday">
             <h2>{{ getWeekName(monday) }}</h2>
             <div class="events">
-                <EventPreview v-for="event in events" :key="event.id" :event="event" :asso="assos.find(a => a.id == event.asso_id)" />
+                <EventPreview v-for="event in events" :key="event.id" :event="event" :asso="getAssoById(event.asso_id)" />
             </div>
-        </div>
+        </article>
+        <article v-if="this.events.length == 0">
+            <h2>Aucun événement à venir</h2>
+            <p>Revenez plus tard, ou consultez la liste des événements passés.</p>
+        </article>
     </section>
 </template>
 
 <style lang="scss" scoped>
+.parameters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1em;
+
+    label {
+        margin: 0 .5em;
+
+        input, .switch {
+            margin: 0 4px;
+        }
+    }
+
+}
+
 .events {
     display: flex;
     flex-wrap: wrap;

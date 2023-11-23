@@ -4,6 +4,7 @@ import { marked } from 'marked';
 import { mangle } from 'marked-mangle';
 import DOMPurify from 'dompurify';
 import EventPreview from '../components/EventPreview.vue';
+import Switch from '../components/Switch.vue';
 
 marked.use(mangle());
 
@@ -12,19 +13,18 @@ export default {
         return {
             asso: {},
             error: null,
-            events: []
+            events: [],
+            showPastEvents: false
         }
     },
     mounted() {
         Api.assos.getOne(this.$route.params.id)
             .then(asso => this.asso = asso)
             .catch(error => this.error = error);
-        Api.assos.getEvents(this.$route.params.id)
-            .then(events => this.events = events)
-            .catch(error => this.error = error);
+        this.updateEvents();
     },
     computed: {
-        socials: function() {
+        socials() {
             return this.asso.socials?.map(social => 
                 ({ type: social.split(':', 1)[0], value: social.substring(social.indexOf(':') + 1) })
             ) ?? [];
@@ -40,8 +40,21 @@ export default {
             return DOMPurify.sanitize(marked.parse(this.asso.description));
         }
     },
+    methods: {
+        updateEvents(params = { after: new Date() }) {
+            Api.assos.getEvents(this.$route.params.id, params)
+                .then(events => this.events = events)
+                .catch(error => this.error = error);
+        }
+    },
+    watch: {
+        showPastEvents() {
+            this.updateEvents({ [this.showPastEvents ? 'before' : 'after']: new Date(), desc: this.showPastEvents });
+        }
+    },
     components: {
-        EventPreview
+        EventPreview,
+        Switch
     }
 }
 </script>
@@ -59,10 +72,18 @@ export default {
                     <div class="description" v-html="description" />
                     <div class="events">
                         <h3>Événements</h3>
+                        <div class="parameters">
+                            <label>
+                                Afficher les événements passés
+                                <Switch v-model="showPastEvents" class="switch" />
+                            </label>
+                        </div>
                         <div class="events-container">
                             <EventPreview v-for="event in events" :key="event.id" :event="event" :asso="asso" />
                         </div>
-                        <span v-if="events.length == 0">Aucun événement à venir</span>
+                        <span v-if="events.length == 0">
+                            Aucun événement {{ showPastEvents ? 'passé' : 'à venir' }}
+                        </span>
                     </div>
                 </div>
                 <div class="infos">

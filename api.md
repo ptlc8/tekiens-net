@@ -75,6 +75,7 @@ Récupère tous les événements de l'association avec l'identifiant {id}.
     - before : filtre les événements avant la date spécifiée, format SQL (facultatif)
     - after : filtre les événements après la date spécifiée, format SQL (facultatif)
     - limit : limite le nombre d'événements retournés (facultatif)
+    - desc : tri les événements par ordre décroissant (facultatif)
 - Fonction api.js : `Api.assos.getEvents(id)`
 
 
@@ -87,6 +88,7 @@ Récupère tous les événements.
     - before : filtre les événements avant la date spécifiée, format SQL (facultatif)
     - after : filtre les événements après la date spécifiée, format SQL (facultatif)
     - limit : limite le nombre d'événements retournés (facultatif)
+    - desc : tri les événements par ordre décroissant (facultatif)
 - Fonction api.js : `Api.events.get()`
 
 ### 🟢 `POST /api/events`
