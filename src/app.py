@@ -3,7 +3,7 @@ from flask import Flask, send_from_directory
 from api import api
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='front/dist/assets')
 app.register_blueprint(api, url_prefix='/api')
 
 

@@ -1,3 +1,4 @@
+const baseUrl = import.meta.env.VITE_BASE_URL ?? '';
 const Api = {
     assos: {
         get: function (params={}) {
@@ -48,7 +49,7 @@ function sendApiRequest(method, endpoint, parameters={}, message=undefined) {
         }
         var urlParameters = Object.entries(parameters)
             .filter(([_, v]) => v !== null && v !== undefined)
-            .map(([k, v]) => 
+            .map(([k, v]) =>
                 v instanceof Array ?
                     v.map(i => k + "[]=" + encodeURIComponent(i)).join("&")
                 : v instanceof Date ?
@@ -57,7 +58,7 @@ function sendApiRequest(method, endpoint, parameters={}, message=undefined) {
                     k + "=" + encodeURIComponent(v)
             ).join("&");
         var options = { method };
-        fetch("/api/" + endpoint + "?" + urlParameters, options)
+        fetch(baseUrl + "/api/" + endpoint + "?" + urlParameters, options)
             .then(res => res.json())
             .then(function (response) {
                 if (!response.success) {
