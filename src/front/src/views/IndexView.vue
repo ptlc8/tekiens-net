@@ -25,7 +25,7 @@ export default {
                 .catch(error => this.error = error);
         },
         getAssos() {
-            Api.assos.get({ after: new Date().getFullYear() })
+            Api.assos.get({ after: new Date().getUTCFullYear() })
                 .then(assos => this.assos = assos)
                 .catch(error => this.error = error);
         }

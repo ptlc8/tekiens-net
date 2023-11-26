@@ -23,7 +23,7 @@ export default {
                 let campus = this.getAssoById(event.asso_id)?.campus;
                 if (campus && !this.selectedCampus[campus])
                     return false;
-                return new Date(event.date) > new Date() ? !this.showPastEvents : this.showPastEvents;
+                return new Date(event.date + 'Z') > new Date() ? !this.showPastEvents : this.showPastEvents;
             });
             if (this.showPastEvents)
                 events.reverse();
@@ -55,7 +55,7 @@ export default {
         },
         getEventsByWeek() {
             return this.events.reduce((o, event) => {
-                const monday = this.getMonday(new Date(event.date));
+                const monday = this.getMonday(new Date(event.date + 'Z'));
                 const key = `${monday.getFullYear()}-${monday.getMonth()+1}-${monday.getDate()}`;
                 if (!o[key]) o[key] = [];
                 o[key].push(event);
@@ -70,7 +70,7 @@ export default {
                 return 'La semaine prochaine';
             if (monday.getTime() == this.getMonday(new Date(new Date().getTime() - 7 * 24*60*60*1000)).getTime())
                 return 'La semaine dernière';
-            return 'Semaine du ' + new Date(monday).toLocaleDateString("FR-fr");
+            return 'Semaine du ' + new Date(monday).toLocaleDateString('FR-fr');
         },
         getAssoById(id) {
             return this.assos.find(asso => asso.id == id);

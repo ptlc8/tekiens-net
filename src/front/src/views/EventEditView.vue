@@ -1,6 +1,7 @@
 <script>
 import Api from '../api';
 import { useSessionStore } from "../stores/session";
+import DateTimeInput from '../components/DateTimeInput.vue';
 
 export default {
     setup() {
@@ -38,6 +39,14 @@ export default {
             if (this.sessionStore.session === undefined || !this.event.asso_id) // not loaded
                 return undefined;
             return this.sessionStore.session.asso_id != this.event.asso_id;
+        },
+        date: {
+            get() {
+                return this.event.date ? new Date(this.event.date + 'Z') : undefined;
+            },
+            set(date) {
+                this.event.date = date.toISOString().slice(0, 19);
+            }
         }
     },
     watch: {
@@ -45,6 +54,9 @@ export default {
             if (isNotGranted)
                 this.$router.push('/events/' + this.$route.params.id);
         }
+    },
+    components: {
+        DateTimeInput
     }
 }
 </script>
@@ -57,7 +69,7 @@ export default {
                 <label for="title">Titre</label>
                 <input v-model="event.title" id="title" name="title" type="text" required maxlength="255" placeholder="Nom de l'événement" />
                 <label for="date">Date et heure</label>
-                <input v-model="event.date" id="date" name="date" type="datetime-local" required />
+                <DateTimeInput v-model="date" id="date" name="date" type="datetime-local" required />
                 <label for="place">Lieu</label>
                 <input v-model="event.place" id="place" name="place" type="text" required maxlength="255" placeholder="Bâtiment Cauchy" />
                 <label for="poster">Url de l'affiche (optionnel)</label>

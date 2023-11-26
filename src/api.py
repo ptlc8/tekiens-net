@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 import mysql.connector
 import secrets
+from ics import Calendar, Event
 
 load_dotenv()
 
@@ -252,3 +253,39 @@ def post_session():
     session_id = secrets.token_urlsafe(24)
     mycursor.execute("INSERT INTO sessions (id, asso_id) VALUES (%s, %s)", (session_id, asso['id']))
     return success({'id': session_id, 'asso_id': asso['id']}, 201)
+
+
+# ics
+
+def events_to_ics(events):
+    cal = Calendar()
+    for event in events:
+        e = Event()
+        e.uid = str(event['id'])
+        e.name = event['title']
+        e.begin = event['date']
+        e.location = event['place']
+        e.organizer = event['asso_id']
+        e.last_modified = event['lastUpdateDate']
+        e.created = event['createDate']
+        e.url = event['link']
+        #e.status = event['status']
+        e.description = event['description']
+        cal.events.add(e)
+    return cal
+
+@api.route('/events.ics', methods=['GET'])
+def get_events_ics():
+    mydb = get_db()
+    mycursor = mydb.cursor(dictionary=True)
+    mycursor.execute("SELECT * FROM events")
+    events = mycursor.fetchall()
+    return events_to_ics(events).serialize()
+
+@api.route('/assos/<id>/events.ics', methods=['GET'])
+def get_asso_events_ics(id):
+    mydb = get_db()
+    mycursor = mydb.cursor(dictionary=True)
+    mycursor.execute("SELECT * FROM events WHERE asso_id = %s", (id,))
+    events = mycursor.fetchall()
+    return events_to_ics(events).serialize()
