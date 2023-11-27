@@ -53,7 +53,7 @@ export default {
             return this.sessionStore.session.asso_id == this.asso.id;
         },
         icsUrl() {
-            return location.host + baseUrl + '/assos/' + this.asso.id + '/events.ics';
+            return location.host + baseUrl + '/api/assos/' + this.asso.id + '/events.ics';
         }
     },
     methods: {
@@ -208,6 +208,7 @@ h2 {
             padding: 1em;
             border-radius: 8px;
             background-color: var(--bg-color);
+            flex: 1;
         }
 
         .events-container {
