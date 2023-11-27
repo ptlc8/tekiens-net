@@ -1,4 +1,4 @@
-from flask import Blueprint, request, g
+from flask import Blueprint, request, g, Response
 import json
 import os
 from dotenv import load_dotenv
@@ -292,7 +292,7 @@ def get_events_ics():
     cal.extra.append(ContentLine('X-WR-CALNAME', {}, name))
     cal.extra.append(ContentLine('NAME', {}, name))
     add_events_to_calendar(cal, events)
-    return cal.serialize()
+    return Response(cal.serialize(), mimetype='text/calendar')
 
 @api.route('/assos/<id>/events.ics', methods=['GET'])
 def get_asso_events_ics(id):
@@ -310,4 +310,4 @@ def get_asso_events_ics(id):
     cal.extra.append(ContentLine('NAME', {}, name))
     cal.extra.append(ContentLine('COLOR', {}, f'#{asso["color"]:0{6}x}'))
     add_events_to_calendar(cal, events)
-    return cal.serialize()
+    return Response(cal.serialize(), mimetype='text/calendar')

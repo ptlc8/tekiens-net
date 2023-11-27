@@ -8,6 +8,8 @@ import Switch from '../components/Switch.vue';
 import { useSessionStore } from "../stores/session";
 import { RouterLink } from 'vue-router';
 
+const baseUrl = import.meta.env.VITE_BASE_URL ?? '';
+
 marked.use(mangle(), { breaks: true });
 
 export default {
@@ -48,8 +50,10 @@ export default {
         editable() {
             if (!this.sessionStore.session) // not logged in
                 return false;
-            console.log(this.sessionStore.session.asso_id, this.asso.id);
             return this.sessionStore.session.asso_id == this.asso.id;
+        },
+        icsUrl() {
+            return location.host + baseUrl + '/assos/' + this.asso.id + '/events.ics';
         }
     },
     methods: {
@@ -108,11 +112,11 @@ export default {
                 </div>
                 <div class="infos">
                     <template v-if="editable">
-                        <RouterLink :to="'/assos/' + asso.id + '/edit'" custom v-slot="{ navigate }">
-                            <button @click="navigate">Éditer l'association</button>
+                        <RouterLink :to="'/assos/' + asso.id + '/edit'">
+                            <button>Éditer l'association</button>
                         </RouterLink>
-                        <RouterLink to="/events/create" custom v-slot="{ navigate }">
-                            <button @click="navigate">Créer un événement</button>7
+                        <RouterLink to="/events/create">
+                            <button>Créer un événement</button>
                         </RouterLink>
                         <hr />
                     </template>
@@ -136,6 +140,7 @@ export default {
                             Twitter @{{ social.value }}
                         </a>
                         <a v-else-if="social.type == 'discord'" target="_blank" :href="'https://discord.gg/' + social.value">
+                            <img src="/assets/socials/discord.svg" width="16" height="16" /> 
                             Discord
                         </a>
                         <a v-else-if="social.type == 'instagram'" target="_blank" :href="'https://instagram.com/' + social.value">
@@ -147,16 +152,23 @@ export default {
                             {{ social.value }}
                         </a>
                         <a v-else-if="social.type == 'links'" target="_blank" :href="'https://' + social.value">
-                            Liens
+                            🖇 Liens
                         </a>
                         <a v-else-if="social.type == 'facebook'" target="_blank" :href="'https://facebook.com/' + social.value">
                             <img src="/assets/socials/facebook.svg" width="16" height="16" />
                             Facebook <template v-if="!social.value.match(/[\?\/\=]/)">({{ social.value }})</template>
                         </a>
                         <a v-else-if="social.type == 'linkedin'" target="_blank" :href="'https://linkedin.com/' + social.value">
+                            <img src="/assets/socials/linkedin.svg" width="16" height="16" />
                             LinkedIn
                         </a>
                     </template>
+                    <hr />
+                    <a target="_blank" :href="'webcal://' + icsUrl">
+                        <button>Ajouter à votre agenda</button>
+                    </a>
+                    URL de l'agenda :
+                    <input type="text" :value="icsUrl" readonly />
                     <hr />
                     <span v-if="asso.names?.length > 1">{{ asso.names.length > 2 ? 'Anciens noms' : 'Ancien nom' }} :</span>
                     <ul v-if="asso.names?.length > 1">
@@ -238,6 +250,10 @@ h2 {
                 height: 4em;
                 width: auto;
             }
+        }
+
+        a > * {
+            width: 100%;
         }
     }
 
