@@ -45,7 +45,7 @@ var router = createRouter({
             }
         },
         {
-            path: '/events/:id',
+            path: '/events/:id(\\d+)',
             name: 'event',
             component: () => import('./views/EventView.vue'),
             meta: {
@@ -93,11 +93,19 @@ var router = createRouter({
             }
         },
         {
-            path: '/events/:id/edit',
+            path: '/events/:id(\\d+)/edit',
             name: 'event-edit',
             component: () => import('./views/EventEditView.vue'),
             meta: {
                 title: 'Éditer un événement - Tekiens.net'
+            }
+        },
+        {
+            path: '/:pathMatch(.*)*',
+            name: '404',
+            component: () => import('./views/404View.vue'),
+            meta: {
+                title: '404 - Tekiens.net'
             }
         }
     ]

@@ -20,7 +20,7 @@ export default {
     },
     data() {
         return {
-            asso: {},
+            asso: null,
             error: null,
             events: [],
             showPastEvents: false
@@ -38,7 +38,7 @@ export default {
             ) ?? [];
         },
         color() {
-            return '#' + this.asso.color?.toString(16)?.padStart(6, 0);
+            return '#' + this.asso?.color?.toString(16)?.padStart(6, 0);
         },
         backgroundColor() {
             return this.color + '44';
@@ -86,12 +86,13 @@ export default {
 <template>
     <section>
         <article :style="{ '--accent-color': color, '--bg-color': backgroundColor }">
-            <span v-if="error">Erreur: {{ error }}</span>
-            <h2>
+            <h2 v-if="error == 'Not found'">Association "{{ $route.params.id }}" non trouvée.</h2>
+            <span v-else-if="error">Erreur: {{ error }}</span>
+            <h2 v-if="asso">
                 <img :src="asso.logos?.[0]" width="200" height="200">
                 {{ asso.names?.[0] }}
             </h2>
-            <div class="asso">
+            <div v-if="asso" class="asso">
                 <div class="main">
                     <div class="description" v-html="description" />
                     <div class="events">

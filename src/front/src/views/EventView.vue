@@ -17,7 +17,7 @@ export default {
     },
     data() {
         return {
-            event: {},
+            event: null,
             error: null,
             asso: {}
         }
@@ -29,7 +29,7 @@ export default {
     },
     computed: {
         color() {
-            return '#' + this.asso.color?.toString(16)?.padStart(6, 0);
+            return '#' + this.asso?.color?.toString(16)?.padStart(6, 0);
         },
         backgroundColor() {
             return this.color + '44';
@@ -70,8 +70,9 @@ export default {
 <template>
     <section>
         <article :style="{ '--accent-color': color, '--bg-color': backgroundColor }">
-            <span v-if="error">Erreur: {{ error }}</span>
-            <div class="event">
+            <h2 v-if="error == 'Not found'">Cet événement n'existe plus... ou n'existe pas encore.</h2>
+            <span v-else-if="error">Erreur: {{ error }}</span>
+            <div v-if="event" class="event">
                 <div class="main">
                     <h2>{{ event.title }}</h2>
                     <div class="description">
