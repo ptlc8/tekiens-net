@@ -105,7 +105,7 @@ Ajoute un événement.
     - price : prix de l'événement (facultatif)
     - link : lien de l'événement (facultatif)
     - access : accès à l'événement (facultatif)
-    - status : statut de l'événement (facultatif)
+    - status : statut de l'événement (programmed, cancelled, rescheduled, full, movedOnline) (facultatif)
     - capacity : capacité de l'événement (facultatif)
 - Corps de la requête : événement au format JSON
 - Fonction api.js : `Api.events.create(event)`
@@ -133,7 +133,7 @@ Fonctionne aussi avec la méthode 🟠 PATCH.
     - price : prix de l'événement (facultatif)
     - link : lien de l'événement (facultatif)
     - access : accès à l'événement (facultatif)
-    - status : statut de l'événement (facultatif)
+    - status : statut de l'événement (programmed, cancelled, rescheduled, full, movedOnline) (facultatif)
     - capacity : capacité de l'événement (facultatif)
 - Corps de la requête : événement au format JSON
 - Fonction api.js : `Api.events.update(id, event)`

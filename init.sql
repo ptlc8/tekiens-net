@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `events` (
   `price` tinytext COMMENT 'price',
   `link` tinytext COMMENT 'url',
   `access` tinytext COMMENT 'who can join',
-  `status` tinytext NOT NULL DEFAULT ('Programmé') COMMENT 'status',
+  `status` ENUM('programmed','cancelled','rescheduled','full','movedOnline') NOT NULL DEFAULT ('programmed') COMMENT 'status',
   `capacity` int DEFAULT NULL COMMENT 'max number of participants',
   `createDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'create datetime',
   `lastUpdateDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'last update datetime',

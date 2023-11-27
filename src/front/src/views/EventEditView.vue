@@ -1,12 +1,16 @@
 <script>
 import Api from '../api';
+import { eventStatus } from '../eventStatus';
 import { useSessionStore } from "../stores/session";
 import DateTimeInput from '../components/DateTimeInput.vue';
+
+const baseUrl = import.meta.env.VITE_BASE_URL ?? '';
 
 export default {
     setup() {
         return {
-            sessionStore: useSessionStore()
+            sessionStore: useSessionStore(),
+            eventStatus
         }
     },
     data() {
@@ -46,7 +50,7 @@ export default {
             }
         },
         eventUrl() {
-            return 'https://' + location.host + import.meta.env.VITE_BASE_URL + '/events/' + this.$route.params.id;
+            return 'https://' + location.host + baseUrl + '/events/' + this.$route.params.id;
         },
     },
     watch: {
@@ -86,7 +90,9 @@ export default {
                 <label for="access">Qui peut participer ? (optionnel)</label>
                 <input v-model="event.access" id="access" name="access" type="text" maxlength="255" placeholder="Ouvert à tous" />
                 <label for="status">Statut (optionnel)</label>
-                <input v-model="event.status" id="status" name="status" type="text" maxlength="255" placeholder="Programmé" />
+                <select v-model="event.status" id="status" name="status" >
+                    <option v-for="name, status in eventStatus" :value="status">{{ name }}</option>
+                </select>
                 <label for="capacity">Capacité (optionnel)</label>
                 <input v-model="event.capacity" id="capacity" name="capacity" type="number" min="0" placeholder="100 places" />
                 <button type="submit">Publier les modifications</button>
