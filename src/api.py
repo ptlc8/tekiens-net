@@ -174,7 +174,7 @@ def post_event():
     mycursor.execute("INSERT INTO events (asso_id" + ''.join([f', {k}' for k in new_event.keys()]) + ") VALUES ((SELECT asso_id FROM sessions WHERE id = %s)" + (', %s' * len(new_event)) + ");", (session, *new_event.values()))
     if not mycursor.rowcount:
         return error('Unauthorized', 403)
-    return success('Created')
+    return success({'id': mycursor.lastrowid})
 
 @api.route('/events/<id>', methods=['GET'])
 def get_event(id):
