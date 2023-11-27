@@ -16,11 +16,7 @@ export default {
     },
     methods: {
         logout() {
-            this.sessionStore.setSessionId(null);
-        },
-        async login() {
-            let session = await this.sessions.create(assoId, password);
-            this.sessionStore.setSessionId(session.id);
+            this.sessionStore.sessionId = null;
         }
     },
     watch: {
@@ -43,7 +39,7 @@ export default {
                 <div class="header">
                     <template v-if="session.asso">
                         <span>{{ session.asso.names[0] }}</span>
-                        <img :src="session.asso.logos[0]" />
+                        <img :src="session.asso.logos[0]" width="48" height="48" alt="Logo de l'association">
                     </template>
                 </div>
                 <RouterLink :to="'/assos/' + session.asso_id" custom v-slot="{ navigate }">
@@ -140,6 +136,7 @@ header {
 
             img {
                 height: 100%;
+                width: auto;
                 border-radius: 8px;
             }
 

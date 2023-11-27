@@ -17,7 +17,7 @@ export default {
     methods: {
         login() {
             Api.sessions.create(this.asso, this.password).then(session => {
-                this.sessionStore.setSessionId(session.id);
+                this.sessionStore.sessionId = session.id;
                 this.$router.push(this.$route.query.redirect ?? '/');
             }).catch(error => {
                 this.error = error;

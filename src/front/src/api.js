@@ -37,6 +37,9 @@ const Api = {
         },
         getOne: function (id) {
             return sendApiRequest("GET", "sessions/" + encodeURIComponent(id), {}, "Getting session");
+        },
+        delete: function (id) {
+            return sendApiRequest("DELETE", "sessions/" + encodeURIComponent(id), {}, "Deleting session");
         }
     }
 };

@@ -220,7 +220,7 @@ def delete_event(id):
     if not event['editable']:
         return error('Unauthorized', 403)
     mycursor.execute("DELETE FROM events WHERE id = %s", (id,))
-    return success('Deleted')
+    return success(None)
 
 
 # sessions
@@ -252,6 +252,13 @@ def post_session():
     session_id = secrets.token_urlsafe(24)
     mycursor.execute("INSERT INTO sessions (id, asso_id) VALUES (%s, %s)", (session_id, asso['id']))
     return success({'id': session_id, 'asso_id': asso['id']}, 201)
+
+@api.route('/sessions/<id>', methods=['DELETE'])
+def delete_session(id):
+    mydb = get_db()
+    mycursor = mydb.cursor(dictionary=True)
+    mycursor.execute("DELETE FROM sessions WHERE id = %s", (id,))
+    return success(None)
 
 
 # ics

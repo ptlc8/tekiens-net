@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import Api from '../api';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 async function getSession(id) {
     if (!id) return null;
@@ -12,9 +12,8 @@ async function getSession(id) {
 export const useSessionStore = defineStore('session', () => {
     const sessionId = ref(undefined);
     const session = ref(undefined);
-    
-    async function setSessionId(id) {
-        sessionId.value = id;
+
+    watch(sessionId, async (id, oldId) => {
         if (id) {
             localStorage.setItem("session", id);
             session.value = await getSession(id);
@@ -22,9 +21,11 @@ export const useSessionStore = defineStore('session', () => {
             localStorage.removeItem("session");
             session.value = null;
         }
-    }
+        if (oldId)
+            Api.sessions.delete(oldId);
+    });
 
-    setSessionId(localStorage.getItem("session"));
+    sessionId.value = localStorage.getItem("session");
 
-    return { sessionId, session, setSessionId };
+    return { sessionId, session };
 });
