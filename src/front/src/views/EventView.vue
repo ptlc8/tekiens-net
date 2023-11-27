@@ -81,8 +81,10 @@ export default {
                     </div>
                 </div>
                 <div class="infos">
-                    <img :src="asso.logos?.[0]" class="logo" alt="Logo de l'association" width="200" height="200">
-                    <span class="asso">{{ asso.names?.[0] }}</span>
+                    <RouterLink :to="'/assos/' + event.asso_id">
+                        <img :src="asso.logos?.[0]" class="logo" alt="Logo de l'association" width="200" height="200">
+                        <span class="asso">{{ asso.names?.[0] }}</span>
+                    </RouterLink>
                     <hr />
                     <template v-if="editable">
                         <RouterLink :to="'/events/' + event.id + '/edit'">
@@ -97,7 +99,7 @@ export default {
                     <span>📍 {{ event.place }}</span>
                     <span v-if="duration">⏱ {{ event.duration }}</span>
                     <span v-if="event.price">💲 {{ event.price }}</span>
-                    <span v-if="event.link">🖇 <a :href="event.link">{{ event.link }}</a></span>
+                    <span v-if="event.link">🖇 <a :href="event.link">Lien de l'événement</a></span>
                     <span v-if="event.access">🔒 {{ event.access }}</span>
                     <span v-if="event.status">{{ status }}</span>
                     <span v-if="event.capacity">👥 {{ event.capacity }} places</span>
@@ -137,6 +139,7 @@ export default {
                 float: right;
                 width: 40%;
                 height: auto;
+                margin: 0 0 1em 1em;
                 border-radius: 8px;
                 box-shadow: 0 0 10px 2px rgba(0, 0, 0, .1);
             }
@@ -156,12 +159,14 @@ export default {
         background-color: var(--bg-color);
 
         .logo {
+            display: block;
             margin: .5em auto;
             width: 8em;
             height: auto;
         }
 
         .asso {
+            display: block;
             text-align: center;
             font-weight: bold;
         }
