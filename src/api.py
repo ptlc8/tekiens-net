@@ -4,7 +4,6 @@ import os
 from dotenv import load_dotenv
 import mysql.connector
 import secrets
-from ics import Calendar, Event
 
 load_dotenv()
 
@@ -257,35 +256,57 @@ def post_session():
 
 # ics
 
-def events_to_ics(events):
-    cal = Calendar()
+from ics import Calendar, Event
+from ics.grammar.parse import ContentLine
+
+def add_events_to_calendar(cal, events):
     for event in events:
+        asso = event['asso'].split(',')[0]
         e = Event()
         e.uid = str(event['id'])
-        e.name = event['title']
+        e.name = '[' + asso + '] ' + event['title']
         e.begin = event['date']
         e.location = event['place']
-        e.organizer = event['asso_id']
+        e.organizer = asso
         e.last_modified = event['lastUpdateDate']
         e.created = event['createDate']
         e.url = event['link']
         #e.status = event['status']
         e.description = event['description']
+        e.extra.append(ContentLine('COLOR', {}, f'#{event["color"]:0{6}x}'))
+        if event['poster']:
+            e.extra.append(ContentLine('IMAGE', {}, event['poster']))
         cal.events.add(e)
-    return cal
 
 @api.route('/events.ics', methods=['GET'])
 def get_events_ics():
+    # get events
     mydb = get_db()
     mycursor = mydb.cursor(dictionary=True)
-    mycursor.execute("SELECT * FROM events")
+    mycursor.execute("SELECT events.*, assos.names AS asso, assos.color FROM events JOIN assos ON events.asso_id = assos.id")
     events = mycursor.fetchall()
-    return events_to_ics(events).serialize()
+    # create ics calendar
+    cal = Calendar()
+    name = 'Tous les événements - Tekiens.net'
+    cal.extra.append(ContentLine('X-WR-CALNAME', {}, name))
+    cal.extra.append(ContentLine('NAME', {}, name))
+    add_events_to_calendar(cal, events)
+    return cal.serialize()
 
 @api.route('/assos/<id>/events.ics', methods=['GET'])
 def get_asso_events_ics(id):
+    # get events and asso
     mydb = get_db()
     mycursor = mydb.cursor(dictionary=True)
-    mycursor.execute("SELECT * FROM events WHERE asso_id = %s", (id,))
+    mycursor.execute("SELECT assos.names, assos.color FROM assos WHERE id = %s", (id,))
+    asso = mycursor.fetchone()
+    mycursor.execute("SELECT events.* FROM events JOIN assos ON events.asso_id = assos.id WHERE asso_id = %s", (id,))
     events = mycursor.fetchall()
-    return events_to_ics(events).serialize()
+    # create ics calendar
+    cal = Calendar()
+    name = asso['names'].split(',')[0] + ' - Tekiens.net'
+    cal.extra.append(ContentLine('X-WR-CALNAME', {}, name))
+    cal.extra.append(ContentLine('NAME', {}, name))
+    cal.extra.append(ContentLine('COLOR', {}, f'#{asso["color"]:0{6}x}'))
+    add_events_to_calendar(cal, events)
+    return cal.serialize()
