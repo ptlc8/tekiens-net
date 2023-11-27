@@ -22,7 +22,7 @@ def get_db():
 
 # only use editable columns
 assos_columns = ['id', 'names', 'logos', 'start', 'end', 'theme', 'campus', 'room', 'socials', 'description', 'color']
-events_columns = ['title', 'poster', 'description', 'date', 'place', 'price', 'link', 'access', 'status', 'capacity']
+events_columns = ['title', 'poster', 'description', 'date', 'place', 'duration', 'price', 'link', 'access', 'status', 'capacity']
 events_needed_columns = ['title', 'date', 'place']
 
 
@@ -267,6 +267,7 @@ def add_events_to_calendar(cal, events):
         e.name = '[' + asso + '] ' + event['title']
         e.begin = event['date']
         e.location = event['place']
+        e.duration = {'minutes': event['duration']}
         e.organizer = asso
         e.last_modified = event['lastUpdateDate']
         e.created = event['createDate']

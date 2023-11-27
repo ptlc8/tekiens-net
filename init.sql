@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS `events` (
   `description` text COMMENT 'description',
   `date` datetime NOT NULL COMMENT 'datetime',
   `place` tinytext NOT NULL COMMENT 'place',
+  `duration` int UNSIGNED NULL COMMENT 'duration in minutes',
   `price` tinytext COMMENT 'price',
   `link` tinytext COMMENT 'url',
   `access` tinytext COMMENT 'who can join',

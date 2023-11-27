@@ -101,6 +101,7 @@ Ajoute un événement.
     - place : lieu de l'événement
     - poster : affiche de l'événement (facultatif)
     - description : description de l'événement (facultatif)
+    - duration : durée de l'événement en minutes (facultatif)
     - price : prix de l'événement (facultatif)
     - link : lien de l'événement (facultatif)
     - access : accès à l'événement (facultatif)
@@ -128,6 +129,7 @@ Fonctionne aussi avec la méthode 🟠 PATCH.
     - place : lieu de l'événement (facultatif)
     - poster : affiche de l'événement (facultatif)
     - description : description de l'événement (facultatif)
+    - duration : durée de l'événement en minutes (facultatif)
     - price : prix de l'événement (facultatif)
     - link : lien de l'événement (facultatif)
     - access : accès à l'événement (facultatif)

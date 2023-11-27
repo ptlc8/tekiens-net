@@ -23,9 +23,6 @@ export default {
             .catch(error => this.error = error);
     },
     methods: {
-        getEventUrl() {
-            return 'https://' + location.host + '/events/' + this.$route.params.id;
-        },
         editEvent() {
             Api.events.update(this.event.id, this.event)
                 .then(() => this.$router.push('/events/' + this.$route.params.id))
@@ -47,7 +44,10 @@ export default {
             set(date) {
                 this.event.date = date.toISOString().slice(0, 19);
             }
-        }
+        },
+        eventUrl() {
+            return 'https://' + location.host + import.meta.env.VITE_BASE_URL + '/events/' + this.$route.params.id;
+        },
     },
     watch: {
         isNotGranted(isNotGranted) {
@@ -76,13 +76,13 @@ export default {
                 <input v-model="event.poster" id="poster" name="poster" type="text" maxlength="255" placeholder="https://tekiens.net/assets/super-affiche.jpg" />
                 <img v-if="event.poster" :src="event.poster" alt="Affiche de l'événement" width="200" height="200" />
                 <label for="description">Description (optionnel)</label>
-                <textarea v-model="event.description" id="description" name="description" type="text" maxlength="128" rows="12" placeholder="Cet événement sera intéressant, venez !"></textarea>
+                <textarea v-model="event.description" id="description" name="description" maxlength="65535" rows="12" placeholder="Cet événement sera intéressant, venez !"></textarea>
                 <label for="price">Prix (optionnel)</label>
                 <input v-model="event.price" id="price" name="price" type="text" maxlength="255" placeholder="Gratuit" />
-                <!--<label for="duration">Durée (optionnel)</label>
-                <input v-model="event.duration" id="duration" name="duration" type="text" maxlength="255" placeholder="2h" />-->
+                <label for="duration">Durée en minutes (optionnel)</label>
+                <input v-model="event.duration" id="duration" name="duration" type="number" min="0" placeholder="120 minutes" />
                 <label for="link">Lien du QR code (optionnel)</label>
-                <input v-model="event.link" id="link" name="link" type="text" maxlength="255" :placeholder="getEventUrl()" />
+                <input v-model="event.link" id="link" name="link" type="text" maxlength="255" :placeholder="eventUrl" />
                 <label for="access">Qui peut participer ? (optionnel)</label>
                 <input v-model="event.access" id="access" name="access" type="text" maxlength="255" placeholder="Ouvert à tous" />
                 <label for="status">Statut (optionnel)</label>
