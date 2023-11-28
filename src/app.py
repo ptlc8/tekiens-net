@@ -18,3 +18,7 @@ def get_front(path):
 @app.route('/')
 def get_index():
     return send_from_directory('front/dist', 'index.html')
+
+@app.route('/displayer')
+def get_displayer_front():
+    return send_from_directory('front/dist', 'displayer.html')
