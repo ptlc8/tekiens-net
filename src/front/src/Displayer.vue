@@ -26,7 +26,7 @@ export default {
         this.update();
         this.timers.push(setInterval(this.updateEvents, UPDATE_TIMEOUT));
         this.timers.push(setInterval(this.next, EVENT_DURATION));
-        setTimeout(() => window.location.reload(), RELOAD_TIMEOUT);
+        this.timers.push(setTimeout(() => window.location.reload(), RELOAD_TIMEOUT));
     },
     computed: {
         event() {
@@ -109,7 +109,6 @@ export default {
                 <div class="main">
                     <img v-if="event.poster" class="poster" :src="event.poster" />
                     <div class="details">
-                        <!--<span class="description">{{ event.description }}</span>-->
                         <span class="asso">
                             <img class="logo" :src="asso?.logos?.[0]" />
                             {{ asso?.names?.[0] }}
@@ -121,7 +120,7 @@ export default {
                         <span v-if="event.access">🔒 {{ event.access }}</span>
                         <span v-if="event.capacity">👥 {{ event.capacity }} places</span>
                         <span>{{ status }}</span>
-                        <QRCode v-if="event.link" :value="event.link" />
+                        <QRCode v-if="event.link" class="qr-code" :value="event.link" />
                     </div>
                 </div>
             </article>
@@ -139,19 +138,20 @@ section {
     flex-direction: column;
     height: 100vh;
     padding: 0;
+    font-size: 1.25vmin;
 }
 .events {
     flex: 1;
     position: relative;
     overflow: hidden;
+    padding: 2%;
 
     .event {
         position: absolute;
         top: 0;
         left: 0;
-        height: 96%;
-        width: 96%;
-        padding: 2%;
+        height: 100%;
+        width: 100%;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -173,10 +173,10 @@ section {
             gap: 1em;
 
             .poster {
-                max-width: 40%;
-                max-height: 70vh;
+                width: 16em;
+                height: 28em;
                 object-fit: contain;
-                filter: drop-shadow(0 0 10px rgba(0, 0, 0, .5));
+                filter: drop-shadow(0 0 1em rgba(0, 0, 0, .5));
             }
         
             .details {
@@ -196,8 +196,9 @@ section {
                 }
             }
         
-            .description {
-                text-align: justify;
+            .qr-code {
+                width: 100%;
+                height: 8em;
             }
         }
 

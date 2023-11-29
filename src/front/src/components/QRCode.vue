@@ -23,5 +23,13 @@ export default {
 </script>
 
 <template>
-    <div ref="qrcode"></div>
+    <div ref="qrcode" class="qr-code"></div>
 </template>
+
+<style>
+.qr-code img {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+}
+</style>
