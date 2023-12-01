@@ -68,7 +68,7 @@ $ a2ensite tekiens-net
 $ service apache2 restart
 ```
 
-Si le projet est servi par un reverse proxy, créer un fichier `.env` dans le dossier `src/front` avec le sous-chemin du projet sous la forme suivante :
+Si le projet est servi par un reverse proxy, créer un fichier `.env.local` dans le dossier `src/front` avec le sous-chemin du projet sous la forme suivante :
 ```properties
-PUBLIC_URL=/sous-chemin
+VITE_BASE_URL=/sous-chemin
 ```
