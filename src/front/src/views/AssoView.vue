@@ -94,7 +94,7 @@ export default {
             </h2>
             <div v-if="asso" class="asso">
                 <div class="main">
-                    <div class="description" v-html="description" />
+                    <div class="description markdown" v-html="description" />
                     <div class="events">
                         <h3>Événements</h3>
                         <div class="parameters">
@@ -229,11 +229,6 @@ h2 {
             vertical-align: text-bottom;
             height: 1em;
             width: auto;
-        }
-
-        hr {
-            width: 100%;
-            border: 1px solid var(--accent-color);
         }
         
         ul {

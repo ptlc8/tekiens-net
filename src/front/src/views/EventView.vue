@@ -83,7 +83,7 @@ export default {
                     <h2>{{ event.title }}</h2>
                     <div class="description">
                         <img v-if="event.poster" :src="event.poster" class="poster" alt="Affiche de l'événement" width="400" height="400">
-                        <div v-html="description"></div>
+                        <div v-html="description" class="markdown"></div>
                         <div class="clear"></div>
                     </div>
                 </div>
@@ -178,11 +178,6 @@ export default {
             font-weight: bold;
         }
 
-        hr {
-            width: 100%;
-            border: 1px solid var(--accent-color);
-        }
-
         a > * {
             width: 100%;
         }
@@ -194,6 +189,7 @@ export default {
         .main .description .poster {
             float: none;
             width: 100%;
+            margin: 0;
         }
     }
 }

@@ -96,3 +96,48 @@ h2 {
 a {
     color: var(--accent-color);
 }
+
+hr {
+    width: 100%;
+    border: 1px solid var(--accent-color);
+}
+
+
+.markdown {
+    img {
+        max-width: 100%;
+        width: 400px;
+        display: block;
+        margin: auto;
+
+        &[alt$=">"] {
+            float: right;
+            margin: 1em 0 1em 1em;
+        }
+
+        &[alt$="<"] {
+            float: left;
+            margin: 1em 1em 1em 0;
+        }
+    }
+
+    table {
+        border-collapse: collapse;
+
+        th, td {
+            border: solid 1px var(--accent-color);
+            padding: .5em 1em;
+        }
+
+        th {
+            background-color: #88888844;
+            background: var(--bg-color);
+        }
+    }
+
+    blockquote {
+        border-left: .4em solid var(--accent-color);
+        padding-left: 1em;
+        margin-left: 0;
+    }
+}
