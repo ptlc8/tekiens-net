@@ -274,7 +274,8 @@ def add_events_to_calendar(cal, events):
         e.name = '[' + asso + '] ' + event['title']
         e.begin = event['date']
         e.location = event['place']
-        e.duration = {'minutes': event['duration']}
+        if event['duration']:
+            e.duration = {'minutes': event['duration']}
         e.organizer = asso
         e.last_modified = event['lastUpdateDate']
         e.created = event['createDate']
