@@ -35,7 +35,8 @@ export default {
             return this.color + '44';
         },
         description() {
-            if (!this.event.description) return '';
+            if (!this.event.description)
+                return '';
             return DOMPurify.sanitize(marked.parse(this.event.description));
         },
         editable() {
@@ -47,11 +48,13 @@ export default {
             return getEventStatus(this.event);
         },
         duration() {
-            if (!this.event.duration) return undefined;
+            if (!this.event.duration)
+                return undefined;
+            var days = Math.floor(this.event.duration / 60 / 24);
             var hours = Math.floor(this.event.duration / 60);
             var minutes = this.event.duration % 60;
-            return `${hours}h${minutes.toString().padStart(2, '0')}`;
-        } 
+            return `${days}j ${hours}h ${minutes}min`.replace(/0j /, '').replace(/0h /, '').replace(/ 0min/, '');
+        }
     },
     watch: {
         '$route.params.id'() {
@@ -67,7 +70,7 @@ export default {
     },
     methods: {
         formatDate(date) {
-            return new Date(date + 'Z').toLocaleString('FR-fr', { weekday:'long', day: 'numeric', month: 'long', hour:'2-digit', minute:'2-digit', timeZone: 'Europe/Paris' })
+            return new Date(date + 'Z').toLocaleString('FR-fr', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' });
         }
     }
 }

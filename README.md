@@ -26,6 +26,7 @@ $ apt-get install mysql-server
 
 ```sh
 $ cd src
+$ chmod 777 data
 $ python3 -m venv venv
 $ venv/bin/pip install flask python-dotenv mysql-connector-python ics pillow
 $ cd front

@@ -50,7 +50,8 @@ const Api = {
 
 
 function parseEvent(event) {
-    event.poster = baseUrl + event.poster;
+    if (event.poster)
+        event.poster = baseUrl + event.poster;
     return event;
 }
 

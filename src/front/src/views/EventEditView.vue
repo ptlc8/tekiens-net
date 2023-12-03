@@ -4,6 +4,7 @@ import { eventStatus } from '../eventStatus';
 import { useSessionStore } from "../stores/session";
 import DateTimeInput from '../components/DateTimeInput.vue';
 import ImageInput from '../components/ImageInput.vue';
+import DurationInput from '../components/DurationInput.vue';
 
 const baseUrl = import.meta.env.VITE_BASE_URL ?? '';
 
@@ -67,7 +68,8 @@ export default {
     },
     components: {
         DateTimeInput,
-        ImageInput
+        ImageInput,
+        DurationInput
     }
 }
 </script>
@@ -90,7 +92,7 @@ export default {
                 <label for="price">Prix (optionnel)</label>
                 <input v-model="event.price" id="price" name="price" type="text" maxlength="255" placeholder="Gratuit" />
                 <label for="duration">Durée en minutes (optionnel)</label>
-                <input v-model="event.duration" id="duration" name="duration" type="number" min="0" placeholder="120 minutes" />
+                <DurationInput v-model="event.duration" id="duration" name="duration" />
                 <label for="link">Lien du QR code (optionnel)</label>
                 <input v-model="event.link" id="link" name="link" type="text" maxlength="255" :placeholder="eventUrl" />
                 <label for="access">Qui peut participer ? (optionnel)</label>
