@@ -22,3 +22,7 @@ def get_index():
 @app.route('/displayer')
 def get_displayer_front():
     return send_from_directory('front/dist', 'displayer.html')
+
+@app.route('/data/<path:path>')
+def get_data(path):
+    return send_from_directory('data', path)

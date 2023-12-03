@@ -3,6 +3,7 @@ import Api from '../api';
 import { eventStatus } from '../eventStatus';
 import { useSessionStore } from "../stores/session";
 import DateTimeInput from '../components/DateTimeInput.vue';
+import ImageInput from '../components/ImageInput.vue';
 
 const baseUrl = import.meta.env.VITE_BASE_URL ?? '';
 
@@ -59,7 +60,8 @@ export default {
         }
     },
     components: {
-        DateTimeInput
+        DateTimeInput,
+        ImageInput
     }
 }
 </script>
@@ -76,8 +78,7 @@ export default {
                 <label for="place">Lieu</label>
                 <input v-model="event.place" id="place" name="place" type="text" required maxlength="255" placeholder="Bâtiment Cauchy" />
                 <label for="poster">Url de l'affiche (optionnel)</label>
-                <input v-model="event.poster" id="poster" name="poster" type="text" maxlength="255" placeholder="https://tekiens.net/assets/super-affiche.jpg" />
-                <img v-if="event.poster" :src="event.poster" alt="Affiche de l'événement" width="200" height="200" />
+                <ImageInput v-model="event.poster" id="poster" name="poster" />
                 <label for="description">Description (optionnel)</label>
                 <textarea v-model="event.description" id="description" name="description" maxlength="65535" rows="12" placeholder="Cet événement sera intéressant, venez !"></textarea>
                 <label for="price">Prix (optionnel)</label>

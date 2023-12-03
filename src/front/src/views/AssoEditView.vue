@@ -13,6 +13,7 @@ export default {
     data() {
         return {
             asso: {},
+            originalAsso: {},
             error: null
         }
     },
@@ -20,12 +21,19 @@ export default {
         if (this.isNotGranted)
             this.$router.push('/assos/' + this.$route.params.id);
         Api.assos.getOne(this.$route.params.id)
-            .then(asso => this.asso = asso)
+            .then(asso => {
+                this.asso = asso;
+                this.originalAsso = JSON.parse(JSON.stringify(asso));
+            })
             .catch(error => this.error = error);
     },
     methods: {
         editAsso() {
-            Api.assos.update(this.asso.id, this.asso)
+            let fields = {};
+            for (let field in this.asso)
+                if (this.asso[field] != this.originalAsso[field])
+                    fields[field] = this.asso[field];
+            Api.assos.update(this.asso.id, fields)
                 .then(() => this.$router.push('/assos/' + this.$route.params.id))
                 .catch(error => this.error = error);
         }

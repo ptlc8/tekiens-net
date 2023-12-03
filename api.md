@@ -2,6 +2,8 @@
 
 Cette API permet d'effectuer des opérations sur des associations (assos) et des événements (events) à l'aide de différentes méthodes. Elle prend en charge les opérations de lecture, de mise à jour, d'ajout et de suppression d'associations, d'événements et de sessions.
 
+Les paramètres peuvent être passés dans l'URL ou dans le corps de la requête au format formulaire (x-www-form-urlencoded).
+
 
 ## Sommaire
 
@@ -64,7 +66,6 @@ Fonctionne aussi avec la méthode 🟠 PATCH.
     - socials : nouveaux réseaux sociaux de l'association au format JSON (facultatif)
     - description : nouvelle description de l'association (facultatif)
     - color : nouvelle couleur de l'association (facultatif)
-- Corps de la requête : association au format JSON
 - Fonction api.js : `Api.assos.update(id, asso)`
 
 ### 🔵 `GET /api/assos/{id}/events`
@@ -99,7 +100,7 @@ Ajoute un événement.
     - title : titre de l'événement
     - date : date et heure de l'événement au format SQL
     - place : lieu de l'événement
-    - poster : affiche de l'événement (facultatif)
+    - poster : affiche de l'événement au format URL base64 (facultatif)
     - description : description de l'événement (facultatif)
     - duration : durée de l'événement en minutes (facultatif)
     - price : prix de l'événement (facultatif)
@@ -107,7 +108,6 @@ Ajoute un événement.
     - access : accès à l'événement (facultatif)
     - status : statut de l'événement (programmed, cancelled, rescheduled, full, movedOnline) (facultatif)
     - capacity : capacité de l'événement (facultatif)
-- Corps de la requête : événement au format JSON
 - Fonction api.js : `Api.events.create(event)`
 
 ### 🔵 `GET /api/events/{id}`
@@ -127,7 +127,7 @@ Fonctionne aussi avec la méthode 🟠 PATCH.
     - title : titre de l'événement (facultatif)
     - date : date et heure de l'événement au format SQL (facultatif)
     - place : lieu de l'événement (facultatif)
-    - poster : affiche de l'événement (facultatif)
+    - poster : affiche de l'événement au format URL base64 (facultatif)
     - description : description de l'événement (facultatif)
     - duration : durée de l'événement en minutes (facultatif)
     - price : prix de l'événement (facultatif)
@@ -135,7 +135,6 @@ Fonctionne aussi avec la méthode 🟠 PATCH.
     - access : accès à l'événement (facultatif)
     - status : statut de l'événement (programmed, cancelled, rescheduled, full, movedOnline) (facultatif)
     - capacity : capacité de l'événement (facultatif)
-- Corps de la requête : événement au format JSON
 - Fonction api.js : `Api.events.update(id, event)`
 
 ### 🔴 `DELETE /api/events/{id}`

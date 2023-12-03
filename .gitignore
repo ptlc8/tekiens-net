@@ -7,4 +7,7 @@
 # env file
 /src/.env
 
+# images uploaded by users
+/src/data/*
+
 !.gitkeep

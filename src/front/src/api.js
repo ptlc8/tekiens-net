@@ -1,48 +1,58 @@
-const baseUrl = import.meta.env.VITE_BASE_URL ?? '';
+const baseUrl = import.meta.env.VITE_BASE_URL ?? "";
+
 const Api = {
     assos: {
-        get: function (params={}) {
+        get(params={}) {
             return sendApiRequest("GET", "assos", params, "Getting assos");
         },
-        getOne: function (id) {
+        getOne(id) {
             return sendApiRequest("GET", "assos/" + encodeURIComponent(id), {}, "Getting asso " + id);
         },
-        getEvents: function (id, params={}) {
-            return sendApiRequest("GET", "assos/" + encodeURIComponent(id) + "/events", params, "Getting asso " + id + " events");
+        getEvents(id, params={}) {
+            return sendApiRequest("GET", "assos/" + encodeURIComponent(id) + "/events", params, "Getting asso " + id + " events")
+                .then(events => events.map(parseEvent));
         },
-        update: function (id, asso, session=localStorage.getItem("session")) {
+        update(id, asso, session=localStorage.getItem("session")) {
             return sendApiRequest("PUT", "assos/" + encodeURIComponent(id), { ...asso, session }, "Updating asso " + id);
         },
     },
     events: {
-        get: function (params={}) {
-            return sendApiRequest("GET", "events", params, "Getting events");
+        get(params={}) {
+            return sendApiRequest("GET", "events", params, "Getting events")
+                .then(events => events.map(parseEvent));
         },
-        getOne: function (id) {
-            return sendApiRequest("GET", "events/" + encodeURIComponent(id), {}, "Getting event " + id);
+        getOne(id) {
+            return sendApiRequest("GET", "events/" + encodeURIComponent(id), {}, "Getting event " + id)
+                .then(parseEvent);
         },
-        update: function (id, event, session=localStorage.getItem("session")) {
+        update(id, event, session=localStorage.getItem("session")) {
             return sendApiRequest("PUT", "events/" + encodeURIComponent(id), { ...event, session }, "Updating event " + id);
         },
-        create: function (event, session=localStorage.getItem("session")) {
+        create(event, session=localStorage.getItem("session")) {
             return sendApiRequest("POST", "events", { ...event, session }, "Adding event");
         },
-        delete: function (id, session=localStorage.getItem("session")) {
+        delete(id, session=localStorage.getItem("session")) {
             return sendApiRequest("DELETE", "events/" + encodeURIComponent(id), { session }, "Deleting event " + id);
         }
     },
     sessions: {
-        create: function (assoId, password) {
+        create(assoId, password) {
             return sendApiRequest("POST", "sessions", { asso: assoId, password }, "Creating session");
         },
-        getOne: function (id) {
+        getOne(id) {
             return sendApiRequest("GET", "sessions/" + encodeURIComponent(id), {}, "Getting session");
         },
-        delete: function (id) {
+        delete(id) {
             return sendApiRequest("DELETE", "sessions/" + encodeURIComponent(id), {}, "Deleting session");
         }
     }
 };
+
+
+function parseEvent(event) {
+    event.poster = baseUrl + event.poster;
+    return event;
+}
 
 
 function sendApiRequest(method, endpoint, parameters={}, message=undefined) {
@@ -51,17 +61,25 @@ function sendApiRequest(method, endpoint, parameters={}, message=undefined) {
             console.info("[API] " + message);
         }
         var urlParameters = Object.entries(parameters)
-            .filter(([_, v]) => v !== null && v !== undefined)
+            .filter(([_, v]) => v !== undefined)
             .map(([k, v]) =>
                 v instanceof Array ?
                     v.map(i => k + "[]=" + encodeURIComponent(i)).join("&")
                 : v instanceof Date ?
                     k + "=" + encodeURIComponent(v.toISOString())
+                : v === null ?
+                    k + "="
                 :
                     k + "=" + encodeURIComponent(v)
             ).join("&");
         var options = { method };
-        fetch(baseUrl + "/api/" + endpoint + "?" + urlParameters, options)
+        if (method == "GET") {
+            endpoint += "?" + urlParameters;
+        } else {
+            options.body = urlParameters;
+            options.headers = { "Content-Type": "application/x-www-form-urlencoded" };
+        }
+        fetch(baseUrl + "/api/" + endpoint, options)
             .then(res => res.json())
             .then(function (response) {
                 if (!response.success) {

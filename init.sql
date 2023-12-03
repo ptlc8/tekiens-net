@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `events` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT 'identifier',
   `asso_id` varchar(24) NOT NULL COMMENT 'organizing asso id',
   `title` tinytext NOT NULL COMMENT 'title',
-  `poster` tinytext COMMENT 'poster path',
+  `poster` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'poster exists',
   `description` text COMMENT 'description',
   `date` datetime NOT NULL COMMENT 'datetime',
   `place` tinytext NOT NULL COMMENT 'place',
