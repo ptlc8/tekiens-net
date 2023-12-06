@@ -140,6 +140,7 @@ section {
     height: 100vh;
     padding: 0;
     font-size: 1.25vmin;
+    cursor: none;
 }
 .events {
     flex: 1;
@@ -223,7 +224,7 @@ section {
 }
 
 .progress {
-    height: 2em;
+    height: 3em;
     position: relative;
     mix-blend-mode: difference;
     background: white;
