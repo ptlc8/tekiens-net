@@ -24,7 +24,7 @@ export default {
     },
     mounted() {
         this.update();
-        this.timers.push(setInterval(this.updateEvents, UPDATE_TIMEOUT));
+        this.timers.push(setInterval(this.update, UPDATE_TIMEOUT));
         this.timers.push(setInterval(this.next, EVENT_DURATION));
         this.timers.push(setTimeout(() => window.location.reload(), RELOAD_TIMEOUT));
     },
