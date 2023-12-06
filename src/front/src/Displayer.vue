@@ -61,7 +61,8 @@ export default {
             return getEventStatus(this.event);
         },
         color() {
-            return '#' + (this.asso?.color?.toString(16)?.padStart(6, 0) ?? "ffffff");
+            let color = this.event?.color ?? this.asso?.color;
+            return '#' + (color?.toString(16)?.padStart(6, 0) ?? "ffffff");
         },
         textColor() {
             return this.calcLuminance(this.color) > 0.25 ? '#000000' : '#ffffff';
@@ -69,7 +70,7 @@ export default {
         link() {
             if (this.event.link)
                 return this.event.link;
-            return 'https://' + location.host + baseUrl + '/events/' + this.event.id;
+            return location.origin + baseUrl + '/events/' + this.event.id;
         }
     },
     methods: {
@@ -79,6 +80,14 @@ export default {
                 return acc;
             }, {});
             this.events = await Api.events.get({ after: new Date() });
+            this.events.push({
+                id: -1,
+                title: 'Ajoutez vos événements sur tekiens.net pour qu\'ils s\'affichent ici',
+                place: location.host + baseUrl,
+                link: location.origin + baseUrl + '/login',
+                access: 'Réservé aux associations',
+                color: 15690752
+            });
         },
         next() {
             this.eventIndex = this.eventIndex >= this.events.length - 1 ? 0 : this.eventIndex + 1;
@@ -110,17 +119,17 @@ export default {
                 <div class="main">
                     <img v-if="event.poster" class="poster" :src="event.poster" />
                     <div class="details">
-                        <span class="asso">
+                        <span v-if="asso" class="asso">
                             <img class="logo" :src="asso?.logos?.[0]" />
                             {{ asso?.names?.[0] }}
                         </span>
-                        <span>📅 {{ date }} à {{ time }}</span>
-                        <span>📍 {{ event.place }}</span>
+                        <span v-if="event.date">📅 {{ date }} à {{ time }}</span>
+                        <span v-if="event.place">📍 {{ event.place }}</span>
                         <span v-if="event.price">💲 {{ event.price }}</span>
                         <span v-if="event.duration">⏱ {{ duration }}</span>
                         <span v-if="event.access">🔒 {{ event.access }}</span>
                         <span v-if="event.capacity">👥 {{ event.capacity }} places</span>
-                        <span>{{ status }}</span>
+                        <span v-if="event.status">{{ status }}</span>
                         <QRCode v-if="event.link" class="qr-code" :value="event.link" />
                     </div>
                 </div>
@@ -142,6 +151,7 @@ section {
     font-size: 1.25vmin;
     cursor: none;
 }
+
 .events {
     flex: 1;
     position: relative;
@@ -238,6 +248,7 @@ section {
         filter: invert(.75);
         animation: progress-bar linear 10s infinite;
     }
+
     .progress-value {
         position: absolute;
         right: 0;
@@ -252,8 +263,8 @@ section {
     0% {
         width: 0%;
     }
+
     100% {
         width: 100%;
     }
-}
-</style>
+}</style>
