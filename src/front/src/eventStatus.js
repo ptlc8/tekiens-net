@@ -7,8 +7,12 @@ export const eventStatus = {
 };
 
 export function getEventStatus(event) {
-    if (new Date(event.date + 'Z') < new Date())
+    let date = Date.parse(event.date + 'Z');
+    if (new Date(date + (event.duration ?? 0) * 60 * 1000) < new Date())
         return '⬛ Terminé';
+    if (date < new Date())
+        return '🟪 En cours';
     if (eventStatus[event.status])
         return eventStatus[event.status];
+    return event.status;
 }

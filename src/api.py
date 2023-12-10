@@ -130,7 +130,7 @@ def get_asso_events(id):
         sql += " AND date < %s"
         params += (g.args.get('before'),)
     if 'after' in g.args:
-        sql += " AND date > %s"
+        sql += " AND DATE_ADD(date, INTERVAL IFNULL(duration, 0) MINUTE) > %s"
         params += (g.args.get('after'),)
     sql += " ORDER BY date"
     if 'desc' in g.args:
@@ -164,7 +164,7 @@ def get_events():
         sql += " AND date < %s"
         params += (g.args.get('before'),)
     if 'after' in g.args:
-        sql += " AND date > %s"
+        sql += " AND DATE_ADD(date, INTERVAL IFNULL(duration, 0) MINUTE) > %s"
         params += (g.args.get('after'),)
     sql += " ORDER BY date"
     if 'desc' in g.args:
@@ -191,7 +191,8 @@ def post_event():
     if not session:
         return error('Unauthorized', 403)
     mycursor.execute("INSERT INTO events (asso_id" + ''.join([f', {k}' for k in new_event.keys()]) + ") VALUES (%s" + (', %s' * len(new_event)) + ");", (session['asso_id'], *new_event.values()))
-    data.create_event_poster(session['asso_id'], new_event['title'], new_event['date'], g.args.get('poster'))
+    if g.args.get('poster'):
+        data.create_event_poster(session['asso_id'], new_event['title'], new_event['date'], g.args.get('poster'))
     return success({'id': mycursor.lastrowid})
 
 @api.route('/events/<id>', methods=['GET'])

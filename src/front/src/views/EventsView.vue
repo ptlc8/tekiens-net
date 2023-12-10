@@ -13,8 +13,7 @@ export default {
             assos: [],
             _events: [],
             error: null,
-            selectedCampus: {},
-            showPastEvents: false
+            selectedCampus: {}
         }
     },
     computed: {
@@ -23,12 +22,27 @@ export default {
                 let campus = this.getAssoById(event.asso_id)?.campus;
                 if (campus && !this.selectedCampus[campus])
                     return false;
-                return new Date(event.date + 'Z') > new Date() ? !this.showPastEvents : this.showPastEvents;
+                if (this.past)
+                    return new Date(event.date + 'Z') <= new Date();
+                return new Date(Date.parse(event.date + 'Z') + (event.duration ?? 0) * 60 * 1000) > new Date();
             });
-            if (this.showPastEvents)
+            if (this.past)
                 events.reverse();
             return events;
+        },
+        past: {
+            get() {
+                return 'past' in this.$route.query;
+            },
+            set(value) {
+                value = value ? null : undefined;
+                this.$router.replace({ query: { ...this.$route.query, past: value } });
+            }
         }
+    },
+    mounted() {
+        this.getEvents();
+        this.getAssos();
     },
     methods: {
         getEvents() {
@@ -75,10 +89,6 @@ export default {
         getAssoById(id) {
             return this.assos.find(asso => asso.id == id);
         }
-    },
-    mounted() {
-        this.getEvents();
-        this.getAssos();
     }
 };
 </script>
@@ -98,7 +108,7 @@ export default {
             <div>
                 <label>
                     Afficher les événements passés
-                    <Switch v-model="showPastEvents" class="switch" />
+                    <Switch v-model="past" class="switch" />
                 </label>
             </div>
         </article>
