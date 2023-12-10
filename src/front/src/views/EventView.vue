@@ -66,11 +66,19 @@ export default {
             Api.assos.getOne(this.event.asso_id)
                 .then(asso => this.asso = asso)
                 .catch(error => this.error = error);
+            document.title = this.event.title + ' - Tekiens.net';
         }
     },
     methods: {
         formatDate(date) {
             return new Date(date + 'Z').toLocaleString('FR-fr', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' });
+        },
+        deleteEvent() {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer cet événement ?'))
+                return;
+            Api.events.delete(this.event.id)
+                .then(() => this.$router.push('/assos/' + this.event.asso_id))
+                .catch(error => this.error = error);
         }
     }
 }
@@ -100,9 +108,7 @@ export default {
                         <RouterLink :to="'/events/' + event.id + '/edit'">
                             <button>Éditer l'événement</button>
                         </RouterLink>
-                        <RouterLink :to="'/events/' + event.id + '/delete'"><!--DELETE-->
-                            <button>Supprimer l'événement</button>
-                        </RouterLink>
+                        <button @click="deleteEvent">Supprimer l'événement</button>
                         <hr />
                     </template>
                     <span>📅 Le {{ formatDate(event.date) }}</span>

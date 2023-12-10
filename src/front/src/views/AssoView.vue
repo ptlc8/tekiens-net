@@ -66,6 +66,7 @@ export default {
     watch: {
         asso() {
             this.updateEvents();
+            document.title = this.asso.names?.[0] + ' - Tekiens.net';
         },
         '$route.params.id'() {
             Api.assos.getOne(this.$route.params.id)
