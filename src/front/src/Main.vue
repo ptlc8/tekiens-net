@@ -1,17 +1,22 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router';
 import { useSessionStore } from './stores/session';
+import { useStateStore } from './stores/state';
 import { ref } from 'vue';
 
 export default {
     setup() {
         var sessionStore = useSessionStore();
+        var stateStore = useStateStore();
         var nav = ref(null);
-        return { sessionStore, nav };
+        return { sessionStore, stateStore, nav };
     },
     computed: {
         session() {
             return this.sessionStore.session;
+        },
+        error() {
+            return this.stateStore.error;
         }
     },
     methods: {
@@ -79,7 +84,10 @@ export default {
         </nav>
     </header>
     <main>
-        <RouterView />
+        <RouterView v-if="!error" />
+        <section v-else class="error">
+            {{ error }}
+        </section>
     </main>
     <footer>
         <span></span>
@@ -244,6 +252,16 @@ main {
     flex: 1;
     display: flex;
     flex-direction: column;
+
+    section.error {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2em;
+        color: #424242;
+        text-align: center;
+    }
 }
 footer {
     display: flex;
