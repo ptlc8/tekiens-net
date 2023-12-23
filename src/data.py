@@ -13,10 +13,10 @@ def create_image(path, base64_image):
     return path
 
 def get_event_poster_path(asso, title, date):
-    asso = re.sub(r'[^\w. -]+', '_', asso)
-    title = re.sub(r'[^\w. -]+', '_', title)
+    asso = re.sub(r'[^\w]+', '-', asso).strip('-')
+    title = re.sub(r'[^\w]+', '-', title).strip('-')
     date = re.compile(r'\d{4}-\d{2}-\d{2}').search(str(date)).group()
-    return 'data/' + asso + '/' + date + ' ' + title + '.webp'
+    return 'data/' + asso + '/' + date + '-' + title + '.webp'
 
 def create_event_poster(asso, title, date, base64_poster):
     path = get_event_poster_path(asso, title, date)
