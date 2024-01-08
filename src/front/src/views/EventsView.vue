@@ -11,14 +11,30 @@ export default {
     data() {
         return {
             assos: [],
-            _events: [],
-            error: null,
+            events: [],
             selectedCampus: {}
         }
     },
+    beforeRouteEnter(to, from, next) {
+        Promise.all([
+            Api.events.get(),
+            Api.assos.get()
+        ])
+            .then(([events, assos]) => {
+                next(view => {
+                    view.events = events;
+                    view.assos = assos;
+                    view.selectedCampus = assos.reduce((allCampus, asso) => {
+                        allCampus[asso.campus] = true;
+                        return allCampus;
+                    }, {});
+                });
+            })
+            .catch(error => next(view => view.$state.error = error));
+    },
     computed: {
-        events() {
-            let events = this._events.filter(event => {
+        filteredEvents() {
+            let events = this.events.filter(event => {
                 let campus = this.getAssoById(event.asso_id)?.campus;
                 if (campus && !this.selectedCampus[campus])
                     return false;
@@ -40,27 +56,7 @@ export default {
             }
         }
     },
-    mounted() {
-        this.getEvents();
-        this.getAssos();
-    },
     methods: {
-        getEvents() {
-            Api.events.get()
-                .then(events => this._events = events)
-                .catch(error => this.error = error);
-        },
-        getAssos() {
-            Api.assos.get()
-                .then(assos => {
-                    this.assos = assos;
-                    this.selectedCampus = assos.reduce((allCampus, asso) => {
-                        allCampus[asso.campus] = true;
-                        return allCampus;
-                    }, {});
-                })
-                .catch(error => this.error = error);
-        },
         getMonday(date) {
             date = new Date(date);
             let weekday = (date.getDay() || 7) - 1;
@@ -68,7 +64,7 @@ export default {
             return new Date(monday.getFullYear(), monday.getMonth(), monday.getDate());
         },
         getEventsByWeek() {
-            return this.events.reduce((o, event) => {
+            return this.filteredEvents.reduce((o, event) => {
                 const monday = this.getMonday(new Date(event.date + 'Z'));
                 const key = `${monday.getFullYear()}-${monday.getMonth()+1}-${monday.getDate()}`;
                 if (!o[key]) o[key] = [];
@@ -101,7 +97,7 @@ export default {
                 <template v-for="_, campus in selectedCampus">
                     <label>
                         {{ campus }}
-                        <input type="checkbox" v-model="selectedCampus[campus]" />
+                        <Switch v-model="selectedCampus[campus]" />
                     </label>
                 </template>
             </div>
@@ -112,14 +108,13 @@ export default {
                 </label>
             </div>
         </article>
-        <span v-if="error">Erreur: {{ error }}</span>
         <article v-for="(events, monday) in getEventsByWeek()" :key="monday">
             <h2>{{ getWeekName(monday) }}</h2>
             <div class="events">
                 <EventPreview v-for="event in events" :key="event.id" :event="event" :asso="getAssoById(event.asso_id)" />
             </div>
         </article>
-        <article v-if="this.events.length == 0">
+        <article v-if="filteredEvents.length == 0">
             <h2>Aucun événement à venir</h2>
             <p>Revenez plus tard, ou consultez la liste des événements passés.</p>
         </article>
@@ -140,7 +135,6 @@ export default {
             margin: 0 4px;
         }
     }
-
 }
 
 .events {

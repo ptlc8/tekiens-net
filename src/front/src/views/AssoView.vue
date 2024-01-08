@@ -21,15 +21,25 @@ export default {
     data() {
         return {
             asso: null,
-            error: null,
-            events: [],
-            showPastEvents: false
+            events: []
         }
     },
-    mounted() {
-        Api.assos.getOne(this.$route.params.id)
-            .then(asso => this.asso = asso)
-            .catch(error => this.error = error);
+    beforeRouteEnter(to, _from, next) {
+        Promise.all([Api.assos.getOne(to.params.id), Api.assos.getEvents(to.params.id)])
+            .then(([asso, events]) => next(view => {
+                view.asso = asso;
+                view.events = events;
+            }))
+            .catch(error => next(view => view.$state.error = error));
+    },
+    beforeRouteUpdate(to, _from, next) {
+        Promise.all([Api.assos.getOne(to.params.id), Api.assos.getEvents(to.params.id)])
+            .then(([asso, events]) => {
+                this.asso = asso;
+                this.events = events;
+            })
+            .catch(error => this.$state.error = error)
+            .finally(next);
     },
     computed: {
         socials() {
@@ -54,27 +64,30 @@ export default {
         },
         icsUrl() {
             return location.host + baseUrl + '/api/assos/' + this.asso.id + '/events.ics';
-        }
-    },
-    methods: {
-        updateEvents(params = { after: new Date() }) {
-            Api.assos.getEvents(this.$route.params.id, params)
-                .then(events => this.events = events)
-                .catch(error => this.error = error);
+        },
+        showPastEvents: {
+            get() {
+                return 'past' in this.$route.query;
+            },
+            set(value) {
+                value = value ? null : undefined;
+                this.$router.replace({ query: { ...this.$route.query, past: value } });
+            }
+        },
+        filteredEvents() {
+            let events = this.events.filter(event => {
+                if (this.showPastEvents)
+                    return new Date(event.date + 'Z') <= new Date();
+                return new Date(Date.parse(event.date + 'Z') + (event.duration ?? 0) * 60 * 1000) > new Date();
+            });
+            if (this.showPastEvents)
+                events.reverse();
+            return events;
         }
     },
     watch: {
-        asso() {
-            this.updateEvents();
-            document.title = this.asso.names?.[0] + ' - Tekiens.net';
-        },
-        '$route.params.id'() {
-            Api.assos.getOne(this.$route.params.id)
-                .then(asso => this.asso = asso)
-                .catch(error => this.error = error);
-        },
-        showPastEvents() {
-            this.updateEvents({ [this.showPastEvents ? 'before' : 'after']: new Date(), desc: this.showPastEvents });
+        asso(asso) {
+            document.title = `${asso.names?.[0]} - Tekiens.net`;
         }
     },
     components: {
@@ -87,8 +100,6 @@ export default {
 <template>
     <section>
         <article :style="{ '--accent-color': color, '--bg-color': backgroundColor }">
-            <h2 v-if="error == 'Not found'">Association "{{ $route.params.id }}" non trouvée.</h2>
-            <span v-else-if="error">Erreur: {{ error }}</span>
             <h2 v-if="asso">
                 <img :src="asso.logos?.[0]" width="200" height="200">
                 {{ asso.names?.[0] }}

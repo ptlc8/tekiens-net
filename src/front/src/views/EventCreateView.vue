@@ -79,13 +79,13 @@ export default {
                 <DateTimeInput v-model="date" id="date" name="date" type="datetime-local" required />
                 <label for="place">Lieu</label>
                 <input v-model="event.place" id="place" name="place" type="text" required maxlength="255" placeholder="Bâtiment Cauchy" />
-                <label for="poster">Url de l'affiche (optionnel)</label>
+                <label for="poster">Affiche (optionnel)</label>
                 <ImageInput v-model="event.poster" id="poster" name="poster" />
                 <label for="description">Description (optionnel)</label>
                 <textarea v-model="event.description" id="description" name="description" maxlength="65535" rows="12" placeholder="Cet événement sera intéressant, venez !"></textarea>
                 <label for="price">Prix (optionnel)</label>
                 <input v-model="event.price" id="price" name="price" type="text" maxlength="255" placeholder="Gratuit" />
-                <label for="duration">Durée en minutes (optionnel)</label>
+                <label for="duration">Durée (optionnel)</label>
                 <DurationInput v-model="event.duration" id="duration" name="duration" />
                 <label for="link">Lien du QR code (optionnel)</label>
                 <input v-model="event.link" id="link" name="link" type="text" maxlength="255" :placeholder="eventUrl" />

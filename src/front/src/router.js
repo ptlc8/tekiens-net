@@ -33,14 +33,6 @@ export function createMainRouter() {
                 }
             },
             {
-                path: '/assos/:id/events',
-                name: 'asso-events',
-                component: () => import('./views/AssoEventsView.vue'),
-                meta: {
-                    title: 'Événements - Tekiens.net'
-                }
-            },
-            {
                 path: '/events',
                 name: 'events',
                 component: () => import('./views/EventsView.vue'),
@@ -117,14 +109,14 @@ export function createMainRouter() {
 
     const state = useStateStore();
 
-    router.beforeEach((to, from, next) => {
+    router.beforeEach((to, _from, next) => {
         document.title = to.meta.title;
         app.loading = true;
         Nprogress.start();
         next();
     });
 
-    router.afterEach(() => {
+    router.afterEach((_to, _from, _failure) => {
         state.error = null;
         state.loading = false;
         Nprogress.done();

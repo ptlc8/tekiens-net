@@ -17,15 +17,20 @@ export default {
             error: null
         }
     },
+    beforeRouteEnter(to, _from, next) {
+        Api.assos.getOne(to.params.id)
+            .then(asso => next(view => view.originalAsso = JSON.parse(JSON.stringify(this.asso = asso))))
+            .catch(error => next(view => view.$state.error = error));
+    },
+    beforeRouteUpdate(to, _from, next) {
+        Api.assos.getOne(to.params.id)
+            .then(asso => this.originalAsso = JSON.parse(JSON.stringify(this.asso = asso)))
+            .catch(error => this.$state.error = error)
+            .finally(next);
+    },
     mounted() {
         if (this.isNotGranted)
             this.$router.push('/assos/' + this.$route.params.id);
-        Api.assos.getOne(this.$route.params.id)
-            .then(asso => {
-                this.asso = asso;
-                this.originalAsso = JSON.parse(JSON.stringify(asso));
-            })
-            .catch(error => this.error = error);
     },
     methods: {
         editAsso() {

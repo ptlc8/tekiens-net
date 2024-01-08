@@ -11,30 +11,21 @@ export default {
         return {
             events: [],
             assos: [],
-            error: null,
         }
     },
-    mounted() {
-        this.getEvents();
-        this.getAssos();
-    },
-    methods: {
-        getEvents() {
-            Api.events.get({ after: new Date(), limit: 10 })
-                .then(events => this.events = events)
-                .catch(error => this.error = error);
-        },
-        getAssos() {
+    beforeRouteEnter(to, _from, next) {
+        Promise.all([
+            Api.events.get({ after: new Date(), limit: 10 }),
             Api.assos.get({ after: new Date().getUTCFullYear() })
-                .then(assos => this.assos = assos)
-                .catch(error => this.error = error);
-        }
+        ]).then(([events, assos]) => next(view => {
+            view.events = events;
+            view.assos = assos;
+        })).catch(error => next(view => view.$state.error = error));
     }
 };
 </script>
 
 <template>
-    <span v-if="error">Erreur: {{ error }}</span>
     <section>
         <article>
             <h2>Événements à venir</h2>

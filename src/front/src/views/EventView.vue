@@ -18,14 +18,19 @@ export default {
     data() {
         return {
             event: null,
-            error: null,
             asso: {}
         }
     },
-    mounted() {
-        Api.events.getOne(this.$route.params.id)
+    beforeRouteEnter(to, _from, next) {
+        Api.events.getOne(to.params.id)
+            .then(event => next(view => view.event = event))
+            .catch(error => next(view => view.$state.error = error));
+    },
+    beforeRouteUpdate(to, _from, next) {
+        Api.events.getOne(to.params.id)
             .then(event => this.event = event)
-            .catch(error => this.error = error);
+            .catch(error => this.$state.error = error)
+            .finally(next);
     },
     computed: {
         color() {
@@ -57,16 +62,10 @@ export default {
         }
     },
     watch: {
-        '$route.params.id'() {
-            Api.events.getOne(this.$route.params.id)
-                .then(event => this.event = event)
-                .catch(error => this.error = error);
-        },
-        event() {
-            Api.assos.getOne(this.event.asso_id)
-                .then(asso => this.asso = asso)
-                .catch(error => this.error = error);
-            document.title = this.event.title + ' - Tekiens.net';
+        event(event) {
+            document.title = `${event.title} - Tekiens.net`;
+            Api.assos.getOne(event.asso_id)
+                .then(asso => this.asso = asso);
         }
     },
     methods: {
@@ -78,7 +77,7 @@ export default {
                 return;
             Api.events.delete(this.event.id)
                 .then(() => this.$router.push('/assos/' + this.event.asso_id))
-                .catch(error => this.error = error);
+                .catch(error => this.$state.error = error);
         }
     }
 }
@@ -87,8 +86,6 @@ export default {
 <template>
     <section>
         <article :style="{ '--accent-color': color, '--bg-color': backgroundColor }">
-            <h2 v-if="error == 'Not found'">Cet événement n'existe plus... ou n'existe pas encore.</h2>
-            <span v-else-if="error">Erreur: {{ error }}</span>
             <div v-if="event" class="event">
                 <div class="main">
                     <h2>{{ event.title }}</h2>

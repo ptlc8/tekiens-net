@@ -1,22 +1,32 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router';
 import { useSessionStore } from './stores/session';
-import { useStateStore } from './stores/state';
 import { ref } from 'vue';
+
+const errors = {
+    'Failed to fetch': { message: ['🌐 Vous n\'êtes pas connecté à internet.', 'Vérifiez votre connexion. 🔌'] },
+    'Unexpected token .* is not valid JSON': { message: ['💥 Erreur côté serveur.', 'Veuillez réessayer plus tard. 🛠️'] },
+    'Not found': { message: ['La page que vous cherchez n\'existe pas.', 'Vérifiez l\'adresse. 🔎'] },
+};
 
 export default {
     setup() {
         var sessionStore = useSessionStore();
-        var stateStore = useStateStore();
         var nav = ref(null);
-        return { sessionStore, stateStore, nav };
+        return { sessionStore, nav };
     },
     computed: {
         session() {
             return this.sessionStore.session;
         },
         error() {
-            return this.stateStore.error;
+            if (!this.$state.error)
+                return null;
+            console.error(this.$state.error);
+            for (const [regex, message] of Object.entries(errors))
+                if (this.$state.error.toString().match(new RegExp(regex)))
+                    return message;
+            return { message: [this.$state.error.name, this.$state.error.message] };
         }
     },
     methods: {
@@ -86,7 +96,7 @@ export default {
     <main>
         <RouterView v-if="!error" />
         <section v-else class="error">
-            {{ error }}
+            <span v-for="message in error.message">{{ message }}</span>
         </section>
     </main>
     <footer>
@@ -256,6 +266,7 @@ main {
     section.error {
         flex: 1;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         font-size: 2em;
