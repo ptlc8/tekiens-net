@@ -19,7 +19,7 @@ export default {
     },
     beforeRouteEnter(to, _from, next) {
         Api.assos.getOne(to.params.id)
-            .then(asso => next(view => view.originalAsso = JSON.parse(JSON.stringify(this.asso = asso))))
+            .then(asso => next(view => view.originalAsso = JSON.parse(JSON.stringify(view.asso = asso))))
             .catch(error => next(view => view.$state.error = error));
     },
     beforeRouteUpdate(to, _from, next) {

@@ -29,7 +29,7 @@ export default {
     },
     beforeRouteUpdate(to, _from, next) {
         Api.events.getOne(to.params.id)
-            .then(event => this.originalEvent = JSON.parse(JSON.stringify(view.event = event)))
+            .then(event => this.originalEvent = JSON.parse(JSON.stringify(this.event = event)))
             .catch(error => this.$state.error = error)
             .finally(next);
     },
