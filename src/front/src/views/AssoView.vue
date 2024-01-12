@@ -116,7 +116,7 @@ export default {
                             </label>
                         </div>
                         <div class="events-container">
-                            <EventPreview v-for="event in events" :key="event.id" :event="event" :asso="asso" />
+                            <EventPreview v-for="event in filteredEvents" :key="event.id" :event="event" :asso="asso" />
                         </div>
                         <span v-if="events.length == 0">
                             Aucun événement {{ showPastEvents ? 'passé' : 'à venir' }}
