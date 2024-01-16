@@ -27,6 +27,7 @@ Les paramètres peuvent être passés dans l'URL ou dans le corps de la requête
 | 🔴 DELETE | [/api/events/{id}](#-delete-apieventsid)         | Supprime l'événement avec l'identifiant {id}                          |
 | 🟢 POST   | [/api/sessions](#-post-apisessions)              | Crée une session lié à une association                                |
 | 🔵 GET    | [/api/sessions/{id}](#-get-apisessionsid)        | Récupère la session avec l'identifiant {id}                           |
+| 🔴 DELETE | [/api/sessions/{id}](#-delete-apisessionsid)     | Supprime la session avec l'identifiant {id}                           |
 
 
 ## Assos
@@ -152,9 +153,9 @@ Supprime l'événement avec l'identifiant {id}.
 
 Crée une session lié à une association.
 - Paramètres :
-    - username : identifiant de l'association
+    - asso : identifiant de l'association
     - password : mot de passe
-- Fonction api.js : `Api.login(username, password)`
+- Fonction api.js : `Api.create(asso, password)`
 
 ### 🔵 `GET /api/sessions/{id}`
 
@@ -162,3 +163,10 @@ Récupère la session avec l'identifiant {id}.
 - Paramètres :
     - id : identifiant de la session
 - Fonction api.js : `Api.sessions.getOne(id)`
+
+### 🔴 `DELETE /api/sessions/{id}`
+
+Supprime la session avec l'identifiant {id}.
+- Paramètres :
+    - id : identifiant de la session
+- Fonction api.js : `Api.sessions.delete(id)`
