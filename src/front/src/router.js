@@ -49,11 +49,11 @@ export function createMainRouter() {
                 }
             },
             {
-                path: '/about',
-                name: 'about',
-                component: () => import('./views/AboutView.vue'),
+                path: '/faq',
+                name: 'faq',
+                component: () => import('./views/FaqView.vue'),
                 meta: {
-                    title: 'À propos - Tekiens.net'
+                    title: 'FAQ - Tekiens.net'
                 }
             },
             {

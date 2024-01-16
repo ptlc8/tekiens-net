@@ -81,7 +81,7 @@ export default {
             <RouterLink to="/assos">Associations</RouterLink>
             <RouterLink to="/events">Événements</RouterLink>
             <a target="_blank" href="https://archive.tekiens.net">Archives</a>
-            <RouterLink to="/about">À propos</RouterLink>
+            <RouterLink to="/faq">FAQ</RouterLink>
             <div class="school-links" tabindex="0">
                 <a>Liens de l'école</a>
                 <div>
