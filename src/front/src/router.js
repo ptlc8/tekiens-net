@@ -65,14 +65,6 @@ export function createMainRouter() {
                 }
             },
             {
-                path: '/dashboard',
-                name: 'dashboard',
-                component: () => import('./views/DashboardView.vue'),
-                meta: {
-                    title: 'Dashboard - Tekiens.net'
-                }
-            },
-            {
                 path: '/assos/:id/edit',
                 name: 'asso-edit',
                 component: () => import('./views/AssoEditView.vue'),

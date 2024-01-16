@@ -60,8 +60,11 @@ export default {
                 <RouterLink :to="'/assos/' + session.asso_id" custom v-slot="{ navigate }">
                     <button @click="navigate">Ma page</button>
                 </RouterLink>
-                <RouterLink to="/dashboard" custom v-slot="{ navigate }">
-                    <button @click="navigate">Dashboard</button>
+                <RouterLink to="/events/create" custom v-slot="{ navigate }">
+                    <button @click="navigate">Créer un événement</button>
+                </RouterLink>
+                <RouterLink :to="'/assos/' + session.asso_id + '/edit'" custom v-slot="{ navigate }">
+                    <button @click="navigate">Modifier ma page</button>
                 </RouterLink>
                 <button @click="logout">Se déconnecter</button>
             </template>
@@ -141,7 +144,7 @@ header {
         flex-direction: column;
 
         &:hover, &:focus-within {
-            max-height: 12em;
+            max-height: 16em;
         }
 
         .header {
