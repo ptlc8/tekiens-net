@@ -38,8 +38,8 @@ export default {
             for (let field in this.asso)
                 if (this.asso[field] != this.originalAsso[field])
                     fields[field] = this.asso[field];
-            Api.assos.update(this.asso.id, fields)
-                .then(() => this.$router.push('/assos/' + this.$route.params.id))
+            Api.assos.update(this.originalAsso.id, fields)
+                .then(() => this.$router.push('/assos/' + this.asso.id))
                 .catch(error => this.error = error);
         }
     },
@@ -47,9 +47,9 @@ export default {
         isNotGranted() {
             if (this.sessionStore.session === null) // not logged in
                 return true;
-            if (this.sessionStore.session === undefined || !this.asso.id) // not loaded
+            if (this.sessionStore.session === undefined || !this.originalAsso.id) // not loaded
                 return undefined;
-            return this.sessionStore.session.asso_id != this.asso.id;
+            return this.sessionStore.session.asso_id != this.originalAsso.id;
         },
         color: {
             get() {
