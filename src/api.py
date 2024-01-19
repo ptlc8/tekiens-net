@@ -74,7 +74,7 @@ def unparse_asso(asso):
 def get_assos():
     mydb = get_db()
     mycursor = mydb.cursor(dictionary=True)
-    sql = "SELECT * FROM assos WHERE 1=1"
+    sql = "SELECT " + ", ".join(assos_columns) + " FROM assos WHERE 1=1"
     params = ()
     if 'campus' in g.args:
         sql += " AND campus = %s"
@@ -96,7 +96,7 @@ def get_assos():
 def get_asso(id):
     mydb = get_db()
     mycursor = mydb.cursor(dictionary=True)
-    mycursor.execute("SELECT * FROM assos WHERE id = %s", (id,))
+    mycursor.execute("SELECT " + ", ".join(assos_columns) + " FROM assos WHERE id = %s", (id,))
     result = mycursor.fetchone()
     if not result:
         return error('Not found', 404)
