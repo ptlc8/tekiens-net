@@ -36,8 +36,17 @@ const Api = {
         }
     },
     sessions: {
-        create(assoId, password) {
-            return sendApiRequest("POST", "sessions", { asso: assoId, password }, "Creating session");
+        async create(assoId, password) { //authentificate the user and return a session id if success
+            //the user call the api to get a challenge
+            let challenge = await sendApiRequest("POST", "sessions", { asso: assoId }, "Challenge session"); 
+
+            let hash_password = await hash(password);
+            
+            let hash_challenge = await hash(challenge + hash_password);
+
+            //the user send the hash of the challenge and the password
+            return await sendApiRequest("POST", "sessions", { asso: assoId, hash: hash_challenge }, "Creating session");
+
         },
         getOne(id) {
             return sendApiRequest("GET", "sessions/" + encodeURIComponent(id), {}, "Getting session");
@@ -92,6 +101,14 @@ function sendApiRequest(method, endpoint, parameters={}, message=undefined) {
             })
             .catch(reject);
     });
+}
+
+//a function to hash a string with sha256 and return the hash in hex
+async function hash(string) {
+    const sourceBytes = new TextEncoder().encode(string);
+    const disgest = await crypto.subtle.digest("SHA-256", sourceBytes);
+    const hash = Array.from(new Uint8Array(disgest)).map(b => b.toString(16).padStart(2, "0")).join(""); 
+    return hash;
 }
 
 export default Api;

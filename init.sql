@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS `assos` (
   `id` varchar(24) NOT NULL COMMENT 'identifier (slug like)',
   `names` text NOT NULL COMMENT 'names separated by comma',
+  `password` char(64) NOT NULL COMMENT 'password hash',
   `logos` text NOT NULL COMMENT 'logos path separated by comma',
   `start` int DEFAULT NULL COMMENT 'creation year',
   `end` int DEFAULT NULL COMMENT 'dissolution year',
@@ -10,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `assos` (
   `socials` text NOT NULL COMMENT 'social networks separated by comma and colon',
   `description` text DEFAULT NULL COMMENT 'description',
   `color` mediumint UNSIGNED NOT NULL COMMENT 'main color',
+  `challenge` char(32) COMMENT 'string generated to verify the password',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 

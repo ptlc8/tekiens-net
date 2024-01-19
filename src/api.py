@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import mysql.connector
 import secrets
 import data
+from hashlib import sha256
 
 load_dotenv()
 
@@ -265,20 +266,43 @@ def get_sessions(id):
 @api.route('/sessions', methods=['POST'])
 def post_session():
     asso_id = g.args.get('asso')
-    password = g.args.get('password')
-    if not asso_id or not password:
+    hash_client = g.args.get('hash') # get the hash from the client if it exists
+
+    if not asso_id:
         return error('Missing parameters')
-    mydb = get_db()
+
+    mydb = get_db() # connect to the database
     mycursor = mydb.cursor(dictionary=True)
-    # TODO: implement password
-    #mycursor.execute("SELECT * FROM assos WHERE id = %s AND password = %s", (assoId, password))
-    mycursor.execute("SELECT * FROM assos WHERE id = %s", (asso_id,))
+
+    mycursor.execute("SELECT password, challenge, id FROM assos WHERE id = %s", (asso_id,))
     asso = mycursor.fetchone()
+
     if not asso:
-        return error('Wrong credentials', 403)
-    session_id = secrets.token_urlsafe(24)
-    mycursor.execute("INSERT INTO sessions (id, asso_id) VALUES (%s, %s)", (session_id, asso['id']))
-    return success({'id': session_id, 'asso_id': asso['id']}, 201)
+        return error('Invalid asso', 400)
+
+    if not hash_client:
+        #generate  the challenge and hash it with the password to send it to the client
+        challenge = secrets.token_urlsafe(24)
+        mycursor.execute("UPDATE assos SET challenge = %s WHERE id = %s", (challenge, asso_id))
+        return success(challenge, 201)
+
+    #check if the challenge exist and if the client send the hash of the challenge 
+    if hash_client and asso['challenge']: 
+
+        #hash the challenge with the password and compare it with the hash send by the client
+        hash_serv = sha256((asso['challenge']+ asso['password']).encode()).hexdigest()
+
+        if hash_client==hash_serv:
+            #if the hash are the same, create a session and return the id of the session (and delete the challenge in the database)
+            session_id = secrets.token_urlsafe(24)
+            mycursor.execute("INSERT INTO sessions (id, asso_id) VALUES (%s, %s)", (session_id, asso['id']))
+            mycursor.execute("UPDATE assos SET challenge = NULL WHERE id = %s", (asso_id,))
+            return success({'id': session_id, 'asso_id': asso['id']}, 201)
+
+    return error('Invalid credentials', 401)
+
+    
+    
 
 @api.route('/sessions/<id>', methods=['DELETE'])
 def delete_session(id):
