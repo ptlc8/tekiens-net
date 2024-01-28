@@ -22,7 +22,6 @@ export default {
         error() {
             if (!this.$state.error)
                 return null;
-            console.error(this.$state.error);
             for (const [regex, message] of Object.entries(errors))
                 if (this.$state.error.toString().match(new RegExp(regex)))
                     return message;
@@ -97,10 +96,12 @@ export default {
         </nav>
     </header>
     <main>
-        <RouterView v-if="!error" />
-        <section v-else class="error">
-            <span v-for="message in error.message">{{ message }}</span>
-        </section>
+        <KeepAlive>
+            <RouterView v-if="!error" />
+            <section v-else class="error">
+                <span v-for="message in error.message">{{ message }}</span>
+            </section>
+        </KeepAlive>
     </main>
     <footer>
         <span></span>

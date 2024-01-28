@@ -103,13 +103,13 @@ export function createMainRouter() {
 
     router.beforeEach((to, _from, next) => {
         document.title = to.meta.title;
+        state.error = null;
         app.loading = true;
         Nprogress.start();
         next();
     });
 
     router.afterEach((_to, _from, _failure) => {
-        state.error = null;
         state.loading = false;
         Nprogress.done();
     });
