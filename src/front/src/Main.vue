@@ -89,7 +89,7 @@ export default {
                     <a target="_blank" href="https://arel.cy-tech.fr/">AREL : plateforme pédagogique</a>
                     <a target="_blank" href="https://services-web.u-cergy.fr/calendar">Celcat : emploi du temps</a>
                     <a target="_blank" href="https://glpi.cy-tech.fr/">GLPI : support informatique</a>
-                    <a target="_blank" href="https://doc.eisti.fr/">Documentation EISTI</a>
+                    <a target="_blank" href="https://doc.cy-tech.fr/">Documentation CY Tech</a>
                 </div>
             </div>
             <span class="open-button" onclick="this.parentElement.classList.toggle('open')"></span>
