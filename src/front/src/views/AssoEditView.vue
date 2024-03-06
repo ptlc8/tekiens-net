@@ -87,8 +87,8 @@ export default {
                     <input @input="onInput" :value="value" name="names[]" type="text" required maxlength="255" placeholder="Super Association" />
                 </ArrayInput>
                 <label for="logos">Logos</label>
-                <ArrayInput v-model="asso.logos" v-slot="{ onUpdate, value }" default="">
-                    <ImageInput @update:modelValue="onUpdate" :modelValue="value" />
+                <ArrayInput v-model="asso.logos" v-slot="{ onUpdate, value, placeholder }" :placeholder="originalAsso.logos" default="">
+                    <ImageInput @update:modelValue="onUpdate" :modelValue="value" :placeholder="placeholder" />
                 </ArrayInput>
                 <label for="theme">Thème</label>
                 <input v-model="asso.theme" id="theme" name="theme" type="text" required maxlength="255" placeholder="Thème intéressant" />

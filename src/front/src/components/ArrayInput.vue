@@ -5,6 +5,10 @@ export default {
             type: Array,
             default: () => []
         },
+        placeholder: {
+            type: Array,
+            default: null
+        },
         name: String,
         default: undefined
     },
@@ -54,7 +58,7 @@ export default {
     <div class="array-input" tabindex="0">
         <template v-for="_, index in values">
             <div class="value">
-                <slot :value="values[index]" :onInput="e => values[index] = e.target.value" :onUpdate="v => values[index] = v" />
+                <slot :value="values[index]" :placeholder="placeholder ? placeholder[index] : null" :onInput="e => values[index] = e.target.value" :onUpdate="v => values[index] = v" />
                 <button type="button" @click="moveUp(index)" v-if="index != 0" title="Déplacer vers le haut">⬆</button>
                 <button type="button" @click="moveDown(index)" v-if="index != values.length - 1" title="Déplacer vers le bas">⬇</button>
                 <button type="button" @click="remove(index)" title="Supprimer">✖</button>
