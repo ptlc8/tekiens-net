@@ -43,7 +43,7 @@ DATABASE_PASS=supermotdepasse
 DATABASE_NAME=tekiens_net
 ```
 
-## Compilation du front-end
+### Compilation du front-end
 
 ```sh
 $ cd front
@@ -51,13 +51,13 @@ $ npm run build
 $ cd ..
 ```
 
-## Lancement en mode développement
+### Lancement en mode développement
 
 ```sh
 $ venv/bin/python3 -m flask run
 ```
 
-## Lancement en mode production avec Apache2
+### Lancement en mode production avec Apache2
 
 ```sh
 $ apt-get update
@@ -72,6 +72,15 @@ $ service apache2 restart
 Si le projet est servi par un reverse proxy, créer un fichier `.env.local` dans le dossier `src/front` avec le sous-chemin du projet sous la forme suivante :
 ```properties
 VITE_BASE_URL=/sous-chemin
+```
+
+## Échantillon de données
+
+Pour ajouter un échantillon de données, exécuter le script `sample.sql` dans la base de données et copier les images du dossier `sample-data` dans le dossier `src/data` :
+
+```sh
+$ cp sample-data/* src/data/
+$ chown -R www-data:www-data src/data/*
 ```
 
 ## API

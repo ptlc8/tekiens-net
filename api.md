@@ -57,14 +57,14 @@ Fonctionne aussi avec la méthode 🟠 PATCH.
     - id : identifiant de l'association
     - session : identifiant de la session lié à l'association
     - id : nouvel identifiant de l'association (facultatif)
-    - names : nouveaux noms de l'association dans l'ordre chronologique séparés par une virgule (facultatif)
-    - logos : nouveaux logos de l'association dans l'ordre chronologique séparés par une virgule (facultatif)
+    - names[] : nouveaux noms de l'association dans l'ordre chronologique (multiple, facultatif)
+    - logos[] : nouveaux logos de l'association dans l'ordre chronologique au format URL base64 (multiple, facultatif)
     - start : nouvelle date de début de l'association (facultatif)
     - end : nouvelle date de fin de l'association (facultatif)
     - theme : nouveau thème de l'association (facultatif)
     - campus : nouveau campus de l'association (facultatif)
     - room : nouvelle salle de l'association (facultatif)
-    - socials : nouveaux réseaux sociaux de l'association au format JSON (facultatif)
+    - socials[] : nouveaux réseaux sociaux de l'association (multiple, facultatif)
     - description : nouvelle description de l'association (facultatif)
     - color : nouvelle couleur de l'association (facultatif)
 - Fonction api.js : `Api.assos.update(id, asso)`
