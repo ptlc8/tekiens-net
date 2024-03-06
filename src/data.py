@@ -5,6 +5,9 @@ import io
 from PIL import Image
 
 
+def normalize(string):
+    return re.sub(r'[^\w]+', '-', string).strip('-')
+
 def create_image(path, base64_image):
     base64_image = re.sub(r'data:image/(\w+);base64,', '', base64_image).encode()
     image = Image.open(io.BytesIO(base64.b64decode(base64_image)))
@@ -12,9 +15,19 @@ def create_image(path, base64_image):
     image.save(path, 'webp', save_all=True)
     return path
 
+def update_asso_folder(old_name, new_name=None):
+    old_name = normalize(old_name)
+    new_name = normalize(new_name or old_name)
+    if old_name == new_name or not os.path.exists('data/' + old_name):
+        return True
+    if os.path.exists('data/' + new_name):
+        return False
+    print('Renaming', old_name, 'to', new_name)
+    os.rename('data/' + old_name, 'data/' + new_name)
+
 def get_event_poster_path(asso, title, date):
-    asso = re.sub(r'[^\w]+', '-', asso).strip('-')
-    title = re.sub(r'[^\w]+', '-', title).strip('-')
+    asso = normalize(asso)
+    title = normalize(title)
     date = re.compile(r'\d{4}-\d{2}-\d{2}').search(str(date)).group()
     return 'data/' + asso + '/' + date + '-' + title + '.webp'
 

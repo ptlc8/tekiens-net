@@ -24,7 +24,7 @@ export default {
         </div>
         <div class="infos">
             <span class="title">{{ event.title }}</span>
-            <RouterLink :to="'/assos/' + event.asso_id">{{ asso?.names?.[0] ?? event.asso_id }}</RouterLink>
+            <RouterLink :to="'/assos/' + encodeURIComponent(event.asso_id)">{{ asso?.names?.[0] ?? event.asso_id }}</RouterLink>
             {{ new Date(event.date + 'Z').toLocaleString('FR-fr', { weekday:'long', hour:'2-digit', minute:'2-digit', timeZone: 'Europe/Paris' }) }}
             -
             {{ event.place }}

@@ -56,13 +56,13 @@ export default {
                         <img :src="session.asso.logos[0]" width="48" height="48" alt="Logo de l'association">
                     </template>
                 </div>
-                <RouterLink :to="'/assos/' + session.asso_id" custom v-slot="{ navigate }">
+                <RouterLink :to="'/assos/' + encodeURIComponent(session.asso_id)" custom v-slot="{ navigate }">
                     <button @click="navigate">Ma page</button>
                 </RouterLink>
                 <RouterLink to="/events/create" custom v-slot="{ navigate }">
                     <button @click="navigate">Créer un événement</button>
                 </RouterLink>
-                <RouterLink :to="'/assos/' + session.asso_id + '/edit'" custom v-slot="{ navigate }">
+                <RouterLink :to="'/assos/' + encodeURIComponent(session.asso_id) + '/edit'" custom v-slot="{ navigate }">
                     <button @click="navigate">Modifier ma page</button>
                 </RouterLink>
                 <button @click="logout">Se déconnecter</button>

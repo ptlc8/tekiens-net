@@ -76,7 +76,7 @@ export default {
             if (!confirm('Êtes-vous sûr de vouloir supprimer cet événement ?'))
                 return;
             Api.events.delete(this.event.id)
-                .then(() => this.$router.push('/assos/' + this.event.asso_id))
+                .then(() => this.$router.push('/assos/' + encodeURIComponent(this.event.asso_id)))
                 .catch(error => this.$state.error = error);
         }
     }
@@ -96,7 +96,7 @@ export default {
                     </div>
                 </div>
                 <div class="infos">
-                    <RouterLink :to="'/assos/' + event.asso_id">
+                    <RouterLink :to="'/assos/' + encodeURIComponent(event.asso_id)">
                         <img :src="asso.logos?.[0]" class="logo" alt="Logo de l'association" width="200" height="200">
                         <span class="asso">{{ asso.names?.[0] }}</span>
                     </RouterLink>

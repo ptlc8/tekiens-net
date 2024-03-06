@@ -14,8 +14,8 @@ Les paramètres peuvent être passés dans l'URL ou dans le corps de la requête
 
 ### Endpoints
 
-| Méthode   | URL                                                | Description                                                           |
-|-----------|----------------------------------------------------|-----------------------------------------------------------------------|
+| Méthode   | URL                                              | Description                                                           |
+|-----------|--------------------------------------------------|-----------------------------------------------------------------------|
 | 🔵 GET    | [/api/assos](#-get-apiassos)                     | Récupère toutes les associations                                      |
 | 🔵 GET    | [/api/assos/{id}](#-get-apiassosid)              | Récupère l'association avec l'identifiant {id}                        |
 | 🟡 PUT    | [/api/assos/{id}](#-put-apiassosid)              | Met à jour l'association avec l'identifiant {id}                      |

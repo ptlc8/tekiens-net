@@ -73,3 +73,7 @@ Si le projet est servi par un reverse proxy, créer un fichier `.env.local` dans
 ```properties
 VITE_BASE_URL=/sous-chemin
 ```
+
+## API
+
+Voir [api.md](api.md).

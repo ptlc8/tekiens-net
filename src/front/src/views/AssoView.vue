@@ -63,7 +63,7 @@ export default {
             return this.sessionStore.session.asso_id == this.asso.id;
         },
         icsUrl() {
-            return location.host + baseUrl + '/api/assos/' + this.asso.id + '/events.ics';
+            return location.host + baseUrl + '/api/assos/' + encodeURIComponent(this.asso.id) + '/events.ics';
         },
         showPastEvents: {
             get() {
@@ -125,7 +125,7 @@ export default {
                 </div>
                 <div class="infos">
                     <template v-if="editable">
-                        <RouterLink :to="'/assos/' + asso.id + '/edit'">
+                        <RouterLink :to="'/assos/' + encodeURIComponent(asso.id) + '/edit'">
                             <button>Éditer l'association</button>
                         </RouterLink>
                         <RouterLink to="/events/create">

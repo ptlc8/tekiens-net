@@ -39,7 +39,7 @@ export default {
         <article>
             <h2>Associations</h2>
             <div class="assos">
-                <RouterLink v-for="asso, i in assos" :key="asso.id" :to="'/assos/' + asso.id">
+                <RouterLink v-for="asso, i in assos" :key="asso.id" :to="'/assos/' + encodeURIComponent(asso.id)">
                     <img :src="asso.logos[0]" :alt="asso.names[0]" :style="{
                         top:  50 - Math.cos((i%2 ? (i+1)/2 : -i/2) / assos.length * 2*Math.PI)*40 + '%',
                         left: 50 + Math.sin((i%2 ? (i+1)/2 : -i/2) / assos.length * 2*Math.PI)*40 + '%'

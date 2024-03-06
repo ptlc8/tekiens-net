@@ -105,7 +105,7 @@ export default {
                 <input v-model="event.link" id="link" name="link" type="text" maxlength="255" :placeholder="eventUrl" />
                 <label for="access">Qui peut participer ? (optionnel)</label>
                 <input v-model="event.access" id="access" name="access" type="text" maxlength="255" placeholder="Ouvert à tous" />
-                <label for="status">Statut (optionnel)</label>
+                <label for="status">Statut</label>
                 <select v-model="event.status" id="status" name="status" >
                     <option v-for="name, status in eventStatus" :value="status">{{ name }}</option>
                 </select>

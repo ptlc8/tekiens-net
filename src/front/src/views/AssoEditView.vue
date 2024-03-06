@@ -30,7 +30,7 @@ export default {
     },
     mounted() {
         if (this.isNotGranted)
-            this.$router.push('/assos/' + this.$route.params.id);
+            this.$router.push('/assos/' + encodeURIComponent(this.$route.params.id));
     },
     methods: {
         editAsso() {
@@ -39,7 +39,7 @@ export default {
                 if (this.asso[field] != this.originalAsso[field])
                     fields[field] = this.asso[field];
             Api.assos.update(this.originalAsso.id, fields)
-                .then(() => this.$router.push('/assos/' + this.asso.id))
+                .then(() => this.$router.push('/assos/' + encodeURIComponent(this.asso.id)))
                 .catch(error => this.error = error);
         }
     },
@@ -63,7 +63,7 @@ export default {
     watch: {
         isNotGranted(isNotGranted) {
             if (isNotGranted)
-                this.$router.push('/assos/' + this.$route.params.id);
+                this.$router.push('/assos/' + encodeURIComponent(this.$route.params.id));
         }
     },
     components: {

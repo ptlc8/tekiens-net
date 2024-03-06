@@ -117,8 +117,11 @@ def put_asso(id):
     new_asso = unparse_asso({k: v for k, v in g.args.items() if k in assos_columns})
     if len(new_asso) == 0:
         return error('Nothing to update', 200)
+    if 'id' in new_asso and ('/' in new_asso['id'] or data.normalize(new_asso['id']) == ''):
+        return error('Invalid id', 400)
     sql = "UPDATE assos SET " + ', '.join([f"{k} = %s" for k in new_asso.keys()]) + " WHERE id = %s"
     mycursor.execute(sql, (*new_asso.values(), id))
+    data.update_asso_folder(id, new_asso.get('id'))
     return success('Updated')
 
 @api.route('/assos/<id>/events', methods=['GET'])
