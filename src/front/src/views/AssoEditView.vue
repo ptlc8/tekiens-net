@@ -3,6 +3,7 @@ import Api from '../api';
 import { useSessionStore } from "../stores/session";
 import ArrayInput from '../components/ArrayInput.vue';
 import SocialInput from '../components/SocialInput.vue';
+import ImageInput from '../components/ImageInput.vue';
 
 export default {
     setup() {
@@ -68,7 +69,8 @@ export default {
     },
     components: {
         ArrayInput,
-        SocialInput
+        SocialInput,
+        ImageInput
     }
 }
 </script>
@@ -84,9 +86,9 @@ export default {
                 <ArrayInput v-model="asso.names" v-slot="{ onInput, value }" default="">
                     <input @input="onInput" :value="value" name="names[]" type="text" required maxlength="255" placeholder="Super Association" />
                 </ArrayInput>
-                <label for="logos">Url des logos</label>
-                <ArrayInput v-model="asso.logos" v-slot="{ onInput, value }" default="">
-                    <input @input="onInput" :value="value" name="logos[]" type="text" required maxlength="255" placeholder="https://tekiens.net/assets/super-logo.png" />
+                <label for="logos">Logos</label>
+                <ArrayInput v-model="asso.logos" v-slot="{ onUpdate, value }" default="">
+                    <ImageInput @update:modelValue="onUpdate" :modelValue="value" />
                 </ArrayInput>
                 <label for="theme">Thème</label>
                 <input v-model="asso.theme" id="theme" name="theme" type="text" required maxlength="255" placeholder="Thème intéressant" />

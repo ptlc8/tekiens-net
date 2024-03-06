@@ -57,7 +57,7 @@ export default {
 <template>
     <div @click="click" @keyup.space.prevent="click" @drop.prevent="onDrop" @dragover.prevent @dragenter.prevent.stop="dragging = true" @dragleave.stop="dragging = false" :class="{ dragging, 'image-input': true }" tabindex="0">
         <input ref="input" v-bind="$attrs" @change="onChange" type="file" accept="image/*" />
-        <img v-if="value" :src="value" alt="Affiche de l'événement" width="200" height="200" />
+        <img v-if="value" :src="value" width="200" height="200" />
         <span v-else>Sélectionnez ou glissez une image</span>
         <div class="buttons">
             <button v-if="value" @click.stop="clear">Supprimer</button>
@@ -68,6 +68,7 @@ export default {
 
 <style scoped lang="scss">
 .image-input {
+    width: 100%;
     display: flex;
     min-height: 8em;
     justify-content: center;

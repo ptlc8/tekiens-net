@@ -57,7 +57,7 @@ def url_value_preprocess(endpoint, values):
 
 def parse_asso(asso):
     asso['names'] = asso['names'].split(',')
-    asso['logos'] = asso['logos'].split(',')
+    asso['logos'] = ['/' + l for l in data.get_asso_logos_paths(asso['id'], int(asso['logos']))]
     asso['socials'] = asso['socials'].split(',')
     return asso
 
@@ -65,7 +65,7 @@ def unparse_asso(asso):
     if 'names' in asso:
         asso['names'] = ','.join(asso['names'])
     if 'logos' in asso:
-        asso['logos'] = ','.join(asso['logos'])
+        asso['logos'] = len(asso['logos'])
     if 'socials' in asso:
         asso['socials'] = ','.join(asso['socials'])
     return asso
@@ -121,6 +121,8 @@ def put_asso(id):
         return error('Invalid id', 400)
     sql = "UPDATE assos SET " + ', '.join([f"{k} = %s" for k in new_asso.keys()]) + " WHERE id = %s"
     mycursor.execute(sql, (*new_asso.values(), id))
+    if 'logos' in g.args:
+        data.update_asso_logos(id, g.args.get('logos'))
     data.update_asso_folder(id, new_asso.get('id'))
     return success('Updated')
 

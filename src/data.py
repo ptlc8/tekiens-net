@@ -24,6 +24,37 @@ def update_asso_folder(old_name, new_name=None):
         return False
     print('Renaming', old_name, 'to', new_name)
     os.rename('data/' + old_name, 'data/' + new_name)
+    
+    
+# Asso logos
+
+def get_asso_logos_paths(asso, count):
+    asso = normalize(asso)
+    return ['data/' + asso + '/logo-' + str(i) + '.webp' for i in range(count)]
+
+def update_asso_logos(asso, base64_logos):
+    asso = normalize(asso)
+    os.makedirs('data/' + asso + '/tmp', exist_ok=True)
+    # move logo files to tmp folder
+    n = 0
+    while os.path.exists('data/' + asso + '/logo-' + str(n) + '.webp'):
+        os.replace('data/' + asso + '/logo-' + str(n) + '.webp', 'data/' + asso + '/tmp/logo-' + str(n) + '.webp')
+        n += 1
+    # create new logo files
+    for i, base64_logo in enumerate(base64_logos):
+        # test if base64 contains logo-<?>.webp
+        if re.search(r'logo-\d+\.webp', base64_logo):
+            os.rename('data/' + asso + '/tmp/' + re.search(r'logo-\d+\.webp', base64_logo).group(), 'data/' + asso + '/logo-' + str(i) + '.webp')
+        else:
+            create_image('data/' + asso + '/logo-' + str(i) + '.webp', base64_logo)
+    # delete tmp folder
+    for i in range(n-1, -1, -1):
+        if os.path.exists('data/' + asso + '/tmp/logo-' + str(i) + '.webp'):
+            os.remove('data/' + asso + '/tmp/logo-' + str(i) + '.webp')
+    os.rmdir('data/' + asso + '/tmp')
+    
+    
+# Event posters
 
 def get_event_poster_path(asso, title, date):
     asso = normalize(asso)

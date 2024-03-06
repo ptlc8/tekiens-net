@@ -3,10 +3,12 @@ const baseUrl = import.meta.env.VITE_BASE_URL ?? "";
 const Api = {
     assos: {
         get(params={}) {
-            return sendApiRequest("GET", "assos", params, "Getting assos");
+            return sendApiRequest("GET", "assos", params, "Getting assos")
+                .then(assos => assos.map(parseAsso));
         },
         getOne(id) {
-            return sendApiRequest("GET", "assos/" + encodeURIComponent(id), {}, "Getting asso " + id);
+            return sendApiRequest("GET", "assos/" + encodeURIComponent(id), {}, "Getting asso " + id)
+                .then(parseAsso);
         },
         getEvents(id, params={}) {
             return sendApiRequest("GET", "assos/" + encodeURIComponent(id) + "/events", params, "Getting asso " + id + " events")
@@ -57,6 +59,12 @@ const Api = {
     }
 };
 
+
+function parseAsso(asso) {
+    if (asso.logos)
+        asso.logos = asso.logos.map(logo => baseUrl + logo);
+    return asso;
+}
 
 function parseEvent(event) {
     if (event.poster)
