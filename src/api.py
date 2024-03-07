@@ -85,6 +85,10 @@ def get_assos():
     if 'after' in g.args:
         sql += " AND (end > %s OR end IS NULL)"
         params += (g.args.get('after'),)
+    if 'order' in g.args and g.args.get('order') in ['start', 'end', 'color', 'random']:
+        sql += " ORDER BY " + ("RAND()" if g.args.get('order') == 'random' else g.args.get('order'))
+        if 'desc' in g.args:
+            sql += " DESC"
     if 'limit' in g.args:
         sql += " LIMIT %s"
         params += (int(g.args.get('limit')),)
@@ -138,7 +142,10 @@ def get_asso_events(id):
     if 'after' in g.args:
         sql += " AND DATE_ADD(date, INTERVAL IFNULL(duration, 0) MINUTE) > %s"
         params += (g.args.get('after'),)
-    sql += " ORDER BY date"
+    if 'order' in g.args and g.args.get('order') == 'random':
+        sql += " ORDER BY " + "RAND()"
+    else:
+        sql += " ORDER BY date"
     if 'desc' in g.args:
         sql += " DESC"
     if 'limit' in g.args:
@@ -172,7 +179,10 @@ def get_events():
     if 'after' in g.args:
         sql += " AND DATE_ADD(date, INTERVAL IFNULL(duration, 0) MINUTE) > %s"
         params += (g.args.get('after'),)
-    sql += " ORDER BY date"
+    if 'order' in g.args and g.args.get('order') == 'random':
+        sql += " ORDER BY " + "RAND()"
+    else:
+        sql += " ORDER BY date"
     if 'desc' in g.args:
         sql += " DESC"
     if 'limit' in g.args:

@@ -39,6 +39,8 @@ Récupère toutes les associations.
     - campus : filtre les associations par campus (facultatif)
     - before : filtre les associations existantes avant l'année spécifiée (facultatif)
     - after : filtre les associations existantes après l'année spécifiée (facultatif)
+    - order : tri les associations, "start" "end" "color" ou "random" (facultatif)
+    - desc : tri les associations par ordre décroissant (facultatif)
     - limit : limite le nombre d'associations retournées (facultatif)
 - Fonction api.js : `Api.assos.get()` 
 
@@ -76,8 +78,9 @@ Récupère tous les événements de l'association avec l'identifiant {id}.
     - id : identifiant de l'association
     - before : filtre les événements avant la date spécifiée, format SQL (facultatif)
     - after : filtre les événements après la date spécifiée, format SQL (facultatif)
-    - limit : limite le nombre d'événements retournés (facultatif)
+    - order : tri les événements, "date" ou "random", (facultatif, par défaut date)
     - desc : tri les événements par ordre décroissant (facultatif)
+    - limit : limite le nombre d'événements retournés (facultatif)
 - Fonction api.js : `Api.assos.getEvents(id)`
 
 
@@ -89,8 +92,9 @@ Récupère tous les événements.
 - Paramètres :
     - before : filtre les événements avant la date spécifiée, format SQL (facultatif)
     - after : filtre les événements après la date spécifiée, format SQL (facultatif)
-    - limit : limite le nombre d'événements retournés (facultatif)
+    - order : tri les événements, "date" ou "random", (facultatif, par défaut date)
     - desc : tri les événements par ordre décroissant (facultatif)
+    - limit : limite le nombre d'événements retournés (facultatif)
 - Fonction api.js : `Api.events.get()`
 
 ### 🟢 `POST /api/events`
