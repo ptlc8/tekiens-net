@@ -1,3 +1,5 @@
+import bcrypt from "bcryptjs";
+
 const baseUrl = import.meta.env.VITE_BASE_URL ?? "";
 
 const Api = {
@@ -40,9 +42,11 @@ const Api = {
     sessions: {
         async create(assoId, password) { //authentificate the user and return a session id if success
             //the user call the api to get a challenge
-            let challenge = await sendApiRequest("POST", "sessions", { asso: assoId }, "Challenge session"); 
 
-            let hash_password = await hash(password);
+            let {challenge, salt} = await sendApiRequest("POST", "sessions", { asso: assoId }, "Challenge session"); 
+            
+            
+            let hash_password = await bcrypt.hash(password, salt);
             
             let hash_challenge = await hash(challenge + hash_password);
 

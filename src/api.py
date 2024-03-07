@@ -6,6 +6,7 @@ import mysql.connector
 import secrets
 import data
 from hashlib import sha256
+from flask_bcrypt import Bcrypt
 
 load_dotenv()
 
@@ -283,6 +284,8 @@ def post_session():
     asso_id = g.args.get('asso')
     hash_client = g.args.get('hash') # get the hash from the client if it exists
 
+    bcrypt= Bcrypt()
+
     if not asso_id:
         return error('Missing parameters')
 
@@ -298,14 +301,20 @@ def post_session():
     if not hash_client:
         #generate  the challenge and hash it with the password to send it to the client
         challenge = secrets.token_urlsafe(24)
+        password = asso['password'].split('$')
+
+        salt= '$'+password[1]+'$'+password[2]+'$'+password[3][:22]
+        print(salt)
         mycursor.execute("UPDATE assos SET challenge = %s WHERE id = %s", (challenge, asso_id))
-        return success(challenge, 201)
+        
+        return success({'challenge' : challenge,'salt' : salt}, 201)
 
     #check if the challenge exist and if the client send the hash of the challenge 
     if hash_client and asso['challenge']: 
 
         #hash the challenge with the password and compare it with the hash send by the client
         hash_serv = sha256((asso['challenge']+ asso['password']).encode()).hexdigest()
+
 
         if hash_client==hash_serv:
             #if the hash are the same, create a session and return the id of the session (and delete the challenge in the database)
