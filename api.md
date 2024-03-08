@@ -155,11 +155,30 @@ Supprime l'événement avec l'identifiant {id}.
 
 ### 🟢 `POST /api/sessions`
 
-Crée une session lié à une association.
+#### Demande de connexion
+
+Demande un challenge au serveur pour vérifier le mot de passe.
 - Paramètres :
     - asso : identifiant de l'association
-    - password : mot de passe
-- Fonction api.js : `Api.create(asso, password)`
+
+Le serveur envoie un challenge (sous forme de chaine de caractères) et le sel du hash bcrypt (sous la forme "$alg$rounds$salt") utilisé pour hasher le mot de passe.
+- Réponse :
+    - challenge : challenge envoyé par le serveur
+    - salt : sel du hash bcrypt
+
+
+#### Réponse au challenge
+
+Le client doit hacher le mot de passe avec le sel.
+Puis hasher ce hash concaténé avec le identifiant de la session identifiant de la session challenge (challenge + bcrypt_hash) avec SHA256.
+- Paramètres :
+    - asso : identifiant de l'association
+    - hash : hash SHA256 du hash bcrypt concaténé avec le challenge : SHA256(challenge + bcrypt_hash)
+
+- Réponse :
+    - id : identifiant de la session
+    - asso_id : identifiant de l'association
+
 
 ### 🔵 `GET /api/sessions/{id}`
 
