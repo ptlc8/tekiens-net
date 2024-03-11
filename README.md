@@ -22,8 +22,18 @@ ou
 $ apt-get install mysql-server
 ```
 
-## Installation
+### Arch (btw)
 
+```sh
+pacman -S python3 npm
+```
+
+Installer un système de gestion de base de données ([arch recommande MariaDB](https://wiki.archlinux.org/title/MySQL)):
+```sh
+pacman -S mariadb
+```
+
+## Installation
 ```sh
 $ cd src
 $ chmod 777 data
@@ -33,10 +43,49 @@ $ cd front
 $ npm install
 ```
 
-Créer une base de données et y exécuter le script `init.sql`.
+### Mise en place de MariaDB
 
+#### Installation et démarrage de MariaDB
+```sh
+sudo mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+sudo systemctl enable mariadb.service
+sudo systemctl start mariadb.service
+sudo mariadb-secure-installation
+```
+puis suivre les étapes d'installation sécurisée de MariaDB.
+
+#### Création d'un utilisateur
+```sh
+mariadb -u root -p
+CREATE USER 'tekiens_net'@'localhost' IDENTIFIED BY '[PASSWORD]';
+GRANT ALL PRIVILEGES ON tekiens_net.* TO 'tekiens_net'@'localhost';
+quit
+```
+
+#### Création de la BDD
+```sh
+mariadb -u tekiens_net -p
+CREATE DATABASE tekiens_net CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE tekiens_net;
+source init.sql # ou sample.sql pour un avoir des données d'exemple
+SHOW TABLES;
+```
+
+Vous devriez avoir un résultat similaire à:
+
+MariaDB [tekiens_net]> SHOW TABLES;
++----------------+
+| Tables_in_tekiens_net |
++----------------+
+| assos          |
+| events         |
+| sessions       |
++----------------+
+3 rows in set (0.001 sec)
+
+#### Création du dotenv
 Créer un fichier `.env` dans le dossier `src` avec les identifiants de la base de données sous la forme suivante :
-```properties
+```
 DATABASE_HOST=localhost
 DATABASE_USER=tekiens_net
 DATABASE_PASS=supermotdepasse
@@ -52,7 +101,7 @@ $ cd ..
 ```
 
 ### Lancement en mode développement
-
+*src/*
 ```sh
 $ venv/bin/python3 -m flask run
 ```
