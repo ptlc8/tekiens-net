@@ -67,7 +67,7 @@ quit
 mariadb -u tekiens_net -p
 CREATE DATABASE tekiens_net CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE tekiens_net;
-source init.sql # ou sample.sql pour un avoir des données d'exemple
+source init.sql # et sample.sql pour un avoir des données d'exemple
 SHOW TABLES;
 ```
 

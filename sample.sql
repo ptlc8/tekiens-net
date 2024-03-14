@@ -1,28 +1,5 @@
 -- mot de passe asso = password
 
-
-DROP TABLE IF EXISTS `assos`;
-
-CREATE TABLE `assos` (
-  `id` varchar(24) NOT NULL COMMENT 'identifier (slug like)',
-  `names` text NOT NULL COMMENT 'names separated by comma',
-  `logos` text NOT NULL COMMENT 'logos path separated by comma',
-  `start` int(11) DEFAULT NULL COMMENT 'creation year',
-  `end` int(11) DEFAULT NULL COMMENT 'dissolution year',
-  `theme` text NOT NULL COMMENT 'theme',
-  `campus` text NOT NULL COMMENT 'campus',
-  `room` text DEFAULT NULL COMMENT 'room',
-  `socials` text NOT NULL COMMENT 'social networks separated by comma and colon',
-  `description` text DEFAULT NULL COMMENT 'description',
-  `color` mediumint(8) unsigned NOT NULL COMMENT 'main color',
-  `password` char(64) NOT NULL COMMENT 'password hash',
-  `challenge` char(32) DEFAULT NULL COMMENT 'string generated to verify the password',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-LOCK TABLES `assos` WRITE;
-
 INSERT INTO `assos` VALUES
 ('animatsuri','Animatsuri,Anim\'EISTI',1,NULL,NULL,'Culture japonaise','Cergy',NULL,'discord:cA6Hstnah,telegram:+WqyWG_WsGqlhZDY0,instagram:animatsuri.cytech','**Vous cherchez de quoi animer vos soirées ? Envie d’oublier ses sushis ? S’évader un peu, parfois c’est sakément difficile...**\n\n**Nous avons peut-être la solution ! Si tout comme nous vous êtes un(e) inconditionnel(le) du Japon, dans ce cas, Animatsuri est l’association qu’il vous faut !**\n\nFanas de mangas, d’animés et de culture japonaise en général, les tekkiens aiment à partager leur passion et pour cela rien de mieux que d’assister une fois par semaine à nos soirées diffusion d’animés.\n\nEt ce n’est pas tout, plusieurs nocturnes fortes en karaokés, quizz et rāmens viennent compléter ces séances !\n\nUne occasion de découvrir de nombreuses séries, dans de nombreux styles et de nombreux genres. Si vous n’avez pas encore attrapé le virus de la japanimation, n’hésitez pas : nos séances sont ouvertes à tous. Animatsuri c’est aussi l’occasion d’en apprendre toujours plus sur la culture japonaise ou encore d’améliorer son niveau en japonais.\n\nN’hésitez pas à nous suivre sur les réseaux sociaux !',12714033,'$2y$10$OtSzFBRUKWrqD9SZHAurKOx1pJvkxzl6a8veBPBcFn5C5XtuyhP3K',NULL),
 ('astre','ASTRE',1,NULL,NULL,'Caricative','Cergy',NULL,'email:assoc.astre@gmail.com','**L’ASTRE est une association caritative de CY Tech (EISTI) dont le but est d’aider les plus démunis et réduire les inégalités.**\n\nPour cela des récoltes de vêtements et nourriture sont organisées. Ainsi que des conférences de sensibilisation et des projets humanitaires !',6291570,'$2y$10$LyG4tpSY44nWXt.Md9euWuvaaGXNqzLl2W.xmXQx.CutX2GhS50/a',NULL),
@@ -50,32 +27,6 @@ INSERT INTO `assos` VALUES
 ('phenix','Phénix',1,NULL,2023,'Festive','Cergy',NULL,'instagram:bde.phenix,facebook:phenixcmi','**Phénix s’adresse à tous les étudiants de Cergy et organise tout au long de l’année des événements mythiques.**\n\nRégulièrement nous proposons des Afterworks pour se détendre après les cours ou encore des apéros Beer-Pong avec des lots à gagner. Plus occasionnellement nous vous emmènerons tester vos aptitudes de tirs lors de PaintBall ou Laser Game. Et si entre deux cours la faim vous guette, nous saurons y remédier avec nos événements culinaires et nos ventes de snacks tout au long de l’année.\n\nNous avons pour habitudes depuis 5 ans maintenant de partir à la conquête des plus belles capitales européennes, telles que : Amsterdam, Prague, Londres ou encore Barcelone !\n\nEnvie de clore l’année en beauté ? Notre Gala CMI saura vous en mettre plein les yeux !\n\n![>](https://cytech.cyu.fr/medias/photo/phenix_1621517008503-png)\n\nL’objectif premier de l’association est de promouvoir le Cursus Master Ingénierie (CMI) en intervenant dans des salons et les lycées. L’aspect national du cursus est assuré par la fédération CMI France dont Phénix fait partie. Chaque début d’année est marqué par notre WECMI, week-end d’intégration national destiné à l’ensemble des étudiants CMI regroupant plus de 200 étudiants venant de la France entière.\n\nUn peu perdu dans tout ça ? Nos parrains et marraines sont là pour vous guider ! Le prix de nos avantages ? C’est simple : une simple adhésion de 4 €, donc n’hésitez pas à rejoindre l’aventure ! Pour en savoir encore plus sur nous, allez visiter nos réseaux sociaux !',16026096,'$2y$10$PtHg.7Qf8oXuzjcethe8eu1k0mihstm6.fz8.Lsa0xx9gngGU/l9S',NULL),
 ('pixelperfect','Pixel Perfect,E-EISTI',1,2012,NULL,'Jeux vidéos','Cergy','CY 208','discord:kxVKng2TWs,twitter:PixelPerfect_CY,web:eeisti.fr,telegram:+DQ7xbyLs049kZmJk,instagram:pixel_perfect_cy','**Que tu dédies ta vie aux jeux vidéo, que tu sois joueur occasionnel ou juste quelqu’un d’intéressé par le milieu, Pixel Perfect est là pour toi !**\n\nDans notre local, nous t’accueillons à bras ouverts avec notre connexion haut débit pour jouer à tes jeux favoris, mais si tu es plutôt console, nous avons aussi de quoi te régaler.\n\nPixel Perfect saura te faire découvrir anciens et nouveaux jeux et t’off rira même des LANs où tu pourras te confronter à d’autres joueurs sur League of Legends,Starcraft II, Hearthstone et bien d’autres jeux !\n\nAlors n’attends plus et rejoins Pixel Perfect qui saura occuper ton temps libre ! Les membres de PixeI Perfect sont toujours prêts pour de nouvelles games.\n\n![](https://cytech.cyu.fr/medias/photo/e-eisti-lan-eaubonne_1626423758018-jpg)',5801945,'$2y$10$BnFBKV6ggzFNVNOqgv6Zyu6A9iXBwiPPqexio9vke1eZRBXaHMhvi',NULL),
 ('sea_voile_tech','Sea Voile Tech,Voil\'EISTI',2,NULL,2022,'Voile','Cergy',NULL,'facebook:voileisti,instagram:sea_voile_tech','**Voil’Eisti, l’association de sport nautique qui va vous faire surfer sur la vague ! Si vous êtes passionné(e) de voile ou simplement à la recherche de sensations, on vous attend pour compléter l’équipage.**\n\n![](https://cytech.cyu.fr/medias/photo/voil-eisti_1621515155834-png)\n\nNous sommes un petit groupe de CY Tech-ien(ne)s motivé(e)s par les sports nautiques, et tout particulièrement la voile. Bien que nous n’ayons pu participer à l’EDHEC, (course croisière des plus renommées), cette année, nous comptons sur vous pour être présents  sur la ligne de départ l’année prochaine.\n\nNous vous attendons nombreux à bord pour de nouvelles aventures !\n**Votre équipage, Voil’Eisti.**',16757248,'5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',NULL);
-
-UNLOCK TABLES;
-
-
-DROP TABLE IF EXISTS `events`;
-
-CREATE TABLE `events` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'identifier',
-  `asso_id` varchar(24) NOT NULL COMMENT 'organizing asso id',
-  `title` tinytext NOT NULL COMMENT 'title',
-  `poster` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'poster exists',
-  `description` text DEFAULT NULL COMMENT 'description',
-  `date` datetime NOT NULL COMMENT 'datetime',
-  `place` tinytext NOT NULL COMMENT 'place',
-  `duration` int(10) unsigned DEFAULT NULL COMMENT 'durée en minutes',
-  `price` tinytext DEFAULT NULL COMMENT 'price',
-  `link` tinytext DEFAULT NULL COMMENT 'url',
-  `access` tinytext DEFAULT NULL COMMENT 'who can join',
-  `status` enum('programmed','cancelled','rescheduled','full','movedOnline') NOT NULL DEFAULT 'programmed' COMMENT 'status',
-  `capacity` int(11) DEFAULT NULL COMMENT 'max number of participants',
-  `createDate` datetime NOT NULL DEFAULT current_timestamp() COMMENT 'create datetime',
-  `lastUpdateDate` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'last update datetime',
-  PRIMARY KEY (`id`),
-  KEY `event_asso_id` (`asso_id`),
-  CONSTRAINT `event_asso` FOREIGN KEY (`asso_id`) REFERENCES `assos` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `events` VALUES
 (10,'les_forts_scenes','Séance hebdomadaire',1,NULL,'2023-12-04 17:00:00','Amphi Condorcet',120,'Gratuit','https://t.me/+3DwmynDzPxw2MzFk',NULL,'programmed',NULL,'2023-11-22 21:06:46','2023-12-04 12:58:47'),
