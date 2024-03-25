@@ -110,7 +110,7 @@ export default {
                     </template>
                     <span>📅 Le {{ formatDate(event.date) }}</span>
                     <span>📍 {{ event.place }}</span>
-                    <span v-if="duration">⏱ {{ duration }}</span>
+                    <span v-if="duration">🕓 {{ duration }}</span>
                     <span v-if="event.price">💲 {{ event.price }}</span>
                     <span v-if="event.link">🖇 <a :href="event.link">Lien de l'événement</a></span>
                     <span v-if="event.access">🔒 {{ event.access }}</span>

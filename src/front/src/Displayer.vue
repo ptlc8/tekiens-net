@@ -126,7 +126,7 @@ export default {
                         <span v-if="event.date">📅 {{ date }} à {{ time }}</span>
                         <span v-if="event.place">📍 {{ event.place }}</span>
                         <span v-if="event.price">💲 {{ event.price }}</span>
-                        <span v-if="event.duration">⏱ {{ duration }}</span>
+                        <span v-if="event.duration">🕓 {{ duration }}</span>
                         <span v-if="event.access">🔒 {{ event.access }}</span>
                         <span v-if="event.capacity">👥 {{ event.capacity }} places</span>
                         <span v-if="event.status">{{ status }}</span>

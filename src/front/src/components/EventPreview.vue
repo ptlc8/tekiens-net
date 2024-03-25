@@ -23,11 +23,17 @@ export default {
             <img v-if="event.poster" :src="event.poster" :alt="event.title" width="300" />
         </div>
         <div class="infos">
-            <span class="title">{{ event.title }}</span>
-            <RouterLink :to="'/assos/' + encodeURIComponent(event.asso_id)">{{ asso?.names?.[0] ?? event.asso_id }}</RouterLink>
-            {{ new Date(event.date + 'Z').toLocaleString('FR-fr', { weekday:'long', hour:'2-digit', minute:'2-digit', timeZone: 'Europe/Paris' }) }}
-            -
-            {{ event.place }}
+            <div class="date">
+                <span class="month">{{ new Date(event.date + 'Z').toLocaleString('FR-fr', { month: 'short', timeZone: 'Europe/Paris' }) }}</span>
+                <span class="day">{{ new Date(event.date + 'Z').toLocaleString('FR-fr', { day: '2-digit', timeZone: 'Europe/Paris' }) }}</span>
+                <span class="weekday">{{ new Date(event.date + 'Z').toLocaleString('FR-fr', { weekday: 'long', timeZone: 'Europe/Paris' }) }}</span>
+            </div>
+            <div class="data">
+                <span class="title">{{ event.title }}</span>
+                <RouterLink :to="'/assos/' + encodeURIComponent(event.asso_id)">{{ asso?.names?.[0] ?? event.asso_id }}</RouterLink>
+                <span class="place">📍 {{ event.place }}</span>
+                <span class="time">🕓 {{ new Date(event.date + 'Z').toLocaleString('FR-fr', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' }) }}</span>
+            </div>
         </div>
     </RouterLink>
 </template>
@@ -45,7 +51,7 @@ export default {
     background-color: white;
 
     .poster {
-        height: 12em;
+        height: 16em;
 
         img {
             width: 100%;
@@ -56,11 +62,45 @@ export default {
 
     .infos {
         display: flex;
-        flex-direction: column;
         margin: .5em 1em;
 
-        .title {
-            font-weight: bold;
+        .date {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 0.2em solid var(--accent-color);
+            margin-right: 0.5em;
+            padding-right: 0.5em;
+            line-height: 1;
+
+            .month {
+                font-size: 1.2em;
+                text-transform: uppercase;
+            }
+
+            .day {
+                font-size: 2.4em;
+            }
+        }
+
+        .data {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+
+            * {
+                max-height: 1.2em;
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                line-clamp: 1;
+                -webkit-box-orient: vertical;
+            }
+
+            .title {
+                font-weight: bold;
+            }
         }
     }
 }
