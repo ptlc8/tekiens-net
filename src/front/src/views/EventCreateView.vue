@@ -84,7 +84,7 @@ export default {
                 <label for="poster">Affiche (optionnel)</label>
                 <ImageInput v-model="event.poster" id="poster" name="poster" />
                 <label for="description">Description (optionnel)</label>
-                <Editor v-model="event.description" placeholder="Cet événement sera sélectionnant, venez !" />
+                <Editor v-model="event.description" placeholder="Cet événement sera intéressant, venez !" />
                 <label for="price">Prix (optionnel)</label>
                 <input v-model="event.price" id="price" name="price" type="text" maxlength="255" placeholder="Gratuit" />
                 <label for="duration">Durée (optionnel)</label>
