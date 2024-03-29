@@ -5,6 +5,7 @@ import { useSessionStore } from "../stores/session";
 import DateTimeInput from '../components/DateTimeInput.vue';
 import ImageInput from '../components/ImageInput.vue';
 import DurationInput from '../components/DurationInput.vue';
+import Editor from '../components/Editor.vue';
 
 const baseUrl = import.meta.env.VITE_BASE_URL ?? '';
 
@@ -77,7 +78,8 @@ export default {
     components: {
         DateTimeInput,
         ImageInput,
-        DurationInput
+        DurationInput,
+        Editor
     }
 }
 </script>
@@ -96,7 +98,7 @@ export default {
                 <label for="poster">Affiche (optionnel)</label>
                 <ImageInput v-model="event.poster" id="poster" name="poster" :placeholder="originalEvent.poster" />
                 <label for="description">Description (optionnel)</label>
-                <textarea v-model="event.description" id="description" name="description" maxlength="65535" rows="12" placeholder="Cet événement sera intéressant, venez !"></textarea>
+                <Editor v-model="event.description" placeholder="Cet événement sera intéressant, venez !" />
                 <label for="price">Prix (optionnel)</label>
                 <input v-model="event.price" id="price" name="price" type="text" maxlength="255" placeholder="Gratuit" />
                 <label for="duration">Durée (optionnel)</label>

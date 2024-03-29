@@ -4,6 +4,7 @@ import { useSessionStore } from "../stores/session";
 import ArrayInput from '../components/ArrayInput.vue';
 import SocialInput from '../components/SocialInput.vue';
 import ImageInput from '../components/ImageInput.vue';
+import Editor from '../components/Editor.vue';
 
 export default {
     setup() {
@@ -70,7 +71,8 @@ export default {
     components: {
         ArrayInput,
         SocialInput,
-        ImageInput
+        ImageInput,
+        Editor
     }
 }
 </script>
@@ -103,7 +105,7 @@ export default {
                 <label for="end">Année de dissolution (facultatif)</label>
                 <input v-model="asso.end" id="end" name="end" type="number" placeholder="jamais" />
                 <label for="description">Description (facultatif)</label>
-                <textarea v-model="asso.description" id="description" name="description" maxlength="65535" rows="12" placeholder="Cette association est intéressante, venez !"></textarea>
+                <Editor v-model="asso.description" placeholder="Cette association est intéressante, venez !" />
                 <label for="socials">Réseaux sociaux (facultatif)</label>
                 <ArrayInput v-model="asso.socials" v-slot="{ onUpdate, value }" default="web:">
                     <SocialInput @update:modelValue="onUpdate" :modelValue="value" />

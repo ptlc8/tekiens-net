@@ -74,7 +74,8 @@ form {
 select,
 input,
 button,
-textarea {
+textarea,
+.ck-editor {
     border-radius: 4px;
     padding: 4px 8px;
     box-shadow: 0 0 10px 2px rgba(0, 0, 0, .1);
@@ -85,6 +86,11 @@ textarea {
     color: #404040;
     color: rgba(0, 0, 0, 0.75);
     box-sizing: border-box;
+}
+
+.ck-editor {
+    --ck-color-base-border: transparent;
+    --ck-color-toolbar-border: transparent;
 }
 
 button {
