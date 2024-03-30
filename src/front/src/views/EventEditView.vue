@@ -19,7 +19,7 @@ export default {
     data() {
         return {
             event: {},
-						asso: {},
+                        asso: {},
             originalEvent: {},
             error: null
         }

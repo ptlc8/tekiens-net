@@ -147,7 +147,7 @@ hr {
     th, td {
         border: solid 1px var(--accent-color);
         padding: .5em 1em;
-				min-width: 2em;
+                min-width: 2em;
     }
 
     th {
@@ -173,23 +173,23 @@ hr {
 }
 
 .ck-editor {
-	.ck-widget.image-inline {
-		display: block;
-		margin: auto;
-		img {
-			@include markdown-img;
-		}
-	}
-	.ck-widget.ck-horizontal-line hr {
-		margin: 0;
-		height: 0;
-		border: 1px solid var(--accent-color);
-	}
-	.ck-widget.table {
-		margin: auto;
-		table {
-			@include markdown-table;
-			border: 0;
-		}
-	}
+    .ck-widget.image-inline {
+        display: block;
+        margin: auto;
+        img {
+            @include markdown-img;
+        }
+    }
+    .ck-widget.ck-horizontal-line hr {
+        margin: 0;
+        height: 0;
+        border: 1px solid var(--accent-color);
+    }
+    .ck-widget.table {
+        margin: auto;
+        table {
+            @include markdown-table;
+            border: 0;
+        }
+    }
 }

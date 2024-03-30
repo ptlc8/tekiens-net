@@ -15,64 +15,64 @@ import { HorizontalLine } from "@ckeditor/ckeditor5-horizontal-line";
 import { Autoformat } from "@ckeditor/ckeditor5-autoformat";
 
 export default {
-	data() {
-		return {
-			editor: ClassicEditor,
-			config: {
-				plugins: [
-					Markdown,
-					Autoformat,
-					Essentials,
-					Heading,
-					HorizontalLine,
-					Bold,
-					Italic,
-					Strikethrough,
-					Code,
-					BlockQuote,
-					Table,
-					TableToolbar,
-					Link,
-					Image,
-					ImageInsertViaUrl,
-					Paragraph,
-					List,
-				],
-				placeholder: this.placeholder,
-				toolbar: {
-					items: [
-						"heading", "horizontalLine",
-						"|", "bold", "italic", "strikethrough",
-						"|", "code", "blockQuote", "insertTable",
-						"|", "link", "imageInsert",
-						"|", "bulletedList", "numberedList",
-						"|", "undo", "redo",
-					],
-				},
-				table: {
-					defaultHeadings: {
-						rows: 1
-					},
-					contentToolbar: [ "tableColumn", "tableRow" ],
-				}
-			},
-		}
-	},
-	props: {
-		value: String,
-		placeholder: String
-	},
-	methods: {
-		onInput(value) {
-			this.$emit('input', value);
-		}
-	},
-	components: {
-		ckeditor: CKEditor.component
-	}
+    data() {
+        return {
+            editor: ClassicEditor,
+            config: {
+                plugins: [
+                    Markdown,
+                    Autoformat,
+                    Essentials,
+                    Heading,
+                    HorizontalLine,
+                    Bold,
+                    Italic,
+                    Strikethrough,
+                    Code,
+                    BlockQuote,
+                    Table,
+                    TableToolbar,
+                    Link,
+                    Image,
+                    ImageInsertViaUrl,
+                    Paragraph,
+                    List,
+                ],
+                placeholder: this.placeholder,
+                toolbar: {
+                    items: [
+                        "heading", "horizontalLine",
+                        "|", "bold", "italic", "strikethrough",
+                        "|", "code", "blockQuote", "insertTable",
+                        "|", "link", "imageInsert",
+                        "|", "bulletedList", "numberedList",
+                        "|", "undo", "redo",
+                    ],
+                },
+                table: {
+                    defaultHeadings: {
+                        rows: 1
+                    },
+                    contentToolbar: [ "tableColumn", "tableRow" ],
+                }
+            },
+        }
+    },
+    props: {
+        value: String,
+        placeholder: String
+    },
+    methods: {
+        onInput(value) {
+            this.$emit('input', value);
+        }
+    },
+    components: {
+        ckeditor: CKEditor.component
+    }
 }
 </script>
 
 <template>
-	<ckeditor :model-value="value" @input="onInput" :editor="editor" :config="config"></ckeditor>
+    <ckeditor :model-value="value" @input="onInput" :editor="editor" :config="config"></ckeditor>
 </template>
