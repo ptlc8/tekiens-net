@@ -8,6 +8,10 @@ import { List } from "@ckeditor/ckeditor5-list";
 import { Link } from "@ckeditor/ckeditor5-link";
 import { Paragraph } from "@ckeditor/ckeditor5-paragraph";
 import { Markdown } from "@ckeditor/ckeditor5-markdown-gfm";
+import { BlockQuote } from "@ckeditor/ckeditor5-block-quote";
+import { Image, ImageInsertViaUrl } from "@ckeditor/ckeditor5-image";
+import { Table, TableToolbar } from "@ckeditor/ckeditor5-table";
+import { HorizontalLine } from "@ckeditor/ckeditor5-horizontal-line";
 
 export default {
 	data() {
@@ -18,19 +22,38 @@ export default {
 					Markdown,
 					Essentials,
 					Heading,
+					HorizontalLine,
 					Bold,
 					Italic,
 					Strikethrough,
 					Code,
+					BlockQuote,
+					Table,
+					TableToolbar,
 					Link,
+					Image,
+					ImageInsertViaUrl,
 					Paragraph,
 					List,
 				],
 				placeholder: this.placeholder,
 				toolbar: {
-					items: ["heading", "bold", "italic", "strikethrough", "code", "link", "bulletedList", "numberedList", "undo", "redo"],
+					items: [
+						"heading", "horizontalLine",
+						"|", "bold", "italic", "strikethrough",
+						"|", "code", "blockQuote", "insertTable",
+						"|", "link", "imageInsert",
+						"|", "bulletedList", "numberedList",
+						"|", "undo", "redo",
+					],
 				},
-			}
+				table: {
+					defaultHeadings: {
+						rows: 1
+					},
+					contentToolbar: [ "tableColumn", "tableRow" ],
+				}
+			},
 		}
 	},
 	props: {

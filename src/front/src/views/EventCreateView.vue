@@ -36,6 +36,12 @@ export default {
         }
     },
     computed: {
+        color() {
+            return '#' + this.sessionStore.session?.asso?.color?.toString(16)?.padStart(6, 0);
+        },
+        backgroundColor() {
+            return this.color + '44';
+        },
         isNotGranted() {
             if (this.sessionStore.session === null) // not logged in
                 return true;
@@ -72,7 +78,7 @@ export default {
 
 <template>
     <section>
-        <article>
+        <article :style="{ '--accent-color': color, '--bg-color': backgroundColor }">
             <h2>Créer un événement</h2>
             <form @submit.prevent="createEvent">
                 <label for="title">Titre</label>

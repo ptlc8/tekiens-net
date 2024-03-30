@@ -124,42 +124,72 @@ hr {
     border: 1px solid var(--accent-color);
 }
 
+@mixin markdown-img {
+    max-width: 100%;
+    width: 400px;
+    display: block;
+    margin: auto;
+    
+    &[alt$=">"] {
+        float: right;
+        margin: 1em 0 1em 1em;
+    }
+    
+    &[alt$="<"] {
+        float: left;
+        margin: 1em 1em 1em 0;
+    }
+}
+
+@mixin markdown-table {
+    border-collapse: collapse;
+
+    th, td {
+        border: solid 1px var(--accent-color);
+        padding: .5em 1em;
+				min-width: 2em;
+    }
+
+    th {
+        background: var(--bg-color, #88888844);
+    }
+}
 
 .markdown {
     img {
-        max-width: 100%;
-        width: 400px;
-        display: block;
-        margin: auto;
-
-        &[alt$=">"] {
-            float: right;
-            margin: 1em 0 1em 1em;
-        }
-
-        &[alt$="<"] {
-            float: left;
-            margin: 1em 1em 1em 0;
-        }
+        @include markdown-img;
     }
 
     table {
-        border-collapse: collapse;
-
-        th, td {
-            border: solid 1px var(--accent-color);
-            padding: .5em 1em;
-        }
-
-        th {
-            background-color: #88888844;
-            background: var(--bg-color);
-        }
+        @include markdown-table;
+        margin: auto;
     }
-
+    
     blockquote {
         border-left: .4em solid var(--accent-color);
         padding-left: 1em;
         margin-left: 0;
     }
+}
+
+.ck-editor {
+	.ck-widget.image-inline {
+		display: block;
+		margin: auto;
+		img {
+			@include markdown-img;
+		}
+	}
+	.ck-widget.ck-horizontal-line hr {
+		margin: 0;
+		height: 0;
+		border: 1px solid var(--accent-color);
+	}
+	.ck-widget.table {
+		margin: auto;
+		table {
+			@include markdown-table;
+			border: 0;
+		}
+	}
 }

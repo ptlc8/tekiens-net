@@ -19,6 +19,7 @@ export default {
     data() {
         return {
             event: {},
+						asso: {},
             originalEvent: {},
             error: null
         }
@@ -50,6 +51,12 @@ export default {
         }
     },
     computed: {
+        color() {
+            return '#' + this.asso?.color?.toString(16)?.padStart(6, 0);
+        },
+        backgroundColor() {
+            return this.color + '44';
+        },
         isNotGranted() {
             if (this.sessionStore.session === null) // not logged in
                 return true;
@@ -70,6 +77,10 @@ export default {
         },
     },
     watch: {
+        event(event) {
+            Api.assos.getOne(event.asso_id)
+                .then(asso => this.asso = asso);
+        },
         isNotGranted(isNotGranted) {
             if (isNotGranted)
                 this.$router.push('/events/' + this.$route.params.id);
@@ -86,7 +97,7 @@ export default {
 
 <template>
     <section>
-        <article>
+        <article :style="{ '--accent-color': color, '--bg-color': backgroundColor }">
             <h2>Éditer un événement</h2>
             <form @submit.prevent="editEvent">
                 <label for="title">Titre</label>
