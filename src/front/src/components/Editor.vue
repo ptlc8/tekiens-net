@@ -12,6 +12,7 @@ import { BlockQuote } from "@ckeditor/ckeditor5-block-quote";
 import { Image, ImageInsertViaUrl } from "@ckeditor/ckeditor5-image";
 import { Table, TableToolbar } from "@ckeditor/ckeditor5-table";
 import { HorizontalLine } from "@ckeditor/ckeditor5-horizontal-line";
+import { Autoformat } from "@ckeditor/ckeditor5-autoformat";
 
 export default {
 	data() {
@@ -20,6 +21,7 @@ export default {
 			config: {
 				plugins: [
 					Markdown,
+					Autoformat,
 					Essentials,
 					Heading,
 					HorizontalLine,
