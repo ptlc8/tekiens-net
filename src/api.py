@@ -341,23 +341,24 @@ def delete_session(id):
 from ics import Calendar, Event
 from ics.grammar.parse import ContentLine
 
-def add_events_to_calendar(cal, events):
+def add_events_to_calendar(cal, events, asso):
+    asso_name = asso['names'].split(',')[0]
     for event in events:
-        asso = event['asso'].split(',')[0]
+
         e = Event()
         e.uid = str(event['id'])
-        e.name = '[' + asso + '] ' + event['title']
+        e.name = '[' + asso_name + '] ' + event['title']
         e.begin = event['date']
         e.location = event['place']
         if event['duration']:
             e.duration = {'minutes': event['duration']}
-        e.organizer = asso
+        e.organizer = asso_name
         e.last_modified = event['lastUpdateDate']
         e.created = event['createDate']
         e.url = event['link']
         #e.status = event['status']
         e.description = event['description']
-        e.extra.append(ContentLine('COLOR', {}, f'#{event["color"]:0{6}x}'))
+        e.extra.append(ContentLine('COLOR', {}, f'#{asso["color"]:0{6}x}'))
         if event['poster']:
             e.extra.append(ContentLine('IMAGE', {}, event['poster']))
         cal.events.add(e)
@@ -392,5 +393,5 @@ def get_asso_events_ics(id):
     cal.extra.append(ContentLine('X-WR-CALNAME', {}, name))
     cal.extra.append(ContentLine('NAME', {}, name))
     cal.extra.append(ContentLine('COLOR', {}, f'#{asso["color"]:0{6}x}'))
-    add_events_to_calendar(cal, events)
+    add_events_to_calendar(cal, events, asso)
     return Response(cal.serialize(), mimetype='text/calendar')
