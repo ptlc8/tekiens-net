@@ -9,26 +9,20 @@ export default {
             get() {
                 if (!this.modelValue)
                     return '';
-                return this.modelValue.toLocaleString("sv-SE", { timeZone: 'Europe/Paris' });
+                return this.iso2local(this.modelValue);
             },
             set(value) {
-                this.$emit('update:modelValue', this.fromLocaleISOString(value, 'Europe/Paris'));
+                console.log(this.local2iso(value));
+                this.$emit('update:modelValue', this.local2iso(value));
             }
         }
     },
     methods: {
-        fromLocaleISOString(isoDate, timeZone) {
-            let localeDate = new Date(isoDate + 'Z');
-            let offset = this.getGMTOffset(timeZone);
-            let date = new Date(localeDate.toGMTString().replace('GMT', offset));
-            if (this.getGMTOffset(timeZone, date) !== offset) {
-                offset = this.getGMTOffset(timeZone, date);
-                date = new Date(localeDate.toGMTString().replace('GMT', offset));
-            }
-            return date;
+        local2iso(local) {
+            return new Date(local).toLocaleString("sv-SE", {timeZone:"UTC"});
         },
-        getGMTOffset(timeZone, date = new Date()) {
-            return Intl.DateTimeFormat("US-en", { timeZoneName:"short", timeZone }).formatToParts(date).find((i) => i.type === "timeZoneName").value;
+        iso2local(iso) {
+            return new Date(iso + 'Z').toLocaleString("sv-SE");
         }
     }
 };

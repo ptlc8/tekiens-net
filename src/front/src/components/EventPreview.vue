@@ -24,15 +24,15 @@ export default {
         </div>
         <div class="infos">
             <div class="date">
-                <span class="month">{{ new Date(event.date + 'Z').toLocaleString('FR-fr', { month: 'short', timeZone: 'Europe/Paris' }) }}</span>
-                <span class="day">{{ new Date(event.date + 'Z').toLocaleString('FR-fr', { day: '2-digit', timeZone: 'Europe/Paris' }) }}</span>
-                <span class="weekday">{{ new Date(event.date + 'Z').toLocaleString('FR-fr', { weekday: 'long', timeZone: 'Europe/Paris' }) }}</span>
+                <span class="month">{{ new Date(event.date + 'Z').toLocaleString('FR-fr', { month: 'short' }) }}</span>
+                <span class="day">{{ new Date(event.date + 'Z').toLocaleString('FR-fr', { day: '2-digit' }) }}</span>
+                <span class="weekday">{{ new Date(event.date + 'Z').toLocaleString('FR-fr', { weekday: 'long' }) }}</span>
             </div>
             <div class="data">
                 <span class="title">{{ event.title }}</span>
                 <RouterLink :to="'/assos/' + encodeURIComponent(event.asso_id)">{{ asso?.names?.[0] ?? event.asso_id }}</RouterLink>
                 <span class="place">📍 {{ event.place }}</span>
-                <span class="time">🕓 {{ new Date(event.date + 'Z').toLocaleString('FR-fr', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' }) }}</span>
+                <span class="time">🕓 {{ new Date(event.date + 'Z').toLocaleString('FR-fr', { hour: '2-digit', minute: '2-digit' }) }}</span>
             </div>
         </div>
     </RouterLink>

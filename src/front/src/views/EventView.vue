@@ -70,7 +70,7 @@ export default {
     },
     methods: {
         formatDate(date) {
-            return new Date(date + 'Z').toLocaleString('FR-fr', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' });
+            return new Date(date + 'Z').toLocaleString('FR-fr', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
         },
         deleteEvent() {
             if (!confirm('Êtes-vous sûr de vouloir supprimer cet événement ?'))

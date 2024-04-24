@@ -49,14 +49,6 @@ export default {
                 return undefined;
             return false;
         },
-        date: {
-            get() {
-                return this.event.date ? new Date(this.event.date + 'Z') : undefined;
-            },
-            set(date) {
-                this.event.date = date.toISOString().slice(0, 19);
-            }
-        },
         eventUrl() {
             return 'https://' + location.host + baseUrl + '/events/$id';
         },
@@ -84,7 +76,7 @@ export default {
                 <label for="title">Titre</label>
                 <input v-model="event.title" id="title" name="title" type="text" required maxlength="255" placeholder="Nom de l'événement" />
                 <label for="date">Date et heure</label>
-                <DateTimeInput v-model="date" id="date" name="date" type="datetime-local" required />
+                <DateTimeInput v-model="event.date" id="date" name="date" type="datetime-local" required />
                 <label for="place">Lieu</label>
                 <input v-model="event.place" id="place" name="place" type="text" required maxlength="255" placeholder="Bâtiment Cauchy" />
                 <label for="poster">Affiche (optionnel)</label>
