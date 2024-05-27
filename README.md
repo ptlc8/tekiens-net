@@ -36,6 +36,7 @@ pacman -S mariadb
 ### Nix(OS)
 
 Installer direnv (https://direnv.net/) (optionnel)
+
 Commandes utiles :
 | Commande | Description |
 | --- | --- |
