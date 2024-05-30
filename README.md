@@ -33,7 +33,18 @@ Installer un système de gestion de base de données ([arch recommande MariaDB](
 pacman -S mariadb
 ```
 
-## Installation
+### Nix(OS)
+
+Installer direnv (https://direnv.net/) (optionnel)
+Commandes utiles :
+| Commande | Description |
+| --- | --- |
+| `direnv allow` | Autorise la configuration du shell automatique |
+| `direnv reload` | Reload le shell |
+| `devenv shell` | Configure le shell (si direnv non installé) |
+| `devenv up` | Lance tous les processus (mysql, backend, frontend) |
+
+## Installation (Non nécéssaire avec Nix + direnv)
 ```sh
 $ cd src
 $ chmod 777 data
