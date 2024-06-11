@@ -54,6 +54,14 @@ def url_value_preprocess(endpoint, values):
             g.args[k] = request.form.get(k) or None
 
 
+# CORS
+
+@api.after_request
+def after_request(response):
+    response.headers['Access-Control-Allow-Origin'] = "*"
+    return response
+
+
 # assos
 
 def parse_asso(asso):
