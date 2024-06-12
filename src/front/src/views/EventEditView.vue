@@ -19,7 +19,7 @@ export default {
     data() {
         return {
             event: {},
-                        asso: {},
+            asso: {},
             originalEvent: {},
             error: null
         }
@@ -51,11 +51,8 @@ export default {
         }
     },
     computed: {
-        color() {
-            return '#' + this.asso?.color?.toString(16)?.padStart(6, 0);
-        },
         backgroundColor() {
-            return this.color + '44';
+            return this.asso?.color + '44';
         },
         isNotGranted() {
             if (this.sessionStore.session === null) // not logged in
@@ -89,7 +86,7 @@ export default {
 
 <template>
     <section>
-        <article :style="{ '--accent-color': color, '--bg-color': backgroundColor }">
+        <article :style="{ '--accent-color': asso?.color, '--bg-color': backgroundColor }">
             <h2>Éditer un événement</h2>
             <form @submit.prevent="editEvent">
                 <label for="title">Titre</label>
@@ -125,10 +122,6 @@ export default {
 
 <style scoped lang="scss">
 form {
-    label {
-        margin-left: 1em;
-    }
-
     .error {
         color: red;
     }

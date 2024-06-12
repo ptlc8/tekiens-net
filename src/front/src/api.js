@@ -17,7 +17,7 @@ const Api = {
                 .then(events => events.map(parseEvent));
         },
         update(id, asso, session=localStorage.getItem("session")) {
-            return sendApiRequest("PUT", "assos/" + encodeURIComponent(id), { ...asso, session }, "Updating asso " + id);
+            return sendApiRequest("PUT", "assos/" + encodeURIComponent(id), { ...unparseAsso(asso), session }, "Updating asso " + id);
         },
     },
     events: {
@@ -60,6 +60,19 @@ const Api = {
         delete(id) {
             return sendApiRequest("DELETE", "sessions/" + encodeURIComponent(id), {}, "Deleting session");
         }
+    },
+    templates: {
+        get() {
+            return sendApiRequest("GET", "templates", {}, "Getting templates");
+        },
+        getOne(id, eventId=undefined) {
+            return sendApiRequest("GET", "templates/" + encodeURIComponent(id), { event: eventId }, "Getting template " + id + " for event " + eventId);
+        }
+    },
+    socials: {
+        get() {
+            return sendApiRequest("GET", "socials", {}, "Getting socials");
+        }
     }
 };
 
@@ -67,6 +80,12 @@ const Api = {
 function parseAsso(asso) {
     if (asso.logos)
         asso.logos = asso.logos.map(logo => baseUrl + logo);
+    return asso;
+}
+
+function unparseAsso(asso) {
+    if (asso.socials)
+        asso.socials = asso.socials.map(social => social.id + ":" + social.value);
     return asso;
 }
 

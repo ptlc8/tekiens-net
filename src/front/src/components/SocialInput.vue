@@ -1,15 +1,9 @@
 <script>
-const socials = [
-    { name: 'Site web', value: 'web', placeholder: 'tekiens.net' },
-    { name: 'Telegram', value: 'telegram', placeholder: '+wtd86pl51' },
-    { name: 'Twitter', value: 'twitter', placeholder: 'Tekiens' },
-    { name: 'Discord', value: 'discord', placeholder: 'ml51rbn113' },
-    { name: 'Instagram', value: 'instagram', placeholder: 'super_asso' },
-    { name: 'Email', value: 'email', placeholder: 'contact@tekiens.net' },
-    { name: 'Page de liens', value: 'links', placeholder: 'tekiens.net/links' },
-    { name: 'Facebook', value: 'facebook', placeholder: 'profile.php?id=518651113' },
-    { name: 'LinkedIn', value: 'linkedin', placeholder: 'company/tekiens' }
-];
+import Api from '../api';
+
+var socials = [];
+Api.socials.get()
+    .then(s => socials = s);
 
 export default {
     setup() {
@@ -17,26 +11,26 @@ export default {
     },
     props: {
         modelValue: {
-            type: String,
-            default: 'web:'
+            type: Object,
+            default: () => ({ id: 'web', value: '' })
         }
     },
     data() {
         return {
-            social: this.modelValue.split(':')[0],
-            value: this.modelValue.substring(this.modelValue.indexOf(':') + 1)
+            social: this.modelValue.id,
+            value: this.modelValue.value
         };
     },
     watch: {
         modelValue() {
-            this.social = this.modelValue.split(':')[0];
-            this.value = this.modelValue.substring(this.modelValue.indexOf(':') + 1);
+            this.social = this.modelValue.id;
+            this.value = this.modelValue.value;
         },
         social(social) {
-            this.$emit('update:modelValue', social + ':' + this.value);
+            this.$emit('update:modelValue', { id: social, value: this.value });
         },
         value(value) {
-            this.$emit('update:modelValue', this.social + ':' + value);
+            this.$emit('update:modelValue', { id: this.social, value });
         }
     }
 }
@@ -44,7 +38,8 @@ export default {
 
 <template>
     <select v-model="social">
-        <option v-for="social in socials" :value="social.value">{{ social.name }}</option>
+        <option v-for="social, socialId in socials" :value="socialId">{{ social.name }}</option>
     </select>
     <input v-model="value" type="text" :placeholder="socials[social]?.placeholder" />
+    <a target="_blank" :href="socials[social]?.link?.replace('{0}', value)">Tester</a>
 </template>

@@ -33,11 +33,8 @@ export default {
             .finally(next);
     },
     computed: {
-        color() {
-            return '#' + this.asso?.color?.toString(16)?.padStart(6, 0);
-        },
         backgroundColor() {
-            return this.color + '44';
+            return this.asso?.color + '44';
         },
         description() {
             if (!this.event.description)
@@ -85,7 +82,7 @@ export default {
 
 <template>
     <section>
-        <article :style="{ '--accent-color': color, '--bg-color': backgroundColor }">
+        <article :style="{ '--accent-color': asso?.color, '--bg-color': backgroundColor }">
             <div v-if="event" class="event">
                 <div class="main">
                     <h2>{{ event.title }}</h2>
