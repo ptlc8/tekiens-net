@@ -89,6 +89,14 @@ export function createMainRouter() {
                 }
             },
             {
+                path: '/templates',
+                name: 'templates',
+                component: () => import('./views/TemplateView.vue'),
+                meta: {
+                    title: 'Templates d\'e-mail - Tekiens.net'
+                }
+            },
+            {
                 path: '/:pathMatch(.*)*',
                 name: '404',
                 component: () => import('./views/404View.vue'),

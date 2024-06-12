@@ -102,6 +102,9 @@ export default {
                         <RouterLink :to="'/events/' + event.id + '/edit'">
                             <button>Éditer l'événement</button>
                         </RouterLink>
+                        <RouterLink :to="'/templates?event=' + event.id">
+                            <button>Générer un mail</button>
+                        </RouterLink>
                         <button @click="deleteEvent">Supprimer l'événement</button>
                         <hr />
                     </template>

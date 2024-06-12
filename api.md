@@ -10,6 +10,7 @@ Les paramètres peuvent être passés dans l'URL ou dans le corps de la requête
 - [Assos](#assos)
 - [Events](#events)
 - [Sessions](#sessions)
+- [Templates](#templates)
 - [Réseaux sociaux](#réseaux-sociaux)
 
 
@@ -29,6 +30,8 @@ Les paramètres peuvent être passés dans l'URL ou dans le corps de la requête
 | 🟢 POST   | [/api/sessions](#-post-apisessions)              | Crée une session lié à une association                                |
 | 🔵 GET    | [/api/sessions/{id}](#-get-apisessionsid)        | Récupère la session avec l'identifiant {id}                           |
 | 🔴 DELETE | [/api/sessions/{id}](#-delete-apisessionsid)     | Supprime la session avec l'identifiant {id}                           |
+| 🔵 GET    | [/api/templates](#-get-apitemplates)             | Récupère les identifiants de toutes les templates                     |
+| 🔵 GET    | [/api/templates/{id}](#get-apitemplatesid)       | Récupère la template avec l'identifiant {id}                          |
 | 🔵 GET    | [/api/socials](#-get-apisocials)                 | Récupère la liste des réseaux sociaux supportés                       |
 
 
@@ -195,6 +198,22 @@ Supprime la session avec l'identifiant {id}.
 - Paramètres :
     - id : identifiant de la session
 - Fonction api.js : `Api.sessions.delete(id)`
+
+
+## Templates
+
+### 🔵 `GET /api/templates`
+
+Récupère les identifiants de toutes les templates.
+- Fonction api.js : `Api.templates.get()`
+
+### 🔵 `GET /api/templates/{id}`
+
+Récupère la template avec l'identifiant {id}.
+- Paramètres :
+    - id : identifiant de la template
+    - event : identifiant de l'événement à rendre sur la template (facultatif)
+- Fonction api.js : `Api.templates.getOne(id, eventId)`
 
 
 ## Réseaux sociaux
