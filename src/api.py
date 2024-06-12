@@ -8,6 +8,8 @@ import data
 from hashlib import sha256
 from flask_bcrypt import Bcrypt
 
+from socials import socials
+
 load_dotenv()
 
 
@@ -64,12 +66,26 @@ def after_request(response):
 
 # assos
 
+# convert asso from database format to API response format
 def parse_asso(asso):
     asso['names'] = asso['names'].split(',')
     asso['logos'] = ['/' + l for l in data.get_asso_logos_paths(asso['id'], int(asso['logos']))]
-    asso['socials'] = asso['socials'].split(',')
+    asso_socials = []
+    for s in asso['socials'].split(','):
+        id = s.split(':')[0]
+        id = id if id in socials else 'web'
+        value = s.split(':', 1)[-1]
+        asso_socials.append({
+            'id': id,
+            'display': socials[id]['display'].format(value),
+            'link': socials[id]['link'].format(value),
+            'value': value
+        })
+    asso['socials'] = asso_socials
+    asso['color'] = f'#{asso["color"]:0{6}x}'
     return asso
 
+# convert asso from API query format to database format
 def unparse_asso(asso):
     if 'names' in asso:
         asso['names'] = ','.join(asso['names'])
@@ -77,6 +93,11 @@ def unparse_asso(asso):
         asso['logos'] = len(asso['logos'])
     if 'socials' in asso:
         asso['socials'] = ','.join(asso['socials'])
+    if 'color' in asso:
+        try:
+            asso['color'] = int(asso['color'][1:], 16)
+        except ValueError:
+            del asso['color']
     return asso
 
 @api.route('/assos', methods=['GET'])
@@ -167,10 +188,12 @@ def get_asso_events(id):
 
 # events
 
+# convert event from database format to API response format
 def parse_event(event):
     event['poster'] = '/' + data.get_event_poster_path(event['asso_id'], event['title'], event['date']) if event['poster'] else None
     return event
 
+# convert event from API query format to database format
 def unparse_event(event):
     if 'poster' in event:
         event['poster'] = bool(event['poster'])
@@ -314,11 +337,11 @@ def post_session():
         salt= '$'+password[1]+'$'+password[2]+'$'+password[3][:22]
         print(salt)
         mycursor.execute("UPDATE assos SET challenge = %s WHERE id = %s", (challenge, asso_id))
-        
+
         return success({'challenge' : challenge,'salt' : salt}, 201)
 
-    #check if the challenge exist and if the client send the hash of the challenge 
-    if hash_client and asso['challenge']: 
+    #check if the challenge exist and if the client send the hash of the challenge
+    if hash_client and asso['challenge']:
 
         #hash the challenge with the password and compare it with the hash send by the client
         hash_serv = sha256((asso['challenge']+ asso['password']).encode()).hexdigest()
@@ -333,9 +356,6 @@ def post_session():
 
     return error('Invalid credentials', 401)
 
-    
-    
-
 @api.route('/sessions/<id>', methods=['DELETE'])
 def delete_session(id):
     mydb = get_db()
@@ -349,10 +369,9 @@ def delete_session(id):
 from ics import Calendar, Event
 from ics.grammar.parse import ContentLine
 
-def add_events_to_calendar(cal, events, asso):
-    asso_name = asso['names'].split(',')[0]
+def add_events_to_calendar(cal, events):
     for event in events:
-
+        asso_name = event['asso'].split(',')[0]
         e = Event()
         e.uid = str(event['id'])
         e.name = '[' + asso_name + '] ' + event['title']
@@ -366,7 +385,7 @@ def add_events_to_calendar(cal, events, asso):
         e.url = event['link']
         #e.status = event['status']
         e.description = event['description']
-        e.extra.append(ContentLine('COLOR', {}, f'#{asso["color"]:0{6}x}'))
+        e.extra.append(ContentLine('COLOR', {}, event['color']))
         if event['poster']:
             e.extra.append(ContentLine('IMAGE', {}, event['poster']))
         cal.events.add(e)
@@ -391,15 +410,22 @@ def get_asso_events_ics(id):
     # get events and asso
     mydb = get_db()
     mycursor = mydb.cursor(dictionary=True)
-    mycursor.execute("SELECT assos.names, assos.color FROM assos WHERE id = %s", (id,))
-    asso = mycursor.fetchone()
-    mycursor.execute("SELECT events.* FROM events JOIN assos ON events.asso_id = assos.id WHERE asso_id = %s", (id,))
+    mycursor.execute("SELECT * FROM assos WHERE id = %s", (id,))
+    asso = parse_asso(mycursor.fetchone())
+    mycursor.execute("SELECT events.*, assos.names AS asso, assos.color FROM events JOIN assos ON events.asso_id = assos.id WHERE asso_id = %s", (id,))
     events = mycursor.fetchall()
     # create ics calendar
     cal = Calendar()
-    name = asso['names'].split(',')[0] + ' - Tekiens.net'
+    name = asso['names'][0] + ' - Tekiens.net'
     cal.extra.append(ContentLine('X-WR-CALNAME', {}, name))
     cal.extra.append(ContentLine('NAME', {}, name))
-    cal.extra.append(ContentLine('COLOR', {}, f'#{asso["color"]:0{6}x}'))
-    add_events_to_calendar(cal, events, asso)
+    cal.extra.append(ContentLine('COLOR', {}, asso['color']))
+    add_events_to_calendar(cal, events)
     return Response(cal.serialize(), mimetype='text/calendar')
+
+
+# socials
+
+@api.route('/socials', methods=['GET'])
+def get_socials():
+    return success(socials)

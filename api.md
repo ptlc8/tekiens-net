@@ -10,6 +10,7 @@ Les paramètres peuvent être passés dans l'URL ou dans le corps de la requête
 - [Assos](#assos)
 - [Events](#events)
 - [Sessions](#sessions)
+- [Réseaux sociaux](#réseaux-sociaux)
 
 
 ### Endpoints
@@ -28,6 +29,7 @@ Les paramètres peuvent être passés dans l'URL ou dans le corps de la requête
 | 🟢 POST   | [/api/sessions](#-post-apisessions)              | Crée une session lié à une association                                |
 | 🔵 GET    | [/api/sessions/{id}](#-get-apisessionsid)        | Récupère la session avec l'identifiant {id}                           |
 | 🔴 DELETE | [/api/sessions/{id}](#-delete-apisessionsid)     | Supprime la session avec l'identifiant {id}                           |
+| 🔵 GET    | [/api/socials](#-get-apisocials)                 | Récupère la liste des réseaux sociaux supportés                       |
 
 
 ## Assos
@@ -66,9 +68,9 @@ Fonctionne aussi avec la méthode 🟠 PATCH.
     - theme : nouveau thème de l'association (facultatif)
     - campus : nouveau campus de l'association (facultatif)
     - room : nouvelle salle de l'association (facultatif)
-    - socials[] : nouveaux réseaux sociaux de l'association (multiple, facultatif)
+    - socials[] : nouveaux réseaux sociaux de l'association (au format `id:value` validant la regex `[a-z]+:.+`, multiple, facultatif)
     - description : nouvelle description de l'association (facultatif)
-    - color : nouvelle couleur de l'association (facultatif)
+    - color : nouvelle couleur de l'association au format hexadécimal (validant la regex `#[0-9a-fA-F]{1,6}`, facultatif)
 - Fonction api.js : `Api.assos.update(id, asso)`
 
 ### 🔵 `GET /api/assos/{id}/events`
@@ -193,3 +195,11 @@ Supprime la session avec l'identifiant {id}.
 - Paramètres :
     - id : identifiant de la session
 - Fonction api.js : `Api.sessions.delete(id)`
+
+
+## Réseaux sociaux
+
+### 🔵 `GET /api/socials`
+
+Récupère la liste des réseaux sociaux supportés.
+- Fonction api.js : `Api.socials.get()`

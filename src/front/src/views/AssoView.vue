@@ -47,11 +47,8 @@ export default {
                 ({ type: social.split(':', 1)[0], value: social.substring(social.indexOf(':') + 1) })
             ) ?? [];
         },
-        color() {
-            return '#' + this.asso?.color?.toString(16)?.padStart(6, 0);
-        },
         backgroundColor() {
-            return this.color + '44';
+            return this.asso?.color + '44';
         },
         description() {
             if (!this.asso.description) return '';
@@ -99,7 +96,7 @@ export default {
 
 <template>
     <section>
-        <article :style="{ '--accent-color': color, '--bg-color': backgroundColor }">
+        <article :style="{ '--accent-color': this.asso?.color, '--bg-color': backgroundColor }">
             <h2 v-if="asso">
                 <img :src="asso.logos?.[0]" width="200" height="200">
                 {{ asso.names?.[0] }}
@@ -139,43 +136,10 @@ export default {
                     <span v-if="asso.campus">📍 Campus : {{ asso.campus }}</span>
                     <span v-if="asso.room">📦 Salle : {{ asso.room }}</span>
                     <hr />
-                    <template v-for="social in socials">
-                        <a v-if="social.type == 'web'" target="_blank" :href="'https://' + social.value">
-                            <img src="/assets/socials/web.svg" width="16" height="16" />
-                            {{ social.value }}
-                        </a>
-                        <a v-else-if="social.type == 'telegram'" target="_blank" :href="'https://t.me/' + social.value">
-                            <img src="/assets/socials/telegram.svg" width="16" height="16" />
-                            Telegram
-                        </a>
-                        <a v-else-if="social.type == 'twitter'" target="_blank" :href="'https://twitter.com/' + social.value">
-                            <img src="/assets/socials/twitter.svg" width="16" height="16" />
-                            Twitter @{{ social.value }}
-                        </a>
-                        <a v-else-if="social.type == 'discord'" target="_blank" :href="'https://discord.gg/' + social.value">
-                            <img src="/assets/socials/discord.svg" width="16" height="16" /> 
-                            Discord
-                        </a>
-                        <a v-else-if="social.type == 'instagram'" target="_blank" :href="'https://instagram.com/' + social.value">
-                            <img src="/assets/socials/instagram.svg" width="16" height="16" />
-                            Instagram @{{ social.value }}
-                        </a>
-                        <a v-else-if="social.type == 'email'" target="_blank" :href="'mailto:' + social.value">
-                            <img src="/assets/socials/email.svg" width="16" height="16" />
-                            {{ social.value }}
-                        </a>
-                        <a v-else-if="social.type == 'links'" target="_blank" :href="'https://' + social.value">
-                            🖇 Liens
-                        </a>
-                        <a v-else-if="social.type == 'facebook'" target="_blank" :href="'https://facebook.com/' + social.value">
-                            <img src="/assets/socials/facebook.svg" width="16" height="16" />
-                            Facebook <template v-if="!social.value.match(/[\?\/\=]/)">({{ social.value }})</template>
-                        </a>
-                        <a v-else-if="social.type == 'linkedin'" target="_blank" :href="'https://linkedin.com/' + social.value">
-                            <img src="/assets/socials/linkedin.svg" width="16" height="16" />
-                            LinkedIn
-                        </a>
-                    </template>
+                    <a v-for="social in asso.socials" target="_blank" :href="social.link">
+                        <img :src="'../assets/socials/' + social.id + '.svg'" width="16" height="16" />
+                        {{ social.display }}
+                    </a>
                     <hr />
                     <a target="_blank" :href="'webcal://' + icsUrl">
                         <button>Ajouter à votre agenda</button>

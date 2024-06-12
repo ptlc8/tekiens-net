@@ -61,8 +61,7 @@ export default {
             return getEventStatus(this.event);
         },
         color() {
-            let color = this.event?.color ?? this.asso?.color;
-            return '#' + (color?.toString(16)?.padStart(6, 0) ?? "ffffff");
+            return this.event?.color ?? this.asso?.color ?? "ffffff";
         },
         textColor() {
             return this.calcLuminance(this.color) > 0.25 ? '#000000' : '#ffffff';
@@ -86,7 +85,7 @@ export default {
                 place: location.host + baseUrl,
                 link: location.origin + baseUrl + '/login',
                 access: 'Réservé aux associations',
-                color: 15690752
+                color: '#ef6c00'
             });
         },
         next() {

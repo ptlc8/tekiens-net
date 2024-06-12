@@ -40,11 +40,6 @@ export default {
                 .filter(asso => this.selectedCampus[asso.campus])
                 .filter(asso => this.past || !asso.end || asso.end > new Date().getFullYear());
         }
-    },
-    methods: {
-        parseColor(intColor) {
-            return '#' + intColor.toString(16)?.padStart(6, 0);
-        }
     }
 };
 
@@ -76,7 +71,7 @@ export default {
         <article v-else>
             <h2>Associations</h2>
             <div class="assos">
-                <RouterLink v-for="asso in filteredAssos" :key="asso.id" :to="'/assos/' + encodeURIComponent(asso.id)" class="asso" :style="{ '--accent-color': parseColor(asso.color) }">
+                <RouterLink v-for="asso in filteredAssos" :key="asso.id" :to="'/assos/' + encodeURIComponent(asso.id)" class="asso" :style="{ '--accent-color': asso.color }">
                     <img :src="asso.logos?.[0]" width="200" height="200">
                     <h3>{{ asso.names?.[0] }}</h3>
                     {{ asso.theme }}

@@ -8,18 +8,13 @@ export default {
             type: Object,
             default: null,
         }
-    },
-    computed: {
-        color() {
-            return '#' + this.asso?.color?.toString(16)?.padStart(6, 0);
-        }
     }
 };
 </script>
 
 <template>
-    <RouterLink :to="'/events/' + event.id" class="event" :style="{ '--accent-color': color }">
-        <div class="poster" :style="{ backgroundColor: color }">
+    <RouterLink :to="'/events/' + event.id" class="event" :style="{ '--accent-color': asso?.color }">
+        <div class="poster">
             <img v-if="event.poster" :src="event.poster" :alt="event.title" width="300" />
         </div>
         <div class="infos">
@@ -52,6 +47,7 @@ export default {
 
     .poster {
         height: 16em;
+        background-color: var(--accent-color);
 
         img {
             width: 100%;

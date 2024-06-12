@@ -52,14 +52,6 @@ export default {
             if (this.sessionStore.session === undefined || !this.originalAsso.id) // not loaded
                 return undefined;
             return this.sessionStore.session.asso_id != this.originalAsso.id;
-        },
-        color: {
-            get() {
-                return '#' + Number(this.asso.color).toString(16).padStart(6, '0');
-            },
-            set(value) {
-                this.asso.color = parseInt(value.substr(1), 16);
-            }
         }
     },
     watch: {
@@ -78,7 +70,7 @@ export default {
 </script>
 
 <template>
-    <section :style="{ '--accent-color': color }">
+    <section :style="{ '--accent-color': asso.color }">
         <article>
             <h2>Éditer une association</h2>
             <form @submit.prevent="editAsso">
@@ -99,7 +91,7 @@ export default {
                 <label for="room">Local associatif (facultatif)</label>
                 <input v-model="asso.room" id="room" name="room" type="text" maxlength="255" placeholder="CY 211" />
                 <label for="color">Couleur</label>
-                <input v-model="color" id="color" name="color" type="color" placeholder="#000" />
+                <input v-model="asso.color" id="color" name="color" type="color" placeholder="#000" />
                 <label for="start">Année de création (facultatif)</label>
                 <input v-model="asso.start" id="start" name="start" type="number" placeholder="1983" />
                 <label for="end">Année de dissolution (facultatif)</label>
@@ -107,7 +99,7 @@ export default {
                 <label for="description">Description (facultatif)</label>
                 <Editor v-model="asso.description" placeholder="Cette association est intéressante, venez !" />
                 <label for="socials">Réseaux sociaux (facultatif)</label>
-                <ArrayInput v-model="asso.socials" v-slot="{ onUpdate, value }" default="web:">
+                <ArrayInput v-model="asso.socials" v-slot="{ onUpdate, value }" :default="{ id: 'web', value: '' }">
                     <SocialInput @update:modelValue="onUpdate" :modelValue="value" />
                 </ArrayInput>
                 <button type="submit">Publier les modifications</button>
@@ -119,10 +111,6 @@ export default {
 
 <style scoped lang="scss">
 form {
-    label {
-        margin-left: 1em;
-    }
-
     img {
         height: 200px;
         object-fit: contain;

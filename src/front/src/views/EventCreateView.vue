@@ -37,7 +37,7 @@ export default {
     },
     computed: {
         color() {
-            return '#' + this.sessionStore.session?.asso?.color?.toString(16)?.padStart(6, 0);
+            return this.sessionStore.session?.asso?.color;
         },
         backgroundColor() {
             return this.color + '44';
@@ -106,10 +106,6 @@ export default {
 
 <style scoped lang="scss">
 form {
-    label {
-        margin-left: 1em;
-    }
-
     img {
         height: 200px;
         object-fit: contain;
