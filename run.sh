@@ -13,6 +13,12 @@ start)
     cd src
     venv/bin/flask run
     ;;
+install)
+    cd src
+    venv/bin/pip install -r requirements.txt
+    cd front
+    npm install
+    ;;
 "")
     cd src/front
     npm run build
@@ -20,7 +26,7 @@ start)
     venv/bin/flask run
     ;;
 *)
-    echo "Usage: $0 {build|dev|start|}"
+    echo "Usage: $0 {build|dev|start|install|}"
     exit 1
     ;;
 esac

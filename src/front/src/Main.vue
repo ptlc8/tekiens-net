@@ -65,6 +65,9 @@ export default {
                 <RouterLink :to="'/assos/' + encodeURIComponent(session.asso_id) + '/edit'" custom v-slot="{ navigate }">
                     <button @click="navigate">Modifier ma page</button>
                 </RouterLink>
+                <RouterLink to="/templates" custom v-slot="{ navigate }">
+                    <button @click="navigate">Générer un mail</button>
+                </RouterLink>
                 <button @click="logout">Se déconnecter</button>
             </template>
             <template v-else>

@@ -424,6 +424,45 @@ def get_asso_events_ics(id):
     return Response(cal.serialize(), mimetype='text/calendar')
 
 
+
+# email templating
+
+import mailing
+
+@api.route('/templates', methods=['GET'])
+def get_templates():
+    return success(mailing.get_templates())
+
+@api.route('/templates/<id>', methods=['GET'])
+def get_template(id):
+
+    template = mailing.get_template(id)
+    if template is None:
+        return error('Not found', 404)
+
+    event_id = g.args.get('event')
+    if not event_id:
+        return success(template)
+
+    mydb = get_db()
+    mycursor = mydb.cursor(dictionary=True)
+    mycursor.execute("SELECT * FROM events WHERE id = %s", (event_id,))
+    result = mycursor.fetchone()
+    if not result:
+        return error('Not found', 404)
+    event = parse_event(result)
+
+    mycursor.execute("SELECT * FROM assos WHERE id = %s", (event['asso_id'],))
+    result = mycursor.fetchone()
+    asso = parse_asso(result)
+
+    return success(mailing.render(template, {
+        'event': event,
+        'asso': asso,
+        'site': request.scheme + '://' + request.host + request.root_path
+    }))
+
+
 # socials
 
 @api.route('/socials', methods=['GET'])

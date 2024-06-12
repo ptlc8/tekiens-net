@@ -1,0 +1,137 @@
+
+<div style="
+    background-color:#ffffff;
+    background-image: url('{{site}}{{event.poster}}');
+    --background-image: url('https://source.unsplash.com/featured/1600x800?sport');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    min-height: 100%;">
+
+    <div style="
+        margin: 0 auto;
+        padding: 15px 0;
+        max-width: 600px;
+        min-width: 320px;
+        width: 320px;
+        width: calc(28000% - 167400px);
+        font-family: Avenir, sans-serif;
+        text-align:justify;">
+
+        <div class="logo" style="text-align:center; margin:20px 0;">
+            <img src="{{site}}/data/{{asso.id}}/logo-0.webp" alt="{{asso.names.0}}" width="200" style="
+                display: inline-block;
+                height:auto;
+                max-width:480px">
+        </div>
+
+        <div style="margin:20px 0;
+            background-color:{{asso.color}};
+            border: 3px #004450 solid;
+            padding: 20px;">
+
+            <!--<h1 class="Titre-Japonais" style="
+                margin-bottom:0;
+                font-style:normal;
+                font-weight:normal;
+                color:#000;
+                font-size:22px;
+                line-height:31px;
+                text-align:center" lang="x-size-26">
+            <span style="color:#f8e800"><strong>オーガナイザーを探す！</strong></span></h1>-->
+
+            <p style="
+                margin-top:10px;
+                font-size:22px;
+                line-height:31px;
+                text-align:center;
+                color:#f8e800;">{{event.title}}</p>
+
+            <div>{{{event.description}}}</div>
+        </div>
+
+        <div style="margin:20px 0;
+            border: 3px #004450 solid;
+            background-color:{{asso.color}};
+            padding: 20px;">
+
+            {{#event.poster}}
+            <img style="width:90%; margin:5%; width:-webkit-fill-available;" src="{{site}}{{event.poster}}">
+            {{/event.poster}}
+
+            📌 Lieu : {{event.place}}
+            <br>
+            ⏰ Date : {{event.date}}
+
+            {{#event.link}}
+            <a style="
+                border-radius:4px;
+                display:block;
+                font-weight:bold;
+                padding:12px 24px;
+                text-align:center;
+                text-decoration:none;
+                margin-top:20px;
+                color: #ffffff;
+                border:1px solid rgba(0,0,0,0.25);
+                background-color: #fff;
+                color: {{asso.color}};"
+                href="{{event.link}}">Lien d'inscription</a>
+            {{/event.link}}
+
+            <a href="{{site}}/events/{{event.id}}" style="
+                border-radius:4px;
+                display:block;
+                font-weight:bold;
+                padding:12px 24px;
+                text-align:center;
+                text-decoration:none;
+                margin-top:20px;
+                color: #ffffff;
+                border:1px solid rgba(0,0,0,0.25);
+                background-color: #fff;
+                color: {{asso.color}};">Voir l'événement sur Tekiens.net</a>
+        </div>
+
+        <div style="margin:20px 0;
+            background-color:{{asso.color}};
+            border: 3px #004450 solid;
+            padding: 20px;">
+
+            <!--<p class="Outro-Japonais" style="
+                Margin-top:0;
+                Margin-bottom:0;
+                font-size:22px;
+                line-height:31px;
+                text-align:center" lang="x-size-26"><strong>
+                <span style="color:#f8e800">がんばってください！</span></strong></p>-->
+
+            <p style="font-size:22px; text-align:center">
+                <span style="color:#f8e800">À bientôt !</span>
+            </p>
+
+            <p style="text-align:right">Le bureau de {{asso.names.0}}</p>
+            <!-- GIF -->
+            <!--<img style="
+              width: 100%;
+              margin-bottom: 10px;" src="https://media.giphy.com/media/12nMEydAAgCxYA/giphy.gif">-->
+
+        </div>
+
+        <div style="text-align: center;
+                background-color:{{asso.color}};
+                border: 3px #004450 solid;">
+
+            {{#asso.socials}}
+            <a href="{{link}}">
+                <img style="min-height: 2em; width:4em; margin: 10px" src="{{site}}/assets/socials/{{id}}.svg" alt="{{display}}">
+            </a>
+            {{/asso.socials}}
+        </div>
+
+        <div style="margin:20px 0; text-align:center; font-size:0.8em; text-shadow: 1px 1px 1px #fff, 1px -1px 1px #fff, -1px -1px 1px #fff, -1px 1px 1px #fff;">
+            Mail envoyé avec <a href="{{site}}" style="color: orangered;">Tekiens.net</a>, le site de la vie étudiante de CY Tech.
+        </div>
+
+    </div>
+</div>

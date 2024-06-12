@@ -4,3 +4,5 @@ mysql-connector-python
 ics
 pillow
 flask-bcrypt
+chevron
+markdown
