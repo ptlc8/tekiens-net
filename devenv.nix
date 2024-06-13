@@ -2,9 +2,9 @@
   packages = [ ];
 
   enterShell = ''
-    if [ ! -f src/.env ]; then
-      cp src/.env.example src/.env
-      sed -i 's/supermotdepasse/tekiens_net/g' src/.env
+    if [ ! -f back/.env ]; then
+      cp back/.env.example back/.env
+      sed -i 's/supermotdepasse/tekiens_net/g' back/.env
     fi
   '';
 
@@ -23,16 +23,16 @@
 
   languages.python = {
     enable = true;
-    directory = "./src";
+    directory = "./back";
     venv = {
       enable = true;
-      requirements = ./src/requirements.txt;
+      requirements = ./back/requirements.txt;
     };
   };
 
   languages.javascript = {
     enable = true;
-    directory = "./src/front";
+    directory = "./front";
     npm = {
       enable = true;
       install.enable = true;
