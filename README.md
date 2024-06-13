@@ -47,12 +47,13 @@ Commandes utiles :
 
 ## Installation (Non nécéssaire avec Nix + direnv)
 ```sh
-$ cd src
+$ cd back
 $ chmod 777 data
 $ python3 -m venv venv
 $ venv/bin/pip install -r requirements.txt
-$ cd front
+$ cd ../front
 $ npm install
+$ cd ..
 ```
 
 ### Mise en place de MariaDB
@@ -79,24 +80,27 @@ quit
 mariadb -u tekiens_net -p
 CREATE DATABASE tekiens_net CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE tekiens_net;
-source init.sql # et sample.sql pour un avoir des données d'exemple
+SOURCE init.sql
+#SOURCE sample.sql # pour un avoir des données d'exemple
 SHOW TABLES;
 ```
 
 Vous devriez avoir un résultat similaire à:
 
+```
 MariaDB [tekiens_net]> SHOW TABLES;
-+----------------+
++-----------------------+
 | Tables_in_tekiens_net |
-+----------------+
-| assos          |
-| events         |
-| sessions       |
-+----------------+
++-----------------------+
+| assos                 |
+| events                |
+| sessions              |
++-----------------------+
 3 rows in set (0.001 sec)
+```
 
 #### Création du dotenv
-Créer un fichier `.env` dans le dossier `src` avec les identifiants de la base de données sous la forme suivante :
+Créer un fichier `.env` dans le dossier `back` avec les identifiants de la base de données sous la forme suivante :
 ```
 DATABASE_HOST=localhost
 DATABASE_USER=tekiens_net
@@ -113,9 +117,11 @@ $ cd ..
 ```
 
 ### Lancement en mode développement
-*src/*
+
 ```sh
+$ cd back
 $ venv/bin/python3 -m flask run
+$ cd ..
 ```
 
 ### Lancement en mode production avec Apache2
@@ -130,18 +136,18 @@ $ a2ensite tekiens-net
 $ service apache2 restart
 ```
 
-Si le projet est servi par un reverse proxy, créer un fichier `.env.local` dans le dossier `src/front` avec le sous-chemin du projet sous la forme suivante :
+Si le projet est servi par un reverse proxy, créer un fichier `.env.local` dans le dossier `front` avec le sous-chemin du projet sous la forme suivante :
 ```properties
 VITE_BASE_URL=/sous-chemin
 ```
 
 ## Échantillon de données
 
-Pour ajouter un échantillon de données, exécuter le script `sample.sql` dans la base de données et copier les images du dossier `sample-data` dans le dossier `src/data` :
+Pour ajouter un échantillon de données, exécuter le script `sample.sql` dans la base de données et copier les images du dossier `back/data.sample` dans le dossier `back/data` :
 
 ```sh
-$ cp sample-data/* src/data/
-$ chown -R www-data:www-data src/data/*
+$ cp back/data.sample/* back/data/
+$ chown -R www-data:www-data back/data/*
 ```
 
 ## API

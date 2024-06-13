@@ -12,7 +12,6 @@ export default {
                 return this.iso2local(this.modelValue);
             },
             set(value) {
-                console.log(this.local2iso(value));
                 this.$emit('update:modelValue', this.local2iso(value));
             }
         }

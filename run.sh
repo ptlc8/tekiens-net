@@ -2,27 +2,27 @@
 
 case $1 in
 build)
-    cd src/front
+    cd front
     npm run build
     ;;
 dev)
-    cd src/front
+    cd front
     npm run dev
     ;;
 start)
-    cd src
+    cd back
     venv/bin/flask run
     ;;
 install)
-    cd src
+    cd back
     venv/bin/pip install -r requirements.txt
-    cd front
+    cd ../front
     npm install
     ;;
 "")
-    cd src/front
+    cd front
     npm run build
-    cd ..
+    cd ../back
     venv/bin/flask run
     ;;
 *)
