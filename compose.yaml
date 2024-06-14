@@ -1,0 +1,25 @@
+services:
+  webserver:
+    build: .
+    ports:
+      - 5000:5000
+    environment:
+      DATABASE_HOST: database
+      DATABASE_USER: tekiens
+      DATABASE_PASS: secret
+      DATABASE_NAME: tekiens-net
+  database:
+    image: mariadb:lts
+    expose:
+      - 3306
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - tekiens-data:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: secret
+      MARIADB_DATABASE: tekiens-net
+      MARIADB_USER: tekiens
+      MARIADB_PASSWORD: secret
+volumes:
+  tekiens-data:
+    driver: local
