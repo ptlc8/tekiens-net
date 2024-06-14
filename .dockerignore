@@ -1,0 +1,14 @@
+.gitignore
+*.md
+.env
+*.example
+
+# back-end
+/back/venv
+__pycache__
+*.pyc
+/back/data/*
+
+# front-end
+/front/dist
+node_modules

@@ -10,6 +10,8 @@ def get_db():
         user=os.environ.get('DATABASE_USER'),
         password=os.environ.get('DATABASE_PASS'),
         database=os.environ.get('DATABASE_NAME'),
-        autocommit=True
+        charset= 'utf8mb4',
+        collation= 'utf8mb4_unicode_ci',
+        autocommit=True,
     )
     return mydb
