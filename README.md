@@ -1,7 +1,6 @@
 # Tekiens.net
 
-**Tekiens.net** by [Atilla](https://atilla.org), le site de la vie étudiante de CY Tech.
-Le but de ce site est de centraliser les informations concernant les associations et les événements de l'école.
+**Tekiens.net** est un site web dédié à la vie étudiante à CY Tech, créé par [Atilla](https://atilla.org). L'objectif de ce site est de centraliser les informations sur les associations et les événements à l'école.
 
 ## Prérequis
 
@@ -75,13 +74,13 @@ GRANT ALL PRIVILEGES ON tekiens_net.* TO 'tekiens_net'@'localhost';
 quit
 ```
 
-#### Création de la BDD
+#### Création de la base de données
 ```sh
 mariadb -u tekiens_net -p
 CREATE DATABASE tekiens_net CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE tekiens_net;
 SOURCE init.sql
-#SOURCE sample.sql # pour un avoir des données d'exemple
+#SOURCE sample.sql # pour avoir des données d'exemple
 SHOW TABLES;
 ```
 
@@ -116,7 +115,7 @@ $ npm run build
 $ cd ..
 ```
 
-### Lancement en mode développement
+### Exécution en mode développement
 
 ```sh
 $ cd back
@@ -124,12 +123,13 @@ $ venv/bin/python3 -m flask run
 $ cd ..
 ```
 
-### Lancement en mode production avec Apache2
+### Exécution en mode production avec Apache2
 
 ```sh
 $ apt-get update
 $ apt-get install apache2 libapache2-mod-wsgi-py3
 $ a2enmod wsgi
+$ chown -R www-data:www-data back/data/*
 $ cp apache2.conf /etc/apache2/sites-available/tekiens-net.conf
 $ # edit tekiens-net.conf with your own path
 $ a2ensite tekiens-net
@@ -143,11 +143,10 @@ VITE_BASE_URL=/sous-chemin
 
 ## Échantillon de données
 
-Pour ajouter un échantillon de données, exécuter le script `sample.sql` dans la base de données et copier les images du dossier `back/data.sample` dans le dossier `back/data` :
+Pour ajouter un échantillon de données, exécuter le script `sample.sql` dans la base de données et copier les images du dossier `back/data.sample` dans le dossier `back/data` (en veillant à ce que le propriétaire des fichiers soit celui qui exécute le serveur web) :
 
 ```sh
-$ cp back/data.sample/* back/data/
-$ chown -R www-data:www-data back/data/*
+$ cp -r back/data.sample/* back/data/
 ```
 
 ## API
