@@ -2,10 +2,12 @@
 import { RouterLink } from 'vue-router';
 import Api from '../api';
 import EventPreview from '../components/EventPreview.vue';
+import AssoPreview from '../components/AssoPreview.vue';
 
 export default {
     components: {
-        EventPreview
+        EventPreview,
+        AssoPreview
     },
     data() {
         return {
@@ -16,7 +18,7 @@ export default {
     beforeRouteEnter(to, _from, next) {
         Promise.all([
             Api.events.get({ after: new Date(), limit: 10 }),
-            Api.assos.get({ after: new Date().getUTCFullYear() })
+            Api.assos.get({ after: new Date().getUTCFullYear(), order: 'random' })
         ]).then(([events, assos]) => next(view => {
             view.events = events;
             view.assos = assos;
@@ -39,7 +41,7 @@ export default {
         <article>
             <h2>Associations</h2>
             <div class="assos">
-                <RouterLink v-for="asso, i in assos" :key="asso.id" :to="'/assos/' + encodeURIComponent(asso.id)">
+                <!--<RouterLink v-for="asso, i in assos" :key="asso.id" :to="'/assos/' + encodeURIComponent(asso.id)">
                     <img :src="asso.logos[0]" :alt="asso.names[0]" :style="{
                         top:  50 - Math.cos((i%2 ? (i+1)/2 : -i/2) / assos.length * 2*Math.PI)*40 + '%',
                         left: 50 + Math.sin((i%2 ? (i+1)/2 : -i/2) / assos.length * 2*Math.PI)*40 + '%'
@@ -47,14 +49,16 @@ export default {
                 </RouterLink>
                 <RouterLink to="/assos">
                     <h3 class="title">Découvrir les assos</h3>
-                </RouterLink>
+                </RouterLink>-->
+                <AssoPreview v-for="asso in assos.slice(0, 6)" :key="asso.id" :asso="asso" />
+                <RouterLink to="/assos" class="more">Découvrir les associations</RouterLink>
             </div>
         </article>
     </section>
 </template>
 
 <style lang="scss" scoped>
-.events {
+.events, .assos {
     display: flex;
     overflow: auto;
 
@@ -69,9 +73,11 @@ export default {
         font-size: 1.6em;
         text-align: center;
         padding: 0.6em;
+        background-color: white;
     }
 }
-.assos {
+
+/*.assos {
     position: relative;
     height: 16em;
 
@@ -89,5 +95,5 @@ export default {
         height: auto;
         transform: translate(-50%, -50%);
     }
-}
+}*/
 </style>

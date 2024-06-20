@@ -1,10 +1,12 @@
 <script>
 import Api from '../api';
 import Switch from '../components/Switch.vue';
+import AssoPreview from '../components/AssoPreview.vue';
 
 export default {
     components: {
-        Switch
+        Switch,
+        AssoPreview
     },
     data() {
         return {
@@ -71,11 +73,11 @@ export default {
         <article v-else>
             <h2>Associations</h2>
             <div class="assos">
-                <RouterLink v-for="asso in filteredAssos" :key="asso.id" :to="'/assos/' + encodeURIComponent(asso.id)" class="asso" :style="{ '--accent-color': asso.color }">
+                <AssoPreview v-for="asso in filteredAssos" :key="asso.id" :asso="asso">
                     <img :src="asso.logos?.[0]" width="200" height="200">
                     <h3>{{ asso.names?.[0] }}</h3>
                     {{ asso.theme }}
-                </RouterLink>
+                </AssoPreview>
             </div>
         </article>
     </section>
@@ -101,24 +103,5 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 1em;
-
-    .asso {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 0.5em;
-        border-radius: 4px;
-        box-shadow: 0 0 10px 2px rgba(0, 0, 0, .1);
-        text-decoration: none;
-        text-align: center;
-        width: 200px;
-        max-width: calc(50% - 2em);
-
-        img {
-            object-fit: contain;
-            width: 100%;
-        }
-    }
 }
 </style>
