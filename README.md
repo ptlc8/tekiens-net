@@ -146,7 +146,7 @@ VITE_BASE_URL=/sous-chemin
 Pour ajouter un échantillon de données, exécuter le script `sample.sql` dans la base de données et copier les images du dossier `back/data.sample` dans le dossier `back/data` :
 
 ```sh
-$ cp back/data.sample/* back/data/
+$ cp -r back/data.sample/* back/data/
 $ chown -R www-data:www-data back/data/*
 ```
 
