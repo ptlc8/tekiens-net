@@ -1,3 +1,4 @@
+#!venv/bin/python
 #python script which take a csv file as input and change the password of the assos who is in mysql database
 #the script use bcrypt to hash the password
 #the csv file must have the following format: id,password
@@ -79,5 +80,5 @@ if __name__ == "__main__":
         id = sys.argv[4]
         change_password(id, password)
     else:
-        print("Usage: python change_password.py <file_name> or python change_password.py -p <password> -i <id>")
+        print(f"Usage: {sys.argv[0]} <file_name> or {sys.argv[0]} -p <password> -i <id>")
         sys.exit(1)
