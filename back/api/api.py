@@ -42,6 +42,7 @@ def url_value_preprocess(endpoint, values):
 @api.after_request
 def after_request(response):
     response.headers['Access-Control-Allow-Origin'] = "*"
+    response.headers['Access-Control-Allow-Methods'] = "GET, POST, HEAD, PUT, PATCH, DELETE"
     return response
 
 
