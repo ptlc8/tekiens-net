@@ -7,18 +7,9 @@ import sys
 from dotenv import load_dotenv
 import os
 from change_password import hash_password
+from api.database import get_db
 
 load_dotenv()
-
-def get_db():
-    mydb = mysql.connector.connect(
-        host=os.environ.get('DATABASE_HOST'),
-        user=os.environ.get('DATABASE_USER'),
-        password=os.environ.get('DATABASE_PASS'),
-        database=os.environ.get('DATABASE_NAME'),
-        autocommit=True
-    )
-    return mydb
 
 def create_asso(id, password):
     try:

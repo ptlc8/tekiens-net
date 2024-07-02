@@ -9,21 +9,11 @@ import sys
 from dotenv import load_dotenv
 import os
 import bcrypt
+from api.database import get_db
 
 load_dotenv()
 
-def get_db():
-    mydb = mysql.connector.connect(
-        host=os.environ.get('DATABASE_HOST'),
-        user=os.environ.get('DATABASE_USER'),
-        password=os.environ.get('DATABASE_PASS'),
-        database=os.environ.get('DATABASE_NAME'),
-        autocommit=True
-            )
-    return mydb
-
 def change_password_csv(file_name):
-
     try:
         mydb = get_db()
         mycursor = mydb.cursor()
@@ -70,7 +60,6 @@ def hash_password(password):
         sys.exit(1)
         
 if __name__ == "__main__":
-    print(sys.argv, len(sys.argv))
     #if there is one argument we take it as the file name
     if len(sys.argv) == 2:
         change_password_csv(sys.argv[1])

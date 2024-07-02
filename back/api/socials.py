@@ -1,3 +1,8 @@
+from flask import Blueprint
+
+from . import api
+
+
 socials = {
     'web': {
         'name': 'Site web',
@@ -54,3 +59,10 @@ socials = {
         'placeholder': 'company/tekiens'
     }
 }
+
+
+blueprint = Blueprint('socials', __name__)
+
+@blueprint.route('', methods=['GET'])
+def get_socials():
+    return api.success(socials)
