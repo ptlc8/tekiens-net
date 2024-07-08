@@ -166,7 +166,7 @@ Demande un challenge au serveur pour vérifier le mot de passe.
 - Paramètres :
     - asso : identifiant de l'association
 
-Le serveur envoie un challenge (sous forme de chaine de caractères) et le sel du hash bcrypt (sous la forme "$alg$rounds$salt") utilisé pour hasher le mot de passe.
+Le serveur envoie un challenge (sous forme de chaine de caractères) et le sel du hash bcrypt (sous la forme `$alg$rounds$salt`) utilisé pour hasher le mot de passe.
 - Réponse :
     - challenge : challenge envoyé par le serveur
     - salt : sel du hash bcrypt
