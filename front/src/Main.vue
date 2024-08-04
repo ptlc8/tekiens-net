@@ -53,7 +53,7 @@ export default {
                 <div class="header">
                     <template v-if="session.asso">
                         <span>{{ session.asso.names[0] }}</span>
-                        <img :src="session.asso.logos[0]" width="48" height="48" alt="Logo de l'association">
+                        <img :src="session.asso.logos[0]" width="48" height="48" alt="Logo de l'association" />
                     </template>
                 </div>
                 <RouterLink :to="'/assos/' + encodeURIComponent(session.asso_id)" custom v-slot="{ navigate }">
@@ -102,7 +102,7 @@ export default {
         <KeepAlive>
             <RouterView v-if="!error" />
             <section v-else class="error">
-                <span v-for="message in error.message">{{ message }}</span>
+                <span v-for="message in error.message" :key="message">{{ message }}</span>
             </section>
         </KeepAlive>
     </main>

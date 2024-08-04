@@ -1,11 +1,11 @@
 <script>
 import Api from '../api';
-import Switch from '../components/Switch.vue';
+import SwitchButton from '../components/SwitchButton.vue';
 import AssoPreview from '../components/AssoPreview.vue';
 
 export default {
     components: {
-        Switch,
+        SwitchButton,
         AssoPreview
     },
     data() {
@@ -13,19 +13,6 @@ export default {
             assos: [],
             selectedCampus: {}
         }
-    },
-    beforeRouteEnter(_to, _from, next) {
-        Api.assos.get()
-            .then(assos => {
-                next(view => {
-                    view.assos = assos;
-                    view.selectedCampus = assos.reduce((allCampus, asso) => {
-                        allCampus[asso.campus] = true;
-                        return allCampus;
-                    }, {});
-                });
-            })
-            .catch(error => next(view => view.$state.error = error));
     },
     computed: {
         past: {
@@ -42,6 +29,19 @@ export default {
                 .filter(asso => this.selectedCampus[asso.campus])
                 .filter(asso => this.past || !asso.end || asso.end > new Date().getFullYear());
         }
+    },
+    beforeRouteEnter(_to, _from, next) {
+        Api.assos.get()
+            .then(assos => {
+                next(view => {
+                    view.assos = assos;
+                    view.selectedCampus = assos.reduce((allCampus, asso) => {
+                        allCampus[asso.campus] = true;
+                        return allCampus;
+                    }, {});
+                });
+            })
+            .catch(error => next(view => view.$state.error = error));
     }
 };
 
@@ -52,17 +52,17 @@ export default {
         <article class="parameters">
             <div v-if="Object.keys(selectedCampus).length > 1">
                 Campus :
-                <template v-for="_, campus in selectedCampus">
+                <template v-for="_, campus in selectedCampus" :key="campus">
                     <label>
                         {{ campus }}
-                        <Switch v-model="selectedCampus[campus]" />
+                        <SwitchButton v-model="selectedCampus[campus]" />
                     </label>
                 </template>
             </div>
             <div>
                 <label>
                     Afficher les anciennes associations
-                    <Switch v-model="past" class="switch" />
+                    <SwitchButton v-model="past" class="switch" />
                 </label>
             </div>
         </article>
@@ -74,11 +74,11 @@ export default {
             <h2>Associations</h2>
             <div class="assos">
                 <AssoPreview v-for="asso in filteredAssos" :key="asso.id" :asso="asso">
-                    <img :src="asso.logos?.[0]" width="200" height="200">
+                    <img :src="asso.logos?.[0]" width="200" height="200" />
                     <h3>{{ asso.names?.[0] }}</h3>
                     {{ asso.theme }}
                 </AssoPreview>
-                <span v-for="i in new Array(10)"></span>
+                <span v-for="i in 10" :key="i"></span>
             </div>
         </article>
     </section>

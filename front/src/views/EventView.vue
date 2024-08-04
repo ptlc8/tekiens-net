@@ -21,17 +21,6 @@ export default {
             asso: {}
         }
     },
-    beforeRouteEnter(to, _from, next) {
-        Api.events.getOne(to.params.id)
-            .then(event => next(view => view.event = event))
-            .catch(error => next(view => view.$state.error = error));
-    },
-    beforeRouteUpdate(to, _from, next) {
-        Api.events.getOne(to.params.id)
-            .then(event => this.event = event)
-            .catch(error => this.$state.error = error)
-            .finally(next);
-    },
     computed: {
         backgroundColor() {
             return this.asso?.color + '44';
@@ -58,13 +47,6 @@ export default {
             return `${days}j ${hours}h ${minutes}min`.replace(/0j /, '').replace(/0h /, '').replace(/ 0min/, '');
         }
     },
-    watch: {
-        event(event) {
-            document.title = `${event.title} - Tekiens.net`;
-            Api.assos.getOne(event.asso_id)
-                .then(asso => this.asso = asso);
-        }
-    },
     methods: {
         formatDate(date) {
             return new Date(date + 'Z').toLocaleString('FR-fr', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
@@ -76,6 +58,24 @@ export default {
                 .then(() => this.$router.push('/assos/' + encodeURIComponent(this.event.asso_id)))
                 .catch(error => this.$state.error = error);
         }
+    },
+    watch: {
+        event(event) {
+            document.title = `${event.title} - Tekiens.net`;
+            Api.assos.getOne(event.asso_id)
+                .then(asso => this.asso = asso);
+        }
+    },
+    beforeRouteEnter(to, _from, next) {
+        Api.events.getOne(to.params.id)
+            .then(event => next(view => view.event = event))
+            .catch(error => next(view => view.$state.error = error));
+    },
+    beforeRouteUpdate(to, _from, next) {
+        Api.events.getOne(to.params.id)
+            .then(event => this.event = event)
+            .catch(error => this.$state.error = error)
+            .finally(next);
     }
 }
 </script>
@@ -87,14 +87,14 @@ export default {
                 <div class="main">
                     <h2>{{ event.title }}</h2>
                     <div class="description">
-                        <img v-if="event.poster" :src="event.poster" class="poster" alt="Affiche de l'événement" width="400" height="400">
+                        <img v-if="event.poster" :src="event.poster" class="poster" alt="Affiche de l'événement" width="400" height="400" />
                         <div v-html="description" class="markdown"></div>
                         <div class="clear"></div>
                     </div>
                 </div>
                 <div class="infos">
                     <RouterLink :to="'/assos/' + encodeURIComponent(event.asso_id)">
-                        <img :src="asso.logos?.[0]" class="logo" alt="Logo de l'association" width="200" height="200">
+                        <img :src="asso.logos?.[0]" class="logo" alt="Logo de l'association" width="200" height="200" />
                         <span class="asso">{{ asso.names?.[0] }}</span>
                     </RouterLink>
                     <hr />

@@ -9,6 +9,7 @@ const RELOAD_TIMEOUT = 60 * 60 * 1_000;
 const baseUrl = import.meta.env.VITE_BASE_URL ?? '';
 
 export default {
+    components: { QRCode },
     setup() {
         return {
             EVENT_DURATION
@@ -21,12 +22,6 @@ export default {
             eventIndex: 0,
             timers: []
         };
-    },
-    mounted() {
-        this.update();
-        this.timers.push(setInterval(this.update, UPDATE_TIMEOUT));
-        this.timers.push(setInterval(this.next, EVENT_DURATION));
-        this.timers.push(setTimeout(() => window.location.reload(), RELOAD_TIMEOUT));
     },
     computed: {
         event() {
@@ -102,11 +97,16 @@ export default {
             return (r * 0.299 + g * 0.587 + b * 0.114) / 256;
         }
     },
+    mounted() {
+        this.update();
+        this.timers.push(setInterval(this.update, UPDATE_TIMEOUT));
+        this.timers.push(setInterval(this.next, EVENT_DURATION));
+        this.timers.push(setTimeout(() => window.location.reload(), RELOAD_TIMEOUT));
+    },
     beforeUnmount() {
         for (let timer of this.timers)
             clearInterval(timer);
-    },
-    components: { QRCode }
+    }
 };
 </script>
 

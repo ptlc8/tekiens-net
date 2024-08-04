@@ -1,14 +1,17 @@
 <script>
 export default {
     props: {
-        asso: Object
+        asso: {
+            type: Object,
+            required: true
+        }
     }
 };
 </script>
 
 <template>
     <RouterLink :to="'/assos/' + encodeURIComponent(asso.id)" class="asso" :style="{ '--accent-color': asso.color }">
-        <img :src="asso.logos?.[0]" width="200" height="200">
+        <img :src="asso.logos?.[0]" width="200" height="200" />
         <h3>{{ asso.names?.[0] }}</h3>
         {{ asso.theme }}
     </RouterLink>

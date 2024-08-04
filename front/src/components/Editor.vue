@@ -15,6 +15,20 @@ import { HorizontalLine } from "@ckeditor/ckeditor5-horizontal-line";
 import { Autoformat } from "@ckeditor/ckeditor5-autoformat";
 
 export default {
+    components: {
+        Ckeditor
+    },
+    props: {
+        value: {
+            type: String,
+            default: ""
+        },
+        placeholder: {
+            type: String,
+            default: ""
+        }
+    },
+    emits: ['input'],
     data() {
         return {
             editor: ClassicEditor,
@@ -58,17 +72,10 @@ export default {
             },
         }
     },
-    props: {
-        value: String,
-        placeholder: String
-    },
     methods: {
         onInput(value) {
             this.$emit('input', value);
         }
-    },
-    components: {
-        Ckeditor
     }
 }
 </script>

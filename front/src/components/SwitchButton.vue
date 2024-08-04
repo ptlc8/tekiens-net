@@ -6,6 +6,7 @@
 
 <script>
 export default {
+    name: 'SwitchButton',
     props: {
         modelValue: {
             type: Boolean,
@@ -18,15 +19,15 @@ export default {
             checked: this.modelValue
         };
     },
-    watch: {
-        modelValue(value) {
-            this.checked = value;
-        }
-    },
     methods: {
         toggle() {
             this.checked = !this.checked;
             this.$emit('update:modelValue', this.checked);
+        }
+    },
+    watch: {
+        modelValue(value) {
+            this.checked = value;
         }
     }
 };

@@ -3,7 +3,10 @@ import { RouterLink } from 'vue-router';
 
 export default {
     props: {
-        event: Object,
+        event: {
+            type: Object,
+            required: true,
+        },
         asso: {
             type: Object,
             default: null,

@@ -1,12 +1,12 @@
 <script>
 import Api from '../api';
 import EventPreview from '../components/EventPreview.vue';
-import Switch from '../components/Switch.vue';
+import SwitchButton from '../components/SwitchButton.vue';
 
 export default {
     components: {
         EventPreview,
-        Switch
+        SwitchButton
     },
     data() {
         return {
@@ -14,23 +14,6 @@ export default {
             events: [],
             selectedCampus: {}
         }
-    },
-    beforeRouteEnter(to, from, next) {
-        Promise.all([
-            Api.events.get(),
-            Api.assos.get()
-        ])
-            .then(([events, assos]) => {
-                next(view => {
-                    view.events = events;
-                    view.assos = assos;
-                    view.selectedCampus = assos.reduce((allCampus, asso) => {
-                        allCampus[asso.campus] = true;
-                        return allCampus;
-                    }, {});
-                });
-            })
-            .catch(error => next(view => view.$state.error = error));
     },
     computed: {
         filteredEvents() {
@@ -85,6 +68,23 @@ export default {
         getAssoById(id) {
             return this.assos.find(asso => asso.id == id);
         }
+    },
+    beforeRouteEnter(to, from, next) {
+        Promise.all([
+            Api.events.get(),
+            Api.assos.get()
+        ])
+            .then(([events, assos]) => {
+                next(view => {
+                    view.events = events;
+                    view.assos = assos;
+                    view.selectedCampus = assos.reduce((allCampus, asso) => {
+                        allCampus[asso.campus] = true;
+                        return allCampus;
+                    }, {});
+                });
+            })
+            .catch(error => next(view => view.$state.error = error));
     }
 };
 </script>
@@ -94,24 +94,24 @@ export default {
         <article class="parameters">
             <div v-if="Object.keys(selectedCampus).length > 1">
                 Campus :
-                <template v-for="_, campus in selectedCampus">
+                <template v-for="_, campus in selectedCampus" :key="campus">
                     <label>
                         {{ campus }}
-                        <Switch v-model="selectedCampus[campus]" />
+                        <SwitchButton v-model="selectedCampus[campus]" />
                     </label>
                 </template>
             </div>
             <div>
                 <label>
                     Afficher les événements passés
-                    <Switch v-model="past" class="switch" />
+                    <SwitchButton v-model="past" class="switch" />
                 </label>
             </div>
         </article>
-        <article v-for="(events, monday) in getEventsByWeek()" :key="monday">
+        <article v-for="(weekEvents, monday) in getEventsByWeek()" :key="monday">
             <h2>{{ getWeekName(monday) }}</h2>
             <div class="events">
-                <EventPreview v-for="event in events" :key="event.id" :event="event" :asso="getAssoById(event.asso_id)" />
+                <EventPreview v-for="event in weekEvents" :key="event.id" :event="event" :asso="getAssoById(event.asso_id)" />
             </div>
         </article>
         <article v-if="filteredEvents.length == 0">

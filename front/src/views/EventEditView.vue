@@ -10,6 +10,12 @@ import Editor from '../components/Editor.vue';
 const baseUrl = import.meta.env.VITE_BASE_URL ?? '';
 
 export default {
+    components: {
+        DateTimeInput,
+        ImageInput,
+        DurationInput,
+        Editor
+    },
     setup() {
         return {
             sessionStore: useSessionStore(),
@@ -22,32 +28,6 @@ export default {
             asso: {},
             originalEvent: {},
             error: null
-        }
-    },
-    beforeRouteEnter(to, _from, next) {
-        Api.events.getOne(to.params.id)
-            .then(event => next(view => view.originalEvent = JSON.parse(JSON.stringify(view.event = event))))
-            .catch(error => next(view => view.$state.error = error));
-    },
-    beforeRouteUpdate(to, _from, next) {
-        Api.events.getOne(to.params.id)
-            .then(event => this.originalEvent = JSON.parse(JSON.stringify(this.event = event)))
-            .catch(error => this.$state.error = error)
-            .finally(next);
-    },
-    mounted() {
-        if (this.isNotGranted)
-            this.$router.push('/events/' + this.$route.params.id);
-    },
-    methods: {
-        editEvent() {
-            let fields = {};
-            for (let field in this.event)
-                if (this.event[field] != this.originalEvent[field])
-                    fields[field] = this.event[field];
-            Api.events.update(this.event.id, fields)
-                .then(() => this.$router.push('/events/' + this.$route.params.id))
-                .catch(error => this.error = error);
         }
     },
     computed: {
@@ -65,6 +45,17 @@ export default {
             return 'https://' + location.host + baseUrl + '/events/' + this.$route.params.id;
         },
     },
+    methods: {
+        editEvent() {
+            let fields = {};
+            for (let field in this.event)
+                if (this.event[field] != this.originalEvent[field])
+                    fields[field] = this.event[field];
+            Api.events.update(this.event.id, fields)
+                .then(() => this.$router.push('/events/' + this.$route.params.id))
+                .catch(error => this.error = error);
+        }
+    },
     watch: {
         event(event) {
             Api.assos.getOne(event.asso_id)
@@ -75,11 +66,20 @@ export default {
                 this.$router.push('/events/' + this.$route.params.id);
         }
     },
-    components: {
-        DateTimeInput,
-        ImageInput,
-        DurationInput,
-        Editor
+    mounted() {
+        if (this.isNotGranted)
+            this.$router.push('/events/' + this.$route.params.id);
+    },
+    beforeRouteEnter(to, _from, next) {
+        Api.events.getOne(to.params.id)
+            .then(event => next(view => view.originalEvent = JSON.parse(JSON.stringify(view.event = event))))
+            .catch(error => next(view => view.$state.error = error));
+    },
+    beforeRouteUpdate(to, _from, next) {
+        Api.events.getOne(to.params.id)
+            .then(event => this.originalEvent = JSON.parse(JSON.stringify(this.event = event)))
+            .catch(error => this.$state.error = error)
+            .finally(next);
     }
 }
 </script>
@@ -108,8 +108,8 @@ export default {
                 <label for="access">Qui peut participer ? (optionnel)</label>
                 <input v-model="event.access" id="access" name="access" type="text" maxlength="255" placeholder="Ouvert à tous" />
                 <label for="status">Statut</label>
-                <select v-model="event.status" id="status" name="status" >
-                    <option v-for="name, status in eventStatus" :value="status">{{ name }}</option>
+                <select v-model="event.status" id="status" name="status">
+                    <option v-for="name, status in eventStatus" :key="status" :value="status">{{ name }}</option>
                 </select>
                 <label for="capacity">Capacité (optionnel)</label>
                 <input v-model="event.capacity" id="capacity" name="capacity" type="number" min="0" placeholder="100 places" />

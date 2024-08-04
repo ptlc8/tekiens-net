@@ -4,7 +4,7 @@ import { marked } from 'marked';
 import { mangle } from 'marked-mangle';
 import DOMPurify from 'dompurify';
 import EventPreview from '../components/EventPreview.vue';
-import Switch from '../components/Switch.vue';
+import SwitchButton from '../components/SwitchButton.vue';
 import { useSessionStore } from "../stores/session";
 import { RouterLink } from 'vue-router';
 
@@ -13,6 +13,10 @@ const baseUrl = import.meta.env.VITE_BASE_URL ?? '';
 marked.use(mangle(), { breaks: true });
 
 export default {
+    components: {
+        EventPreview,
+        SwitchButton
+    },
     setup() {
         return {
             sessionStore: useSessionStore()
@@ -23,23 +27,6 @@ export default {
             asso: null,
             events: []
         }
-    },
-    beforeRouteEnter(to, _from, next) {
-        Promise.all([Api.assos.getOne(to.params.id), Api.assos.getEvents(to.params.id)])
-            .then(([asso, events]) => next(view => {
-                view.asso = asso;
-                view.events = events;
-            }))
-            .catch(error => next(view => view.$state.error = error));
-    },
-    beforeRouteUpdate(to, _from, next) {
-        Promise.all([Api.assos.getOne(to.params.id), Api.assos.getEvents(to.params.id)])
-            .then(([asso, events]) => {
-                this.asso = asso;
-                this.events = events;
-            })
-            .catch(error => this.$state.error = error)
-            .finally(next);
     },
     computed: {
         socials() {
@@ -87,29 +74,42 @@ export default {
             document.title = `${asso.names?.[0]} - Tekiens.net`;
         }
     },
-    components: {
-        EventPreview,
-        Switch
+    beforeRouteEnter(to, _from, next) {
+        Promise.all([Api.assos.getOne(to.params.id), Api.assos.getEvents(to.params.id)])
+            .then(([asso, events]) => next(view => {
+                view.asso = asso;
+                view.events = events;
+            }))
+            .catch(error => next(view => view.$state.error = error));
+    },
+    beforeRouteUpdate(to, _from, next) {
+        Promise.all([Api.assos.getOne(to.params.id), Api.assos.getEvents(to.params.id)])
+            .then(([asso, events]) => {
+                this.asso = asso;
+                this.events = events;
+            })
+            .catch(error => this.$state.error = error)
+            .finally(next);
     }
 }
 </script>
 
 <template>
     <section>
-        <article :style="{ '--accent-color': this.asso?.color, '--bg-color': backgroundColor }">
+        <article :style="{ '--accent-color': asso?.color, '--bg-color': backgroundColor }">
             <h2 v-if="asso">
-                <img :src="asso.logos?.[0]" width="200" height="200">
+                <img :src="asso.logos?.[0]" width="200" height="200" />
                 {{ asso.names?.[0] }}
             </h2>
             <div v-if="asso" class="asso">
                 <div class="main">
-                    <div class="description markdown" v-html="description" />
+                    <div class="description markdown" v-html="description"></div>
                     <div class="events">
                         <h3>Événements</h3>
                         <div class="parameters">
                             <label>
                                 Afficher les événements passés
-                                <Switch v-model="showPastEvents" class="switch" />
+                                <SwitchButton v-model="showPastEvents" class="switch" />
                             </label>
                         </div>
                         <div class="events-container">
@@ -136,7 +136,7 @@ export default {
                     <span v-if="asso.campus">📍 Campus : {{ asso.campus }}</span>
                     <span v-if="asso.room">📦 Salle : {{ asso.room }}</span>
                     <hr />
-                    <a v-for="social in asso.socials" target="_blank" :href="social.link">
+                    <a v-for="social in asso.socials" :key="social.id" target="_blank" :href="social.link">
                         <img :src="'../assets/socials/' + social.id + '.svg'" width="16" height="16" />
                         {{ social.display }}
                     </a>
@@ -149,11 +149,13 @@ export default {
                     <hr />
                     <span v-if="asso.names?.length > 1">{{ asso.names.length > 2 ? 'Anciens noms' : 'Ancien nom' }} :</span>
                     <ul v-if="asso.names?.length > 1">
-                        <li v-for="name in asso.names.slice(1)">{{ name }}</li>
+                        <li v-for="name in asso.names.slice(1)" :key="name">
+                            {{ name }}
+                        </li>
                     </ul>
                     <span v-if="asso.logos?.length > 1">{{ asso.logos.length > 2 ? 'Anciens logos' : 'Ancien logo' }} :</span>
                     <div v-if="asso.logos?.length > 1" class="logos">
-                        <img v-for="logo in asso.logos.slice(1)" :src="logo" width="64" height="64" />
+                        <img v-for="logo in asso.logos.slice(1)" :key="logo" :src="logo" width="64" height="64" />
                     </div>
                 </div>
             </div>

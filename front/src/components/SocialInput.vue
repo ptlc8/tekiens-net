@@ -6,40 +6,41 @@ Api.socials.get()
     .then(s => socials = s);
 
 export default {
-    setup() {
-        return { socials };
-    },
     props: {
         modelValue: {
             type: Object,
             default: () => ({ id: 'web', value: '' })
         }
     },
+    emits: ['update:modelValue'],
+    setup() {
+        return { socials };
+    },
     data() {
         return {
-            social: this.modelValue.id,
+            socialId: this.modelValue.id,
             value: this.modelValue.value
         };
     },
     watch: {
         modelValue() {
-            this.social = this.modelValue.id;
+            this.socialId = this.modelValue.id;
             this.value = this.modelValue.value;
         },
-        social(social) {
-            this.$emit('update:modelValue', { id: social, value: this.value });
+        socialId(socialId) {
+            this.$emit('update:modelValue', { id: socialId, value: this.value });
         },
         value(value) {
-            this.$emit('update:modelValue', { id: this.social, value });
+            this.$emit('update:modelValue', { id: this.socialId, value });
         }
     }
 }
 </script>
 
 <template>
-    <select v-model="social">
-        <option v-for="social, socialId in socials" :value="socialId">{{ social.name }}</option>
+    <select v-model="socialId">
+        <option v-for="s, sId in socials" :key="sId" :value="sId">{{ s.name }}</option>
     </select>
-    <input v-model="value" type="text" :placeholder="socials[social]?.placeholder" />
-    <a target="_blank" :href="socials[social]?.link?.replace('{0}', value)">Tester</a>
+    <input v-model="value" type="text" :placeholder="socials[socialId]?.placeholder" />
+    <a target="_blank" :href="socials[socialId]?.link?.replace('{0}', value)">Tester</a>
 </template>

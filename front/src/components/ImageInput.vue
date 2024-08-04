@@ -1,7 +1,10 @@
 <script>
 export default {
     props: {
-        modelValue: String,
+        modelValue: {
+            type: String,
+            default: null
+        },
         placeholder: {
             type: String,
             default: null

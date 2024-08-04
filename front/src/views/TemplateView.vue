@@ -12,17 +12,6 @@ export default {
             error: null
         }
     },
-    beforeRouteEnter(to, _from, next) {
-        Promise.all([
-            Api.events.get({ /*after: new Date()*/ }),
-            Api.templates.get()
-        ]).then(([events, templates]) => next(view => {
-            view.events = events;
-            view.templates = templates;
-            view.selectedEventId = to.query.event ?? events[0].id;
-            view.selectedTemplate = to.query.template ?? templates[0];
-        })).catch(error => next(view => view.$state.error = error));
-    },
     methods: {
         refreshHTML() {
             if (this.selectedTemplate)
@@ -67,6 +56,17 @@ export default {
         selectedTemplate() {
             this.refreshHTML();
         }
+    },
+    beforeRouteEnter(to, _from, next) {
+        Promise.all([
+            Api.events.get({ /*after: new Date()*/ }),
+            Api.templates.get()
+        ]).then(([events, templates]) => next(view => {
+            view.events = events;
+            view.templates = templates;
+            view.selectedEventId = to.query.event ?? events[0].id;
+            view.selectedTemplate = to.query.template ?? templates[0];
+        })).catch(error => next(view => view.$state.error = error));
     }
 }
 </script>
@@ -78,11 +78,11 @@ export default {
             <form>
                 <label for="template">Template de mail</label>
                 <select v-model="selectedTemplate" id="template">
-                    <option v-for="template in templates" :value="template">Template « {{ template }} »</option>
+                    <option v-for="template in templates" :key="template" :value="template">Template « {{ template }} »</option>
                 </select>
                 <label for="event">Événement</label>
                 <select v-model="selectedEventId" id="event">
-                    <option v-for="event in events" :value="event.id">{{ event.asso_id }} - {{ event.title }}</option>
+                    <option v-for="event in events" :key="event.id" :value="event.id">{{ event.asso_id }} - {{ event.title }}</option>
                 </select>
                 <div class="buttons">
                     <button type="button" @click="copyEmail">Copier le mail</button>

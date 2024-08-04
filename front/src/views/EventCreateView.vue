@@ -10,6 +10,12 @@ import Editor from '../components/Editor.vue';
 const baseUrl = import.meta.env.VITE_BASE_URL ?? '';
 
 export default {
+    components: {
+        DateTimeInput,
+        ImageInput,
+        DurationInput,
+        Editor
+    },
     setup() {
         return {
             sessionStore: useSessionStore(),
@@ -22,17 +28,6 @@ export default {
                 status: 'programmed'
             },
             error: null
-        }
-    },
-    mounted() {
-        if (this.isNotGranted)
-            this.$router.push('/events/');
-    },
-    methods: {
-        createEvent() {
-            Api.events.create(this.event)
-                .then(event => this.$router.push('/events/' + event.id))
-                .catch(error => this.error = error);
         }
     },
     computed: {
@@ -53,17 +48,22 @@ export default {
             return 'https://' + location.host + baseUrl + '/events/$id';
         },
     },
+    methods: {
+        createEvent() {
+            Api.events.create(this.event)
+                .then(event => this.$router.push('/events/' + event.id))
+                .catch(error => this.error = error);
+        }
+    },
     watch: {
         isNotGranted(isNotGranted) {
             if (isNotGranted)
                 this.$router.push('/events/');
         }
     },
-    components: {
-        DateTimeInput,
-        ImageInput,
-        DurationInput,
-        Editor
+    mounted() {
+        if (this.isNotGranted)
+            this.$router.push('/events/');
     }
 }
 </script>
@@ -92,8 +92,8 @@ export default {
                 <label for="access">Qui peut participer ? (optionnel)</label>
                 <input v-model="event.access" id="access" name="access" type="text" maxlength="255" placeholder="Ouvert à tous" />
                 <label for="status">Statut</label>
-                <select v-model="event.status" id="status" name="status" >
-                    <option v-for="name, status in eventStatus" :value="status">{{ name }}</option>
+                <select v-model="event.status" id="status" name="status">
+                    <option v-for="name, status in eventStatus" :key="status" :value="status">{{ name }}</option>
                 </select>
                 <label for="capacity">Capacité (optionnel)</label>
                 <input v-model="event.capacity" id="capacity" name="capacity" type="number" min="0" placeholder="100 places" />

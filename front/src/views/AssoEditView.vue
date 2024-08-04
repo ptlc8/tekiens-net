@@ -7,6 +7,12 @@ import ImageInput from '../components/ImageInput.vue';
 import Editor from '../components/Editor.vue';
 
 export default {
+    components: {
+        ArrayInput,
+        SocialInput,
+        ImageInput,
+        Editor
+    },
     setup() {
         return {
             sessionStore: useSessionStore()
@@ -19,20 +25,14 @@ export default {
             error: null
         }
     },
-    beforeRouteEnter(to, _from, next) {
-        Api.assos.getOne(to.params.id)
-            .then(asso => next(view => view.originalAsso = JSON.parse(JSON.stringify(view.asso = asso))))
-            .catch(error => next(view => view.$state.error = error));
-    },
-    beforeRouteUpdate(to, _from, next) {
-        Api.assos.getOne(to.params.id)
-            .then(asso => this.originalAsso = JSON.parse(JSON.stringify(this.asso = asso)))
-            .catch(error => this.$state.error = error)
-            .finally(next);
-    },
-    mounted() {
-        if (this.isNotGranted)
-            this.$router.push('/assos/' + encodeURIComponent(this.$route.params.id));
+    computed: {
+        isNotGranted() {
+            if (this.sessionStore.session === null) // not logged in
+                return true;
+            if (this.sessionStore.session === undefined || !this.originalAsso.id) // not loaded
+                return undefined;
+            return this.sessionStore.session.asso_id != this.originalAsso.id;
+        }
     },
     methods: {
         editAsso() {
@@ -45,26 +45,26 @@ export default {
                 .catch(error => this.error = error);
         }
     },
-    computed: {
-        isNotGranted() {
-            if (this.sessionStore.session === null) // not logged in
-                return true;
-            if (this.sessionStore.session === undefined || !this.originalAsso.id) // not loaded
-                return undefined;
-            return this.sessionStore.session.asso_id != this.originalAsso.id;
-        }
-    },
     watch: {
         isNotGranted(isNotGranted) {
             if (isNotGranted)
                 this.$router.push('/assos/' + encodeURIComponent(this.$route.params.id));
         }
     },
-    components: {
-        ArrayInput,
-        SocialInput,
-        ImageInput,
-        Editor
+    mounted() {
+        if (this.isNotGranted)
+            this.$router.push('/assos/' + encodeURIComponent(this.$route.params.id));
+    },
+    beforeRouteEnter(to, _from, next) {
+        Api.assos.getOne(to.params.id)
+            .then(asso => next(view => view.originalAsso = JSON.parse(JSON.stringify(view.asso = asso))))
+            .catch(error => next(view => view.$state.error = error));
+    },
+    beforeRouteUpdate(to, _from, next) {
+        Api.assos.getOne(to.params.id)
+            .then(asso => this.originalAsso = JSON.parse(JSON.stringify(this.asso = asso)))
+            .catch(error => this.$state.error = error)
+            .finally(next);
     }
 }
 </script>
@@ -82,7 +82,7 @@ export default {
                 </ArrayInput>
                 <label for="logos">Logos</label>
                 <ArrayInput v-model="asso.logos" v-slot="{ onUpdate, value, placeholder }" :placeholder="originalAsso.logos" default="">
-                    <ImageInput @update:modelValue="onUpdate" :modelValue="value" :placeholder="placeholder" />
+                    <ImageInput @update:model-value="onUpdate" :model-value="value" :placeholder="placeholder" />
                 </ArrayInput>
                 <label for="theme">Thème</label>
                 <input v-model="asso.theme" id="theme" name="theme" type="text" required maxlength="255" placeholder="Thème intéressant" />
@@ -100,7 +100,7 @@ export default {
                 <Editor v-model="asso.description" placeholder="Cette association est intéressante, venez !" />
                 <label for="socials">Réseaux sociaux (facultatif)</label>
                 <ArrayInput v-model="asso.socials" v-slot="{ onUpdate, value }" :default="{ id: 'web', value: '' }">
-                    <SocialInput @update:modelValue="onUpdate" :modelValue="value" />
+                    <SocialInput @update:model-value="onUpdate" :model-value="value" />
                 </ArrayInput>
                 <button type="submit">Publier les modifications</button>
                 <span v-if="error" class="error">{{ error }}</span>
