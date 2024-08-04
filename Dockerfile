@@ -36,6 +36,7 @@ COPY --from=build /app/dist /app/front/dist
 RUN adduser --disabled-password --gecos '' app
 
 # Set ownership of the data folder to app user
+RUN mkdir -p data
 RUN chown -R app:app data
 
 # Run the app

@@ -8,6 +8,7 @@
 __pycache__
 *.pyc
 /back/data/*
+!/back/data/.gitkeep
 
 # front-end
 /front/dist

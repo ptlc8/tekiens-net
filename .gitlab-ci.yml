@@ -1,0 +1,70 @@
+# List of stages for jobs, and their order of execution
+stages:
+  - lint-and-build
+  - test
+  - publish
+
+# Default image for all jobs
+default:
+  image: docker:latest
+  services:
+    - docker:dind
+
+# Job building docker image
+build-docker-job:
+  stage: lint-and-build
+  script:
+    - echo "Building docker image..."
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE:latest -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    - echo "Docker image built."
+  rules:
+    - when: always
+
+# Job linting the front-end code
+lint-front-job:
+  stage: lint-and-build
+  image: node:latest
+  script:
+    - cd front
+    - echo "Linting code..."
+    - npm ci
+    - npm run lint
+    - echo "Lint complete."
+  # run this job only when changes are made to front-end code
+  rules:
+    - changes:
+        paths:
+          - "front/**/*"
+        compare_to: master
+
+# Job testing the container
+test-docker-job:
+  stage: test
+  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+  script:
+    - echo "Testing docker image..."
+    - cd /app/back
+    - flask routes
+    - echo "Docker image tested."
+  rules:
+    - when: always
+  needs:
+    - build-docker-job
+
+# Job publishing the container to the registry
+publish-docker-job:
+  stage: publish
+  script:
+    - echo "Publishing docker image..."
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    - docker tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE:latest
+    - docker push $CI_REGISTRY_IMAGE:latest
+    - echo "Docker image published."
+  rules: # branch is master
+    - if: '$CI_COMMIT_BRANCH == "master"'
+  needs:
+    - build-docker-job

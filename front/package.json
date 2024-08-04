@@ -7,7 +7,8 @@
     "dev": "vite",
     "host": "vite dev --host",
     "preview": "vite preview",
-    "test": "eslint src"
+    "test": "npm run lint",
+    "lint": "eslint src"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-autoformat": "^43.0.0",
