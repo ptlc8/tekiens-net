@@ -78,6 +78,7 @@ export default {
                     <h3>{{ asso.names?.[0] }}</h3>
                     {{ asso.theme }}
                 </AssoPreview>
+                <span v-for="i in new Array(10)"></span>
             </div>
         </article>
     </section>
@@ -103,5 +104,10 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+
+    > :empty {
+        flex: 200px 1 1;
+        margin: 0 1em;
+    }
 }
 </style>
