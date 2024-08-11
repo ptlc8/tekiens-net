@@ -114,7 +114,7 @@ export default {
     </footer>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 header {
     position: relative;
 
@@ -182,6 +182,7 @@ header {
         display: flex;
         padding: 0 1em;
 
+        // eslint-disable-next-line vue-scoped-css/no-unused-selector
         a {
             display: block;
             flex: 1;
@@ -265,6 +266,7 @@ header {
         }
     }
 }
+
 main {
     flex: 1;
     display: flex;
@@ -281,6 +283,7 @@ main {
         text-align: center;
     }
 }
+
 footer {
     display: flex;
     background-color: var(--accent-color);

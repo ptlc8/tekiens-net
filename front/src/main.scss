@@ -165,8 +165,8 @@ hr {
     }
 
     table {
-        @include markdown-table;
         margin: auto;
+        @include markdown-table;
     }
     
     blockquote {
@@ -192,8 +192,8 @@ hr {
     .ck-widget.table {
         margin: auto;
         table {
-            @include markdown-table;
             border: 0;
+            @include markdown-table;
         }
     }
 }

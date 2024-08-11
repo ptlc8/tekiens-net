@@ -1,6 +1,8 @@
 import pluginVue from 'eslint-plugin-vue'
+import pluginVueScopedCSS from 'eslint-plugin-vue-scoped-css';
 export default [
     ...pluginVue.configs['flat/recommended'],
+    ...pluginVueScopedCSS.configs['flat/recommended'],
     {
         rules: {
             "vue/html-indent": ["error", 4],

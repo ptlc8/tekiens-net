@@ -29,8 +29,8 @@ export default {
     <div ref="qrcode" class="qr-code"></div>
 </template>
 
-<style>
-.qr-code img {
+<style scoped>
+.qr-code :deep(img) {
     object-fit: contain;
     width: 100%;
     height: 100%;

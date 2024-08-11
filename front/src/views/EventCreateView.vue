@@ -106,11 +106,6 @@ export default {
 
 <style scoped lang="scss">
 form {
-    img {
-        height: 200px;
-        object-fit: contain;
-    }
-
     .error {
         color: red;
     }

@@ -220,6 +220,7 @@ section {
             opacity: 0;
         }
 
+        /*
         &.up-enter-active, &.up-leave-active {
             transform: translateY(0);
         }
@@ -229,6 +230,7 @@ section {
         &.up-leave-to {
             transform: translateY(-100%);
         }
+        */
     }
 }
 

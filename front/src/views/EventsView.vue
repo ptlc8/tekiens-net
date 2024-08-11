@@ -131,7 +131,7 @@ export default {
     label {
         margin: 0 .5em;
 
-        input, .switch {
+        .switch {
             margin: 0 4px;
         }
     }
