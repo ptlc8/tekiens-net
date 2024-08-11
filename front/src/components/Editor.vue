@@ -1,18 +1,26 @@
 <script>
+import "ckeditor5/ckeditor5.css"
 import { Ckeditor } from "@ckeditor/ckeditor5-vue"
-import { Bold, Italic, Strikethrough, Code } from "@ckeditor/ckeditor5-basic-styles";
-import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
-import { Essentials } from "@ckeditor/ckeditor5-essentials";
-import { Heading } from "@ckeditor/ckeditor5-heading";
-import { List } from "@ckeditor/ckeditor5-list";
-import { Link } from "@ckeditor/ckeditor5-link";
-import { Paragraph } from "@ckeditor/ckeditor5-paragraph";
-import { Markdown } from "@ckeditor/ckeditor5-markdown-gfm";
-import { BlockQuote } from "@ckeditor/ckeditor5-block-quote";
-import { Image, ImageInsertViaUrl } from "@ckeditor/ckeditor5-image";
-import { Table, TableToolbar } from "@ckeditor/ckeditor5-table";
-import { HorizontalLine } from "@ckeditor/ckeditor5-horizontal-line";
-import { Autoformat } from "@ckeditor/ckeditor5-autoformat";
+import {
+  Bold,
+  Italic,
+  Strikethrough,
+  Code,
+  ClassicEditor,
+  Essentials,
+  Heading,
+  List,
+  Link,
+  Paragraph,
+  Markdown,
+  BlockQuote,
+  Image,
+  ImageInsertViaUrl,
+  Table,
+  TableToolbar,
+  HorizontalLine,
+  Autoformat,
+} from 'ckeditor5';
 
 export default {
     components: {
