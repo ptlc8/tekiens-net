@@ -1,11 +1,14 @@
 from flask import Flask, send_from_directory
 
 from api import api
+from rss import get_rss
 
 
 app = Flask(__name__, static_folder='../front/dist/assets')
 app.register_blueprint(api, url_prefix='/api')
 
+# RSS Feed
+app.route('/events.rss')(get_rss)
 
 # Front-end
 

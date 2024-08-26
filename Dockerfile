@@ -24,6 +24,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the back
 COPY back/api ./api
 COPY back/templates ./templates
+COPY back/rss.py ./
 COPY back/app* ./
 
 # Copy sample data

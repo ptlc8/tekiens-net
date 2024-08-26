@@ -6,3 +6,4 @@ pillow
 flask-bcrypt
 chevron
 markdown
+feedgen
