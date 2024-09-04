@@ -47,7 +47,7 @@ export default {
             return this.sessionStore.session.asso_id == this.asso.id;
         },
         icsUrl() {
-            return location.host + baseUrl + '/api/assos/' + encodeURIComponent(this.asso.id) + '/events.ics';
+            return location.host + baseUrl + '/assos/' + encodeURIComponent(this.asso.id) + '/events.ics';
         },
         showPastEvents: {
             get() {

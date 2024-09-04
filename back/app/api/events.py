@@ -1,7 +1,7 @@
 from flask import Blueprint, g
 
-from . import api
-from .database import get_db
+from .. import api
+from ..database import get_db
 from . import data
 
 

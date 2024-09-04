@@ -1,11 +1,10 @@
-from flask import Blueprint, g, Response
+from flask import Blueprint, g
 
-from . import api
-from .database import get_db
+from .. import api
+from ..database import get_db
 from . import data
 from .socials import socials
 from .events import parse_event
-from .ics import create_ics
 
 
 # only use editable columns
@@ -14,7 +13,7 @@ assos_columns = ['id', 'names', 'logos', 'start', 'end', 'theme', 'campus', 'roo
 # convert asso from database format to API response format
 def parse_asso(asso):
     asso['names'] = asso['names'].split(',')
-    asso['logos'] = ['/' + l for l in data.get_asso_logos_paths(asso['id'], int(asso['logos']))]
+    asso['logos'] = ['/' + logo for logo in data.get_asso_logos_paths(asso['id'], int(asso['logos']))]
     asso_socials = []
     for s in asso['socials'].split(','):
         id = s.split(':')[0]
@@ -133,17 +132,3 @@ def get_asso_events(id):
     mycursor.execute(sql, params)
     events = [parse_event(event) for event in mycursor.fetchall()]
     return api.success(events)
-
-@blueprint.route('/<id>/events.ics', methods=['GET'])
-def get_asso_events_ics(id):
-    # get events and asso
-    mydb = get_db()
-    mycursor = mydb.cursor(dictionary=True)
-    mycursor.execute("SELECT * FROM assos WHERE id = %s", (id,))
-    asso = parse_asso(mycursor.fetchone())
-    mycursor.execute("SELECT events.*, assos.names AS asso, assos.color FROM events JOIN assos ON events.asso_id = assos.id WHERE asso_id = %s", (id,))
-    events = mycursor.fetchall()
-    # create ics calendar
-    name = asso['names'][0] + ' - Tekiens.net'
-    cal = create_ics(name, events, color=asso['color'])
-    return Response(cal, mimetype='text/calendar')

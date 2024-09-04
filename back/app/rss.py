@@ -5,8 +5,8 @@ from os import environ
 from flask import Response, request, current_app
 from feedgen.feed import FeedGenerator
 from markdown import markdown
-from api.database import get_db
-from api.events import parse_event
+from .database import get_db
+from .api.events import parse_event
 
 def parse_base_url(base_url: str) -> str:
     if base_url.endswith('/'):

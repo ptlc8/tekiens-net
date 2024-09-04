@@ -22,10 +22,9 @@ ENV PATH=/home/app/.local/bin:$PATH
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the back
-COPY back/api ./api
+COPY back/app ./app
 COPY back/templates ./templates
-COPY back/rss.py ./
-COPY back/app* ./
+COPY back/app.wsgi ./
 
 # Copy sample data
 #COPY back/data.sample ./data

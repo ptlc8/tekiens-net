@@ -1,9 +1,8 @@
-
 from flask import Blueprint, request, g
 
-from .database import get_db
+from ..database import get_db
 from . import mail
-from . import api
+from .. import api
 from . import events
 from . import assos
 

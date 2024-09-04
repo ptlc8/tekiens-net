@@ -2,8 +2,8 @@ from flask import Blueprint, g
 import secrets
 from hashlib import sha256
 
-from . import api
-from .database import get_db
+from .. import api
+from ..database import get_db
 
 
 blueprint = Blueprint('sessions', __name__)

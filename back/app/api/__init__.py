@@ -1,12 +1,9 @@
-from flask import Blueprint, request, g, Response, Flask
+from flask import Blueprint, request, g
 import json
-
-from .database import get_db
 
 from . import assos
 from . import events
 from . import sessions
-from . import ics
 from . import templates
 from . import socials
 
@@ -56,20 +53,6 @@ api.register_blueprint(events.blueprint, url_prefix='/events')
 
 # sessions
 api.register_blueprint(sessions.blueprint, url_prefix='/sessions')
-
-
-# all events ics
-@api.route('/events.ics', methods=['GET'])
-def get_events_ics():
-    # get events
-    mydb = get_db()
-    mycursor = mydb.cursor(dictionary=True)
-    mycursor.execute("SELECT events.*, assos.names AS asso, assos.color FROM events JOIN assos ON events.asso_id = assos.id")
-    events = mycursor.fetchall()
-    # create ics calendar
-    name = 'Tous les événements - Tekiens.net'
-    cal = ics.create_ics(name, events)
-    return Response(cal, mimetype='text/calendar')
 
 
 # email templating
