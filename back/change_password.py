@@ -4,10 +4,8 @@
 #the csv file must have the following format: id,password
 
 import csv
-import mysql.connector
 import sys
 from dotenv import load_dotenv
-import os
 import bcrypt
 from api.database import get_db
 

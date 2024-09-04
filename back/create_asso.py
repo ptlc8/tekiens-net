@@ -1,11 +1,8 @@
 #!venv/bin/python
 # python script which take a new asso identifier and a password as input to create a new asso in the database
 
-import csv
-import mysql.connector
 import sys
 from dotenv import load_dotenv
-import os
 from change_password import hash_password
 from api.database import get_db
 

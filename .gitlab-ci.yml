@@ -40,6 +40,23 @@ lint-front-job:
           - "front/**/*"
         compare_to: master
 
+# Job linting the back-end code
+lint-back-job:
+  stage: lint-and-build
+  image: python:latest
+  script:
+    - cd back
+    - echo "Linting code..."
+    - pip install ruff
+    - ruff check
+    - echo "Lint complete."
+  # run this job only when changes are made to back-end code
+  rules:
+    - changes:
+        paths:
+          - "back/**/*"
+        compare_to: master
+
 # Job testing the container
 test-docker-job:
   stage: test

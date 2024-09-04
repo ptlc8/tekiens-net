@@ -1,7 +1,5 @@
 from datetime import timezone
-from enum import Enum
 from mimetypes import guess_type
-from os import environ
 from flask import Response, request, current_app
 from feedgen.feed import FeedGenerator
 from markdown import markdown
