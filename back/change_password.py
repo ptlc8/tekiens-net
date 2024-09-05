@@ -7,7 +7,7 @@ import csv
 import sys
 from dotenv import load_dotenv
 import bcrypt
-from api.database import get_db
+from app.database import get_db
 
 load_dotenv()
 

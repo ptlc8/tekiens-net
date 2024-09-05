@@ -4,7 +4,7 @@
 import sys
 from dotenv import load_dotenv
 from change_password import hash_password
-from api.database import get_db
+from app.database import get_db
 
 load_dotenv()
 
