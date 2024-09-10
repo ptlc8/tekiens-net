@@ -27,6 +27,7 @@ export default {
             event: {},
             asso: {},
             originalEvent: {},
+            sendingRequest: false,
             error: null
         }
     },
@@ -51,9 +52,11 @@ export default {
             for (let field in this.event)
                 if (this.event[field] != this.originalEvent[field])
                     fields[field] = this.event[field];
+            this.sendingRequest = true;
             Api.events.update(this.event.id, fields)
                 .then(() => this.$router.push('/events/' + this.$route.params.id))
-                .catch(error => this.error = error);
+                .catch(error => this.error = error)
+                .finally(() => this.sendingRequest = false);
         }
     },
     watch: {
@@ -113,7 +116,7 @@ export default {
                 </select>
                 <label for="capacity">Capacité (optionnel)</label>
                 <input v-model="event.capacity" id="capacity" name="capacity" type="number" min="0" placeholder="100 places" />
-                <button type="submit">Publier les modifications</button>
+                <button type="submit" :disabled="sendingRequest">Publier les modifications</button>
                 <span v-if="error" class="error">{{ error }}</span>
             </form>
         </article>
@@ -124,6 +127,11 @@ export default {
 form {
     .error {
         color: red;
+    }
+    button[type="submit"] {
+        &:disabled, &[disabled] {
+            cursor: progress;
+        }
     }
 }
 </style>

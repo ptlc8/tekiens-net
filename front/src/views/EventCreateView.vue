@@ -27,6 +27,7 @@ export default {
             event: {
                 status: 'programmed'
             },
+            sendingRequest: false,
             error: null
         }
     },
@@ -50,9 +51,11 @@ export default {
     },
     methods: {
         createEvent() {
+            this.sendingRequest = true;
             Api.events.create(this.event)
                 .then(event => this.$router.push('/events/' + event.id))
-                .catch(error => this.error = error);
+                .catch(error => this.error = error)
+                .finally(() => this.sendingRequest = false);
         }
     },
     watch: {
@@ -97,7 +100,7 @@ export default {
                 </select>
                 <label for="capacity">Capacité (optionnel)</label>
                 <input v-model="event.capacity" id="capacity" name="capacity" type="number" min="0" placeholder="100 places" />
-                <button type="submit">Créer l'événement</button>
+                <button type="submit" :disabled="sendingRequest">Créer l'événement</button>
                 <span v-if="error" class="error">{{ error }}</span>
             </form>
         </article>
@@ -108,6 +111,11 @@ export default {
 form {
     .error {
         color: red;
+    }
+    button[type="submit"] {
+        &:disabled, &[disabled] {
+            cursor: progress;
+        }
     }
 }
 </style>

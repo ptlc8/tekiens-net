@@ -22,6 +22,7 @@ export default {
         return {
             asso: {},
             originalAsso: {},
+            sendingRequest: false,
             error: null
         }
     },
@@ -40,9 +41,11 @@ export default {
             for (let field in this.asso)
                 if (this.asso[field] != this.originalAsso[field])
                     fields[field] = this.asso[field];
+            this.sendingRequest = true;
             Api.assos.update(this.originalAsso.id, fields)
                 .then(() => this.$router.push('/assos/' + encodeURIComponent(this.asso.id)))
-                .catch(error => this.error = error);
+                .catch(error => this.error = error)
+                .finally(() => this.sendingRequest = false);
         }
     },
     watch: {
@@ -102,7 +105,7 @@ export default {
                 <ArrayInput v-model="asso.socials" v-slot="{ onUpdate, value }" :default="{ id: 'web', value: '' }">
                     <SocialInput @update:model-value="onUpdate" :model-value="value" />
                 </ArrayInput>
-                <button type="submit">Publier les modifications</button>
+                <button type="submit" :disabled="sendingRequest">Publier les modifications</button>
                 <span v-if="error" class="error">{{ error }}</span>
             </form>
         </article>
@@ -113,6 +116,11 @@ export default {
 form {
     .error {
         color: red;
+    }
+    button[type="submit"] {
+        &:disabled, &[disabled] {
+            cursor: progress;
+        }
     }
 }
 </style>
