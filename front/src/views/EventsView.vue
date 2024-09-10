@@ -3,6 +3,8 @@ import Api from '../api';
 import EventPreview from '../components/EventPreview.vue';
 import SwitchButton from '../components/SwitchButton.vue';
 
+const baseUrl = import.meta.env.VITE_BASE_URL ?? '';
+
 export default {
     components: {
         EventPreview,
@@ -37,6 +39,12 @@ export default {
                 value = value ? null : undefined;
                 this.$router.replace({ query: { ...this.$route.query, past: value } });
             }
+        },
+        rssUrl() {
+            return location.protocol + '//' + location.host + baseUrl + '/events.rss';
+        },
+        icsUrl() {
+            return location.host + baseUrl + '/events.ics';
         }
     },
     methods: {
@@ -119,6 +127,23 @@ export default {
             <p>Revenez plus tard, ou consultez la liste des événements passés.</p>
         </article>
     </section>
+    <section>
+        <article>
+            <h2>Flux RSS et agenda</h2>
+            <div class="feeds">
+                URL du flux RSS :
+                <input type="text" :value="rssUrl" readonly />
+                <a target="_blank" :href="rssUrl">
+                    <button>Ajouter le flux RSS</button>
+                </a>
+                URL de l'agenda :
+                <input type="text" :value="icsUrl" readonly />
+                <a target="_blank" :href="'webcal://' + icsUrl">
+                    <button>Ajouter tous les événements à mon agenda</button>
+                </a>
+            </div>
+        </article>
+    </section>
 </template>
 
 <style lang="scss" scoped>
@@ -141,5 +166,10 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+}
+
+.feeds {
+    display: flex;
+    flex-direction: column;
 }
 </style>

@@ -19,7 +19,7 @@ export default {
     <RouterLink :to="'/events/' + event.id" class="event" :style="{ '--accent-color': asso?.color }">
         <div class="poster">
             <img v-if="event.poster" :src="event.poster" :alt="event.title" width="300" />
-            <img v-else :src="asso.logos?.[0]"/>
+            <img v-else :src="asso.logos?.[0]" />
         </div>
         <div class="infos">
             <div class="date">

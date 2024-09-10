@@ -69,6 +69,18 @@ export default {
             return events;
         }
     },
+    methods: {
+        canShare() {
+            return 'share' in navigator;
+        },
+        share() {
+            navigator.share({
+                title: this.asso.names?.[0],
+                text: "Découvre l'association " + this.asso.names?.[0],
+                url: location.href
+            });
+        }
+    },
     watch: {
         asso(asso) {
             document.title = `${asso.names?.[0]} - Tekiens.net`;
@@ -141,6 +153,7 @@ export default {
                         {{ social.display }}
                     </a>
                     <hr />
+                    <button v-if="canShare()" @click="share">Partager l'association</button>
                     <a target="_blank" :href="'webcal://' + icsUrl">
                         <button>Ajouter à votre agenda</button>
                     </a>

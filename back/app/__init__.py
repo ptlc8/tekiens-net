@@ -11,7 +11,7 @@ app.register_blueprint(api, url_prefix='/api')
 
 # ics routes
 app.route('/events.ics', methods=['GET'])(ics.get_events)
-app.route('/<id>/events.ics', methods=['GET'])(ics.get_asso_events)
+app.route('/assos/<id>/events.ics', methods=['GET'])(ics.get_asso_events)
 
 # RSS Feed
 app.route('/events.rss')(get_rss)

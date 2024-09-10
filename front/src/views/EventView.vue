@@ -51,6 +51,16 @@ export default {
         formatDate(date) {
             return new Date(date + 'Z').toLocaleString('FR-fr', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
         },
+        canShare() {
+            return 'share' in navigator;
+        },
+        share() {
+            navigator.share({
+                title: this.event.title,
+                text: "Découvre l'événement " + this.event.title,
+                url: location.href
+            });
+        },
         deleteEvent() {
             if (!confirm('Êtes-vous sûr de vouloir supprimer cet événement ?'))
                 return;
@@ -98,6 +108,7 @@ export default {
                         <span class="asso">{{ asso.names?.[0] }}</span>
                     </RouterLink>
                     <hr />
+                    <button v-if="canShare()" @click="share">Partager l'événement</button>
                     <template v-if="editable">
                         <RouterLink :to="'/events/' + event.id + '/edit'">
                             <button>Éditer l'événement</button>
