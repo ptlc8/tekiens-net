@@ -21,7 +21,8 @@ build-docker-job:
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
     - echo "Docker image built."
   rules:
-    - when: always
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 # Job linting the front-end code
 lint-front-job:
@@ -33,12 +34,13 @@ lint-front-job:
     - npm ci
     - npm run lint
     - echo "Lint complete."
-  # run this job only when changes are made to front-end code
+  # run this job only when changes are made to front-end code in a merge request
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         paths:
           - "front/**/*"
-        compare_to: master
+        compare_to: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
 
 # Job linting the back-end code
 lint-back-job:
@@ -50,12 +52,13 @@ lint-back-job:
     - pip install ruff
     - ruff check
     - echo "Lint complete."
-  # run this job only when changes are made to back-end code
+  # run this job only when changes are made to back-end code in a merge request
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         paths:
           - "back/**/*"
-        compare_to: master
+        compare_to: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
 
 # Job testing the container
 test-docker-job:
@@ -67,7 +70,8 @@ test-docker-job:
     - flask routes
     - echo "Docker image tested."
   rules:
-    - when: always
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   needs:
     - build-docker-job
 
@@ -81,7 +85,7 @@ publish-docker-job:
     - docker tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE:latest
     - docker push $CI_REGISTRY_IMAGE:latest
     - echo "Docker image published."
-  rules: # branch is master
-    - if: '$CI_COMMIT_BRANCH == "master"'
+  rules: # commit is on default branch
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   needs:
     - build-docker-job
