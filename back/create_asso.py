@@ -14,7 +14,7 @@ def create_asso(id, password):
         mycursor = mydb.cursor()
         #hash the password
         password = hash_password(password)
-        sql = "INSERT INTO `assos` (`id`, `names`, `password`, `logos`, `theme`, `campus`, `socials`, `color`) VALUES (%s, %s, %s, 0, '', '', '', 0)"
+        sql = "INSERT INTO `assos` (`id`, `names`, `password`, `logos`, `theme`, `campus`, `socials`, `color`) VALUES (%s, %s, %s, 0, '', 'Cergy', '', 0)"
         mycursor.execute(sql, (id, id, password))
         mycursor.close()
         mydb.close()
