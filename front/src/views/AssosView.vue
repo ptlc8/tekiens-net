@@ -26,7 +26,7 @@ export default {
         },
         filteredAssos() {
             return this.assos
-                .filter(asso => this.selectedCampus[asso.campus])
+                .filter(asso => !asso.campus || this.selectedCampus[asso.campus])
                 .filter(asso => this.past || !asso.end || asso.end > new Date().getFullYear());
         }
     },
@@ -36,7 +36,8 @@ export default {
                 next(view => {
                     view.assos = assos;
                     view.selectedCampus = assos.reduce((allCampus, asso) => {
-                        allCampus[asso.campus] = true;
+                        if (asso.campus)
+                            allCampus[asso.campus] = true;
                         return allCampus;
                     }, {});
                 });
