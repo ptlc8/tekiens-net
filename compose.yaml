@@ -10,6 +10,7 @@ services:
       DATABASE_USER: tekiens
       DATABASE_PASS: secret
       DATABASE_NAME: tekiens-net
+    restart: always
   database:
     image: mariadb:lts
     expose:
@@ -24,6 +25,7 @@ services:
       MARIADB_DATABASE: tekiens-net
       MARIADB_USER: tekiens
       MARIADB_PASSWORD: secret
+    restart: always
 volumes:
   tekiens-mysql:
     driver: local
