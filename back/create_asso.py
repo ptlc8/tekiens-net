@@ -2,11 +2,8 @@
 # python script which take a new asso identifier and a password as input to create a new asso in the database
 
 import sys
-from dotenv import load_dotenv
 from change_password import hash_password
 from app.database import get_db
-
-load_dotenv()
 
 def create_asso(id, password):
     try:

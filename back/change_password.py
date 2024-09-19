@@ -5,11 +5,8 @@
 
 import csv
 import sys
-from dotenv import load_dotenv
 import bcrypt
 from app.database import get_db
-
-load_dotenv()
 
 def change_password_csv(file_name):
     try:
