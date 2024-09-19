@@ -42,12 +42,20 @@ def get_events():
         sql += " ORDER BY date"
     if 'desc' in g.args:
         sql += " DESC"
-    if 'limit' in g.args:
+    sql_for_count = sql.replace("*", "COUNT(*) as count", 1)
+    params_for_count = params
+    if 'limit' in g.args and int(g.args.get('limit')) >= 0:
         sql += " LIMIT %s"
         params += (int(g.args.get('limit')),)
+    if 'offset' in g.args and int(g.args.get('offset')) > 0:
+        sql += " OFFSET %s"
+        params += (int(g.args.get('offset')),)
     mycursor.execute(sql, params)
     events = [parse_event(event) for event in mycursor.fetchall()]
-    return api.success(events)
+    # Second SQL query to get count
+    mycursor.execute(sql_for_count, params_for_count)
+    count = mycursor.fetchone()['count']
+    return api.success(events, count=count)
 
 @blueprint.route('', methods=['POST'])
 def post_event():

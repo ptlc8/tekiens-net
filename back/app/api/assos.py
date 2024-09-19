@@ -67,12 +67,20 @@ def get_assos():
         sql += " ORDER BY " + ("RAND()" if g.args.get('order') == 'random' else g.args.get('order'))
         if 'desc' in g.args:
             sql += " DESC"
-    if 'limit' in g.args:
+    sql_for_count = sql.replace(", ".join(assos_columns), "COUNT(*) as count", 1)
+    params_for_count = params
+    if 'limit' in g.args and int(g.args.get('limit')) >= 0:
         sql += " LIMIT %s"
         params += (int(g.args.get('limit')),)
+    if 'offset' in g.args and int(g.args.get('offset')) > 0:
+        sql += " OFFSET %s"
+        params += (int(g.args.get('offset')),)
     mycursor.execute(sql, params)
     assos = [parse_asso(asso) for asso in mycursor.fetchall()]
-    return api.success(assos)
+    # Second SQL query to get count
+    mycursor.execute(sql_for_count, params_for_count)
+    count = mycursor.fetchone()['count']
+    return api.success(assos, count=count)
 
 @blueprint.route('/<id>', methods=['GET'])
 def get_asso(id):
@@ -126,9 +134,17 @@ def get_asso_events(id):
         sql += " ORDER BY date"
     if 'desc' in g.args:
         sql += " DESC"
-    if 'limit' in g.args:
+    sql_for_count = sql.replace("*", "COUNT(*) as count", 1)
+    params_for_count = params
+    if 'limit' in g.args and int(g.args.get('limit')) >= 0:
         sql += " LIMIT %s"
         params += (int(g.args.get('limit')),)
+    if 'offset' in g.args and int(g.args.get('offset')) > 0:
+        sql += " OFFSET %s"
+        params += (int(g.args.get('offset')),)
     mycursor.execute(sql, params)
     events = [parse_event(event) for event in mycursor.fetchall()]
-    return api.success(events)
+    # Second SQL query to get count
+    mycursor.execute(sql_for_count, params_for_count)
+    count = mycursor.fetchone()['count']
+    return api.success(events, count=count)

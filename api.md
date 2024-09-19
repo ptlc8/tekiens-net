@@ -7,6 +7,7 @@ Les paramètres peuvent être passés dans l'URL ou dans le corps de la requête
 
 ## Sommaire
 
+- [Généralités](#généralités)
 - [Assos](#assos)
 - [Events](#events)
 - [Sessions](#sessions)
@@ -35,6 +36,23 @@ Les paramètres peuvent être passés dans l'URL ou dans le corps de la requête
 | 🔵 GET    | [/api/socials](#-get-apisocials)                 | Récupère la liste des réseaux sociaux supportés                       |
 
 
+## Généralités
+
+### Requête
+
+Les requêtes sont au format HTTP. Les paramètres peuvent être passés dans l'URL ou dans le corps de la requête au format formulaire (x-www-form-urlencoded).
+
+Pour les paramètres dits "multiple", ils doivent être passés suivis de crochets `[]` pour être interprétés comme un tableau. Par exemple, `names[]=nom1&names[]=nom2`.
+
+### Réponse
+
+Les réponses sont au format JSON. Le champ booléen `success` indique si la requête a abouti.
+
+S'il est à `true`, le champ `data` contient les données retournées. Éventuellement, le champ `count` contient le nombre d'éléments existants. (Pas forcément égal à la taille de `data`, car il peut y avoir une limite ou un décalage.)
+
+S'il est à `false`, une erreur est survenue et le champ `error` contient un message d'erreur.
+
+
 ## Assos
 
 ### 🔵 `GET /api/assos`
@@ -47,6 +65,7 @@ Récupère toutes les associations.
     - order : tri les associations, "start" "end" "color" ou "random" (facultatif)
     - desc : tri les associations par ordre décroissant (facultatif)
     - limit : limite le nombre d'associations retournées (facultatif)
+    - offset : décale le début de la liste d'associations retournées (facultatif)
 - Fonction api.js : `Api.assos.get()` 
 
 ### 🔵 `GET /api/assos/{id}`
@@ -86,6 +105,7 @@ Récupère tous les événements de l'association avec l'identifiant {id}.
     - order : tri les événements, "date" ou "random", (facultatif, par défaut date)
     - desc : tri les événements par ordre décroissant (facultatif)
     - limit : limite le nombre d'événements retournés (facultatif)
+    - offset : décale le début de la liste d'événements retournés (facultatif)
 - Fonction api.js : `Api.assos.getEvents(id)`
 
 
@@ -100,6 +120,7 @@ Récupère tous les événements.
     - order : tri les événements, "date" ou "random", (facultatif, par défaut date)
     - desc : tri les événements par ordre décroissant (facultatif)
     - limit : limite le nombre d'événements retournés (facultatif)
+    - offset : décale le début de la liste d'événements retournés (facultatif)
 - Fonction api.js : `Api.events.get()`
 
 ### 🟢 `POST /api/events`
