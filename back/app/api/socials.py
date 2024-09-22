@@ -57,7 +57,19 @@ socials = {
         'display': 'LinkedIn',
         'link': 'https://linkedin.com/{0}',
         'placeholder': 'company/tekiens'
-    }
+    },
+    'youtube': {
+        'name': 'YouTube',
+        'display': 'YouTube',
+        'link': 'https://youtube.com/{0}',
+        'placeholder': '@tekiens-net'
+    },
+    'tiktok': {
+        'name': 'TikTok',
+        'display': 'TikTok',
+        'link': 'https://tiktok.com/{0}',
+        'placeholder': '@tekiens'
+    },
 }
 
 
