@@ -44,7 +44,7 @@ export default {
             var days = Math.floor(this.event.duration / 60 / 24);
             var hours = Math.floor(this.event.duration / 60) % 24;
             var minutes = this.event.duration % 60;
-            return `${days}j ${hours}h ${minutes}min`.replace(/0j /, '').replace(/0h /, '').replace(/ 0min/, '');
+            return `${days}j ${hours}h ${minutes}min`.replace(/ 0min/, '').replace(/ 0h/, '').replace(/^0j /, '');
         }
     },
     methods: {
