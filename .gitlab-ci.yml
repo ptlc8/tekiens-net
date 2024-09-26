@@ -1,6 +1,6 @@
 # List of stages for jobs, and their order of execution
 stages:
-  - lint-and-build
+  - build
   - test
   - publish
 
@@ -12,10 +12,10 @@ default:
 
 # Job building docker image
 build-docker-job:
-  stage: lint-and-build
+  stage: build
   script:
-    - echo "Building docker image..."
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - echo "Building docker image... but first logging in to $CI_REGISTRY"
+    - echo $CI_JOB_TOKEN | docker login $CI_REGISTRY -u gitlab-ci-token --password-stdin
     - docker pull $CI_REGISTRY_IMAGE:latest || true
     - docker build --cache-from $CI_REGISTRY_IMAGE:latest -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
@@ -26,7 +26,7 @@ build-docker-job:
 
 # Job linting the front-end code
 lint-front-job:
-  stage: lint-and-build
+  stage: test
   image: node:latest
   script:
     - cd front
@@ -44,7 +44,7 @@ lint-front-job:
 
 # Job linting the back-end code
 lint-back-job:
-  stage: lint-and-build
+  stage: test
   image: python:latest
   script:
     - cd back
@@ -80,7 +80,7 @@ publish-docker-job:
   stage: publish
   script:
     - echo "Publishing docker image..."
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - echo $CI_JOB_TOKEN | docker login $CI_REGISTRY -u gitlab-ci-token --password-stdin
     - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
     - docker tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE:latest
     - docker push $CI_REGISTRY_IMAGE:latest
