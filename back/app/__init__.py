@@ -1,4 +1,5 @@
 from flask import Flask, send_from_directory
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from .api import api
 from . import ics
@@ -35,3 +36,7 @@ def get_displayer_front():
 @app.route('/data/<path:path>')
 def get_data(path):
     return send_from_directory('../data', path)
+
+
+# Fix for reverse proxy
+app.wsgi_app = ProxyFix(app.wsgi_app)
