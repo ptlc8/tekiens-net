@@ -100,12 +100,32 @@ MariaDB [tekiens_net]> SHOW TABLES;
 
 #### Création du dotenv
 Créer un fichier `.env` dans le dossier `back` avec les identifiants de la base de données sous la forme suivante :
-```
+```sh
 DATABASE_HOST=localhost
 DATABASE_USER=tekiens_net
 DATABASE_PASS=supermotdepasse
 DATABASE_NAME=tekiens_net
 ```
+
+### Mise en place de la connexion au serveur SMTP (optionnel)
+
+Utile pour envoyer les emails pour les événements. Si vous ne voulez pas utiliser cette fonctionnalité, vous pouvez passer cette étape.
+
+#### Informations dans le dotenv
+
+La connexion au serveur smtp se fait grâce aux informations dans le `.env` :
+
+``` sh
+SMTP_ADDRESS=<smtp address>   # Exemple: smtp.gmail.com
+SMTP_PORT=<smtp port>         # Exemple: 465
+SMTP_TLS=true                 # Optionnel, true par défaut
+SMTP_USERNAME=<smtp username> # Exemple: foo.bar@example.com
+SMTP_PASSWORD=<smtp password>
+```
+
+#### Avec gmail
+
+Si vous voulez utiliser le serveur SMTP de gmail et utiliser votre propre adresse gmail, vous ne pourrez pas utiliser votre mot de passe directement dans le `.env`. À la place il faut créer un  [https://myaccount.google.com/apppasswords](mot de passe d'application), de préférence réservé à tekiens.net, et l'utiliser en tant que mot de passe SMTP.
 
 ### Compilation du front-end
 

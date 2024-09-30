@@ -79,6 +79,7 @@ select,
 input,
 button,
 textarea,
+dialog,
 .ck-editor {
     border-radius: 4px;
     padding: 4px 8px;
@@ -90,6 +91,10 @@ textarea,
     color: #404040;
     color: rgba(0, 0, 0, 0.75);
     box-sizing: border-box;
+}
+
+dialog {
+    margin-bottom: auto;
 }
 
 .ck-editor {

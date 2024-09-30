@@ -65,8 +65,19 @@ const Api = {
         get() {
             return sendApiRequest("GET", "templates", {}, "Getting templates");
         },
-        getOne(id, eventId=undefined) {
-            return sendApiRequest("GET", "templates/" + encodeURIComponent(id), { event: eventId }, "Getting template " + id + " for event " + eventId);
+        getOne(id) {
+            return sendApiRequest("GET", "templates/" + encodeURIComponent(id), {}, "Getting template " + id);
+        },
+        getEmail(id, eventId) {
+            return sendApiRequest("GET", "templates/" + encodeURIComponent(id) + "/" + encodeURIComponent(eventId), { event: eventId }, "Getting template " + id + " for event " + eventId);
+        },
+        send(id, eventId, to, session=localStorage.getItem("session")) {
+            return sendApiRequest("POST", "templates/" + encodeURIComponent(id) + "/" + encodeURIComponent(eventId) + "/send", { to, session }, "Sending email for event " + eventId + "with template " + id);
+        }
+    },
+    emails: {
+        get() {
+            return sendApiRequest("GET", "emails", {}, "Getting emails");
         }
     },
     socials: {

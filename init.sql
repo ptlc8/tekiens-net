@@ -48,3 +48,9 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 
 ALTER TABLE `sessions`
   ADD CONSTRAINT `session_asso` FOREIGN KEY (`asso_id`) REFERENCES `assos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+CREATE TABLE IF NOT EXISTS `emails` (
+  `email` varchar(32) UNIQUE NOT NULL,
+  name varchar(32) NOT NULL,
+  PRIMARY KEY (`email`)
+) ENGINE=InnoDB

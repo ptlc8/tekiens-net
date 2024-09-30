@@ -17,23 +17,26 @@ Les paramètres peuvent être passés dans l'URL ou dans le corps de la requête
 
 ### Endpoints
 
-| Méthode   | URL                                              | Description                                                           |
-|-----------|--------------------------------------------------|-----------------------------------------------------------------------|
-| 🔵 GET    | [/api/assos](#-get-apiassos)                     | Récupère toutes les associations                                      |
-| 🔵 GET    | [/api/assos/{id}](#-get-apiassosid)              | Récupère l'association avec l'identifiant {id}                        |
-| 🟡 PUT    | [/api/assos/{id}](#-put-apiassosid)              | Met à jour l'association avec l'identifiant {id}                      |
-| 🔵 GET    | [/api/assos/{id}/events](#-get-apiassosidevents) | Récupère tous les événements de l'association avec l'identifiant {id} |
-| 🔵 GET    | [/api/events](#-get-apievents)                   | Récupère tous les événements                                          |
-| 🟢 POST   | [/api/events](#-post-apievents)                  | Ajoute un événement                                                   |
-| 🔵 GET    | [/api/events/{id}](#-get-apieventsid)            | Récupère l'événement avec l'identifiant {id}                          |
-| 🟡 PUT    | [/api/events/{id}](#-put-apieventsid)            | Met à jour l'événement avec l'identifiant {id}                        |
-| 🔴 DELETE | [/api/events/{id}](#-delete-apieventsid)         | Supprime l'événement avec l'identifiant {id}                          |
-| 🟢 POST   | [/api/sessions](#-post-apisessions)              | Crée une session lié à une association                                |
-| 🔵 GET    | [/api/sessions/{id}](#-get-apisessionsid)        | Récupère la session avec l'identifiant {id}                           |
-| 🔴 DELETE | [/api/sessions/{id}](#-delete-apisessionsid)     | Supprime la session avec l'identifiant {id}                           |
-| 🔵 GET    | [/api/templates](#-get-apitemplates)             | Récupère les identifiants de toutes les templates                     |
-| 🔵 GET    | [/api/templates/{id}](#get-apitemplatesid)       | Récupère la template avec l'identifiant {id}                          |
-| 🔵 GET    | [/api/socials](#-get-apisocials)                 | Récupère la liste des réseaux sociaux supportés                       |
+| Méthode   | URL                                                                      | Description                                                                             |
+|-----------|--------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| 🔵 GET    | [/api/assos](#-get-apiassos)                                             | Récupère toutes les associations                                                        |
+| 🔵 GET    | [/api/assos/{id}](#-get-apiassosid)                                      | Récupère l'association avec l'identifiant {id}                                          |
+| 🟡 PUT    | [/api/assos/{id}](#-put-apiassosid)                                      | Met à jour l'association avec l'identifiant {id}                                        |
+| 🔵 GET    | [/api/assos/{id}/events](#-get-apiassosidevents)                         | Récupère tous les événements de l'association avec l'identifiant {id}                   |
+| 🔵 GET    | [/api/events](#-get-apievents)                                           | Récupère tous les événements                                                            |
+| 🟢 POST   | [/api/events](#-post-apievents)                                          | Ajoute un événement                                                                     |
+| 🔵 GET    | [/api/events/{id}](#-get-apieventsid)                                    | Récupère l'événement avec l'identifiant {id}                                            |
+| 🟡 PUT    | [/api/events/{id}](#-put-apieventsid)                                    | Met à jour l'événement avec l'identifiant {id}                                          |
+| 🔴 DELETE | [/api/events/{id}](#-delete-apieventsid)                                 | Supprime l'événement avec l'identifiant {id}                                            |
+| 🟢 POST   | [/api/sessions](#-post-apisessions)                                      | Crée une session lié à une association                                                  |
+| 🔵 GET    | [/api/sessions/{id}](#-get-apisessionsid)                                | Récupère la session avec l'identifiant {id}                                             |
+| 🔴 DELETE | [/api/sessions/{id}](#-delete-apisessionsid)                             | Supprime la session avec l'identifiant {id}                                             |
+| 🔵 GET    | [/api/templates](#-get-apitemplates)                                     | Récupère les identifiants de toutes les templates                                       |
+| 🔵 GET    | [/api/templates/{id}](#-get-apitemplatesid)                              | Récupère la template avec l'identifiant {id}                                            |
+| 🔵 GET    | [/api/templates/{id}/{event_id}](#-get-apitemplatesidevent_id)           | Récupère le mail pour l'event {event_id} généré par la template avec l'identifiant {id} |
+| 🟢 POST   | [/api/templates/{id}/{event_id}/send](#-post-apitemplatesidevent_idsend) | Envoie un email à propos de l'évenement {event_id} via la template {id}                 |
+| 🔵 GET    | [/api/socials](#-get-apisocials)                                         | Récupère la liste des réseaux sociaux supportés                                         |
+| 🔵 GET    | [/api/emails](#-get-apiemails)                                           | Récupère la liste des groupe d'emails (uniquement les noms et les ids)                  |
 
 
 ## Généralités
@@ -233,8 +236,24 @@ Récupère les identifiants de toutes les templates.
 Récupère la template avec l'identifiant {id}.
 - Paramètres :
     - id : identifiant de la template
-    - event : identifiant de l'événement à rendre sur la template (facultatif)
-- Fonction api.js : `Api.templates.getOne(id, eventId)`
+- Fonction api.js : `Api.templates.getOne(id)`
+
+### 🔵 `GET /api/templates/{id}/{event_id}`
+
+Récupère le mail pour l'event {event_id} généré par la template avec l'identifiant {id}.
+- Paramètres :
+    - id : identifiant de la template
+    - event_id : identifiant de l'événement à rendre sur la template
+- Fonction api.js : `Api.templates.getEmail(id, eventId)`
+
+### 🟢 `POST /api/templates/{id}/{event_id}/send`
+
+Envoie un email à propos de l'évenement {event_id} via la template {id}
+- Paramètres :
+    - id : identifiant de la template
+    - event_id : identifiant de l'événement à rendre sur la template
+    - to : l'adresse email à laquelle envoyer l'email
+- Fonction api.js : `Api.templates.send(id, eventId, to)`
 
 
 ## Réseaux sociaux
@@ -243,3 +262,11 @@ Récupère la template avec l'identifiant {id}.
 
 Récupère la liste des réseaux sociaux supportés.
 - Fonction api.js : `Api.socials.get()`
+
+
+## Emails
+
+### 🔵 `GET /api/emails`
+
+Récupère la liste des adresses email (aka mailing list) de cy-tech
+- Fonction api.js : `Api.emails.get()`

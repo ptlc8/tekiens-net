@@ -2,6 +2,7 @@ from flask import Blueprint, request, g
 import json
 
 from . import assos
+from . import emails
 from . import events
 from . import sessions
 from . import templates
@@ -61,3 +62,6 @@ api.register_blueprint(templates.blueprint, url_prefix='/templates')
 
 # socials
 api.register_blueprint(socials.blueprint, url_prefix='/socials')
+
+# emails
+api.register_blueprint(emails.blueprint, url_prefix='/emails')
