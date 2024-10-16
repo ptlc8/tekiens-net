@@ -4,6 +4,7 @@ import EventPreview from '../components/EventPreview.vue';
 import SwitchButton from '../components/SwitchButton.vue';
 
 const baseUrl = import.meta.env.VITE_BASE_URL ?? '';
+const eventsPerPage = 50;
 
 export default {
     components: {
@@ -14,31 +15,42 @@ export default {
         return {
             assos: [],
             events: [],
-            selectedCampus: {}
+            allCampus: []
         }
     },
     computed: {
-        filteredEvents() {
-            let events = this.events.filter(event => {
-                let campus = this.getAssoById(event.asso_id)?.campus;
-                if (campus && !this.selectedCampus[campus])
-                    return false;
-                if (this.past)
-                    return new Date(event.date + 'Z') <= new Date();
-                return new Date(Date.parse(event.date + 'Z') + (event.duration ?? 0) * 60 * 1000) > new Date();
-            });
-            if (this.past)
-                events.reverse();
-            return events;
-        },
         past: {
             get() {
                 return 'past' in this.$route.query;
             },
             set(value) {
                 value = value ? null : undefined;
-                this.$router.replace({ query: { ...this.$route.query, past: value } });
+                this.$router.replace({ query: { ...this.$route.query, past: value, page: undefined } });
             }
+        },
+        page: {
+            get() {
+                return parseInt(this.$route.query.page) || 1;
+            },
+            set(value) {
+                if (value <= 1)
+                    value = undefined;
+                this.$router.push({ query: { ...this.$route.query, page: value } });
+            }
+        },
+        selectedCampus: {
+            get() {
+                if (this.$route.query.campus === null)
+                    return [];
+                return this.$route.query.campus?.split(',');
+            },
+            set(value) {
+                value = !value ? undefined : value.length == 0 ? null : value.join(',');
+                this.$router.replace({ query: { ...this.$route.query, campus: value, page: undefined } });
+            }
+        },
+        pageMax() {
+            return Math.ceil(this.events.count / eventsPerPage);
         },
         rssUrl() {
             return location.protocol + '//' + location.host + baseUrl + '/events.rss';
@@ -55,7 +67,7 @@ export default {
             return new Date(monday.getFullYear(), monday.getMonth(), monday.getDate());
         },
         getEventsByWeek() {
-            return this.filteredEvents.reduce((o, event) => {
+            return this.events.reduce((o, event) => {
                 const monday = this.getMonday(new Date(event.date + 'Z'));
                 const key = `${monday.getFullYear()}-${monday.getMonth()+1}-${monday.getDate()}`;
                 if (!o[key]) o[key] = [];
@@ -75,24 +87,65 @@ export default {
         },
         getAssoById(id) {
             return this.assos.find(asso => asso.id == id);
+        },
+        isCampusSelected(campus) {
+            if (!this.selectedCampus)
+                return true;
+            return this.selectedCampus.includes(campus);
+        },
+        selectCampus(campus, selected) {
+            if (selected) {
+                if (this.selectedCampus)
+                    this.selectedCampus = this.selectedCampus.concat([campus]);
+                else 
+                    this.selectedCampus = [ campus ];
+            } else {
+                if (this.selectedCampus)
+                    this.selectedCampus = this.selectedCampus.filter(c => c != campus);
+                else
+                    this.selectedCampus = this.allCampus.filter(c => c != campus);
+            }
         }
     },
     beforeRouteEnter(to, from, next) {
         Promise.all([
-            Api.events.get(),
+            Api.events.get({
+                limit: eventsPerPage,
+                offset: ((to.query.page ?? 1) - 1) * eventsPerPage,
+                campus: to.query.campus?.split(','),
+                after: 'past' in to.query ? undefined : new Date(),
+                before: 'past' in to.query ? new Date() : undefined,
+                desc: 'past' in to.query ? true : undefined
+            }),
             Api.assos.get()
         ])
             .then(([events, assos]) => {
                 next(view => {
                     view.events = events;
                     view.assos = assos;
-                    view.selectedCampus = assos.reduce((allCampus, asso) => {
-                        allCampus[asso.campus] = true;
+                    view.allCampus = assos.reduce((allCampus, asso) => {
+                        if (asso.campus && !allCampus.includes(asso.campus))
+                            allCampus.push(asso.campus);
                         return allCampus;
-                    }, {});
+                    }, []);
                 });
             })
             .catch(error => next(view => view.$state.error = error));
+    },
+    beforeRouteUpdate(to, from, next) {
+        Api.events.get({
+            limit: eventsPerPage,
+            offset: ((to.query.page ?? 1) - 1) * eventsPerPage,
+            campus: to.query.campus?.split(','),
+            after: 'past' in to.query ? undefined : new Date(),
+            before: 'past' in to.query ? new Date() : undefined,
+            desc: 'past' in to.query ? true : undefined
+        })
+            .then(events => {
+                this.events = events;
+                next();
+            })
+            .catch(error => this.$state.error = error);
     }
 };
 </script>
@@ -100,12 +153,12 @@ export default {
 <template>
     <section>
         <article class="parameters">
-            <div v-if="Object.keys(selectedCampus).length > 1">
+            <div v-if="allCampus.length > 1">
                 Campus :
-                <template v-for="_, campus in selectedCampus" :key="campus">
+                <template v-for="c in allCampus" :key="c">
                     <label>
-                        {{ campus }}
-                        <SwitchButton v-model="selectedCampus[campus]" />
+                        {{ c }}
+                        <SwitchButton @update:model-value="v => selectCampus(c, v)" :model-value="isCampusSelected(c)" />
                     </label>
                 </template>
             </div>
@@ -122,26 +175,40 @@ export default {
                 <EventPreview v-for="event in weekEvents" :key="event.id" :event="event" :asso="getAssoById(event.asso_id)" />
             </div>
         </article>
-        <article v-if="filteredEvents.length == 0">
-            <h2>Aucun événement à venir</h2>
-            <p>Revenez plus tard, ou consultez la liste des événements passés.</p>
+        <article v-if="events.length == 0">
+            <h2>Aucun événement trouvé</h2>
+            <p>Revenez plus tard, ou essayer de changer les paramètres.</p>
+        </article>
+        <article class="pages">
+            <div>
+                <button v-if="page > 1" @click="page--">Page précédente</button>
+                <template v-for="n in 3" :key="n">
+                    <button v-if="0 < page - 4 + n && page - 4 + n <= pageMax" @click="page -= 4 + n">{{ page - 4 + n }}</button>
+                </template>
+                <button disabled>{{ page }}</button>
+                <template v-for="n in 3" :key="n">
+                    <button v-if="0 < page + n && page + n <= pageMax" @click="page += n">{{ page + n }}</button>
+                </template>
+                <button v-if="page < pageMax" @click="page++">Page suivante</button>
+            </div>
+            <div>
+                {{ events.count }} événements correspondant aux critères sélectionnés
+            </div>
         </article>
     </section>
     <section>
-        <article>
+        <article class="feeds">
             <h2>Flux RSS et agenda</h2>
-            <div class="feeds">
-                URL du flux RSS :
-                <input type="text" :value="rssUrl" readonly />
-                <a target="_blank" :href="rssUrl">
-                    <button>Ajouter le flux RSS</button>
-                </a>
-                URL de l'agenda :
-                <input type="text" :value="icsUrl" readonly />
-                <a target="_blank" :href="'webcal://' + icsUrl">
-                    <button>Ajouter tous les événements à mon agenda</button>
-                </a>
-            </div>
+            URL du flux RSS :
+            <input type="text" :value="rssUrl" readonly />
+            <a target="_blank" :href="rssUrl">
+                <button>Ajouter le flux RSS</button>
+            </a>
+            URL de l'agenda :
+            <input type="text" :value="icsUrl" readonly />
+            <a target="_blank" :href="'webcal://' + icsUrl">
+                <button>Ajouter tous les événements à mon agenda</button>
+            </a>
         </article>
     </section>
 </template>
@@ -166,6 +233,19 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+}
+
+.pages {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2em;
+
+    button {
+        margin-left: 5px;
+        margin-right: 5px;
+        min-width: 2em;
+    }
 }
 
 .feeds {

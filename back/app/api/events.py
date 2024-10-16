@@ -28,7 +28,7 @@ blueprint = Blueprint('events', __name__)
 def get_events():
     mydb = get_db()
     mycursor = mydb.cursor(dictionary=True)
-    sql = "SELECT * FROM events WHERE 1=1"
+    sql = "SELECT events.* FROM events JOIN assos ON assos.id = events.asso_id WHERE 1=1"
     params = ()
     if 'before' in g.args:
         sql += " AND date < %s"
@@ -36,13 +36,16 @@ def get_events():
     if 'after' in g.args:
         sql += " AND DATE_ADD(date, INTERVAL IFNULL(duration, 0) MINUTE) > %s"
         params += (g.args.get('after'),)
+    if 'campus' in g.args and type(g.args.get('campus')) is list:
+        sql += " AND campus IN (''" + (", %s" * len(g.args.get('campus'))) + ")"
+        params += tuple(g.args.get('campus'))
     if 'order' in g.args and g.args.get('order') == 'random':
         sql += " ORDER BY " + "RAND()"
     else:
         sql += " ORDER BY date"
     if 'desc' in g.args:
         sql += " DESC"
-    sql_for_count = sql.replace("*", "COUNT(*) as count", 1)
+    sql_for_count = sql.replace("events.*", "COUNT(*) as count", 1)
     params_for_count = params
     if 'limit' in g.args and int(g.args.get('limit')) >= 0:
         sql += " LIMIT %s"

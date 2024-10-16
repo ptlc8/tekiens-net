@@ -120,6 +120,7 @@ Récupère tous les événements.
 - Paramètres :
     - before : filtre les événements avant la date spécifiée, format SQL (facultatif)
     - after : filtre les événements après la date spécifiée, format SQL (facultatif)
+    - campus : filtre les événements par campus (multiple, facultatif)
     - order : tri les événements, "date" ou "random", (facultatif, par défaut date)
     - desc : tri les événements par ordre décroissant (facultatif)
     - limit : limite le nombre d'événements retournés (facultatif)

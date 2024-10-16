@@ -6,15 +6,15 @@ const Api = {
     assos: {
         get(params={}) {
             return sendApiRequest("GET", "assos", params, "Getting assos")
-                .then(assos => assos.map(parseAsso));
+                .then(assos => mapResponse(assos, parseAsso));
         },
         getOne(id) {
             return sendApiRequest("GET", "assos/" + encodeURIComponent(id), {}, "Getting asso " + id)
                 .then(parseAsso);
         },
         getEvents(id, params={}) {
-            return sendApiRequest("GET", "assos/" + encodeURIComponent(id) + "/events", params, "Getting asso " + id + " events")
-                .then(events => events.map(parseEvent));
+            return sendApiRequest("GET", "assos/" + encodeURIComponent(id) + "/events", params, "Getting asso " + id + " events ")
+                .then(events => mapResponse(events, parseEvent));
         },
         update(id, asso, session=localStorage.getItem("session")) {
             return sendApiRequest("PUT", "assos/" + encodeURIComponent(id), { ...unparseAsso(asso), session }, "Updating asso " + id);
@@ -23,7 +23,7 @@ const Api = {
     events: {
         get(params={}) {
             return sendApiRequest("GET", "events", params, "Getting events")
-                .then(events => events.map(parseEvent));
+                .then(events => mapResponse(events, parseEvent));
         },
         getOne(id) {
             return sendApiRequest("GET", "events/" + encodeURIComponent(id), {}, "Getting event " + id)
@@ -106,6 +106,12 @@ function parseEvent(event) {
     return event;
 }
 
+function mapResponse(arrayResponse, callbackfn) {
+    var result = arrayResponse.map(callbackfn);
+    result.count = arrayResponse.count;
+    return result;
+}
+
 
 function sendApiRequest(method, endpoint, parameters={}, message=undefined) {
     return new Promise(function (resolve, reject) {
@@ -138,7 +144,10 @@ function sendApiRequest(method, endpoint, parameters={}, message=undefined) {
                     console.error("[API] " + response.error);
                     reject(response.error);
                 } else {
-                    resolve(response.data);
+                    let data = response.data;
+                    if (response.count !== undefined)
+                        data.count = response.count;
+                    resolve(data);
                 }
             })
             .catch(reject);
