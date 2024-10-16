@@ -14,10 +14,12 @@ from . import socials
 api = Blueprint('api', __name__)
 
 def success(data, status=200, **kwargs):
-    return json.dumps({'success': True, 'data': data, **kwargs}, default=str), status, {'ContentType': 'application/json'}
+    json_data = json.dumps({'success': True, 'data': data, **kwargs}, default=str)
+    return json_data, status, {'Content-Type': 'application/json'}
 
 def error(message, status=400, **kwargs):
-    return json.dumps({'success': False, 'error': message, **kwargs}, default=str), status, {'ContentType': 'application/json'}
+    json_data = json.dumps({'success': False, 'error': message, **kwargs}, default=str)
+    return json_data, status, {'Content-Type': 'application/json'}
 
 
 # parse all args from url and form

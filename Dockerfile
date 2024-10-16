@@ -2,11 +2,12 @@
 FROM node:lts-slim AS build
 WORKDIR /app
 
+# Install dependencies
+COPY front/package*.json ./
+RUN npm ci
+
 # Copy the code
 COPY front .
-
-# Install dependencies
-RUN npm ci
 
 # Build
 RUN npm run build
