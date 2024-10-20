@@ -4,12 +4,16 @@ import { getEventStatus } from '../eventStatus';
 import { marked } from 'marked';
 import { mangle } from 'marked-mangle';
 import DOMPurify from 'dompurify';
-import { useSessionStore } from "../stores/session";
+import { useSessionStore } from '../stores/session';
 import { RouterLink } from 'vue-router';
+import QRCode from '../components/QRCode.vue'
 
 marked.use(mangle(), { breaks: true });
 
 export default {
+    components: {
+        QRCode
+    },
     setup() {
         return {
             sessionStore: useSessionStore()
@@ -49,7 +53,13 @@ export default {
     },
     methods: {
         formatDate(date) {
-            return new Date(date + 'Z').toLocaleString('FR-fr', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+            return new Date(date + 'Z').toLocaleString('FR-fr', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        },
+        formatTime(date) {
+            return new Date(date + 'Z').toLocaleTimeString('FR-fr', { hour: '2-digit', minute: '2-digit' });
+        },
+        formatDateTime(date) {
+            return new Date(date + 'Z').toLocaleString('FR-fr', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
         },
         canShare() {
             return 'share' in navigator;
@@ -120,15 +130,19 @@ export default {
                         <hr />
                     </template>
                     <span>📅 Le {{ formatDate(event.date) }}</span>
+                    <span>⌚ À {{ formatTime(event.date) }}</span>
                     <span>📍 {{ event.place }}</span>
                     <span v-if="duration">🕓 {{ duration }}</span>
                     <span v-if="event.price">💲 {{ event.price }}</span>
-                    <span v-if="event.link">🖇 <a :href="event.link">Lien de l'événement</a></span>
                     <span v-if="event.access">🔒 {{ event.access }}</span>
                     <span v-if="event.status">{{ status }}</span>
                     <span v-if="event.capacity">👥 {{ event.capacity }} places</span>
-                    <span>📝 Crée le {{ formatDate(event.createDate) }}</span>
-                    <span>🔄 Dernière mise à jour le {{ formatDate(event.lastUpdateDate) }}</span>
+                    <span>📝 Crée le {{ formatDateTime(event.createDate) }}</span>
+                    <span>🔄 Dernière mise à jour le {{ formatDateTime(event.lastUpdateDate) }}</span>
+                    <a :href="event.link" target="_blank">
+                        <QRCode class="qr-code" :value="event.link" />
+                        <button v-if="event.link">🖇 Lien de l'événement</button>
+                    </a>
                 </div>
             </div>
         </article>
@@ -195,8 +209,13 @@ export default {
             font-weight: bold;
         }
 
-        a > * {
+        button {
             width: 100%;
+        }
+
+        .qr-code {
+            width: 10em;
+            margin: 1em auto;
         }
     }
 
