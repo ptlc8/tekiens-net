@@ -1,6 +1,19 @@
+<img src="https://pic.infini.fr/9ISNflin/b9lylW93.png" alt="drawing" width="500"/>
+
 # Tekiens.net
 
 **Tekiens.net** est un site web dédié à la vie étudiante à CY Tech, créé par [Atilla](https://atilla.org). L'objectif de ce site est de centraliser les informations sur les associations et les événements à l'école.
+
+Il propose actuellement un profil pour chaque association permettant de répertorier toutes les informations utile sur l'association et de publier des évènements qui seront à la fois présents sur la page Association et dans la page Evènement qui récapitule tous les évènements en cours ou à venir à CY tech. 
+Le site peut aussi générer une mise en forme HTML de mail à partir de template pour aider les association dans leur communication. 
+
+Pour les étudiants, un système de calendrier (ICS) permet d'ajouter le flux des évènements d'une ou plusieurs associations à son calendrier en plus d'un flux RSS.
+
+## Technologies utilisées
+
+Le site utilise actuellement [Flask](https://flask.palletsprojects.com) pour gérer le back-end, en Python donc. 
+
+Le framework javascript [VueJS](https://vuejs.org/) est utilisé pour le back-end et la base de données est géré en SQL (MySQL/MariaDB)
 
 ## Prérequis
 

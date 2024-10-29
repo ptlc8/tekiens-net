@@ -22,6 +22,20 @@ import { RouterLink } from 'vue-router';
             </article>
             <article id="use">
                 <h2>Utilisation de la plateforme</h2>
+                <h3>Comment ajouter une association à mon calendrier ?</h3>
+                Tekiens.net propose un flux calendrier(iCal) et RSS pour les évènements, que ce soit pour une ou toutes les associations.
+                Pour que les évènements apparaissent automatiquement dans votre calendrier, vous devez ajouter le lien trouvable sur la page d'une association ou "Événements" (exemple pour ATILLA: tekiens.net/assos/atilla/events.ics) dans votre application de calendrier.
+                <br />Voici quelques liens utiles pour savoir comment ajouter un calendrier iCal dans différents logiciels/outils :
+                <ul>
+                    <li>Calendrier <a href="mail.etu.cyu.fr">mail.etu.cyu.fr</a> : En allant dans "Calendrier"-> l'icone paramètre à côté de <b>"Calendriers"</b> -> <b>"Ajouter Calendrier Externe"</b> -> <b>"Ajouter un calendrier externe (autre)"</b> -> <b>"Abonnement iCAL"</b> -> Mettez le lien ics (exemple: https://tekiens.net/events.ics)</li>
+                    <li><a href="https://support.google.com/calendar/answer/37100?hl=fr">Google Calendar</a></li>
+                    <li><a href="https://support.microsoft.com/fr-fr/office/importer-des-calendriers-dans-outlook-8e8364e1-400e-4c0f-a573-fe76b5a2d379">Outlook</a></li>
+                    <li><a href="https://support.mozilla.org/en-US/kb/creating-new-calendars">Thunderbird</a></li>
+                    <li><a href="https://support.apple.com/fr-fr/guide/calendar/icl1022/mac">Calendar</a> (Mac OS) </li>
+                    <li>Moodle/<a href="cours.cyu.fr">cours.cyu.fr</a> : Aller dans votre calendrier et tout en bas de la page cliquer sur <b>"Importer ou exporter des calendriers"</b> -> <b>"Importer un calendrier"</b> puis remplir les champs, bien sélectionner <b>"URL d'un calendrier"</b> et mettre la mise à jour sur <b>"Chaque heure"</b></li>
+                    <li><a href="https://support.apple.com/fr-fr/guide/iphone/iph3d1110d4/ios">Iphone</a></li>
+                    <li><u>Android</u> : le plus simple est d'ajouter le calendrier à votre agenda Google, la synchronisation se fera ensuite automatiquement. </li>
+                </ul>
                 <h3>Comment puis-je ajouter mon association sur tekiens.net ?</h3>
                 Pour ajouter votre association sur tekiens.net, vous devez contacter le bureau de l'association <RouterLink to="/assos/atilla">Atilla</RouterLink>.
                 La plateforme n'est actuellement dédiée qu'aux associations de CY Tech.
