@@ -13,7 +13,7 @@ Pour les étudiants, un système de calendrier (ICS) permet d'ajouter le flux de
 
 Le site utilise actuellement [Flask](https://flask.palletsprojects.com) pour gérer le back-end, en Python donc. 
 
-Le framework javascript [VueJS](https://vuejs.org/) est utilisé pour le back-end et la base de données est géré en SQL (MySQL/MariaDB)
+Le framework javascript [VueJS](https://vuejs.org/) est utilisé pour le back-end et la base de données est gérée en SQL (MySQL/MariaDB)
 
 ## Prérequis
 
@@ -33,6 +33,13 @@ ou
 ```sh
 $ apt-get install mysql-server
 ```
+
+### Windows
+
+Installer:
+- [Python](https://www.python.org/downloads/)
+- [NodeJS](https://nodejs.org/en/download/prebuilt-installer)
+- [Mariadb](https://mariadb.org/download)
 
 ### Arch (btw)
 
@@ -57,7 +64,9 @@ Commandes utiles :
 | `devenv shell` | Configure le shell (si direnv non installé) |
 | `devenv up` | Lance tous les processus (mysql, backend, frontend) |
 
-## Installation (Non nécéssaire avec Nix + direnv)
+## Installation 
+
+### Linux(Non nécéssaire avec Nix + direnv)
 ```sh
 $ cd back
 $ chmod 777 data
@@ -68,9 +77,18 @@ $ npm install
 $ cd ..
 ```
 
+### Windows
+Powershell:
+```powershell
+PS> cd .\back 
+PS> py -3 -m venv venv
+PS> .\venv\Scripts\activate  #si script bloqué : "set-executionpolicy remotesigned" dans powershell 
+PS> pip install -r .\requirements.txt
+```
+
 ### Mise en place de MariaDB
 
-#### Installation et démarrage de MariaDB
+#### Installation et démarrage de MariaDB (Hors Windows)
 ```sh
 sudo mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 sudo systemctl enable mariadb.service
@@ -80,6 +98,9 @@ sudo mariadb-secure-installation
 puis suivre les étapes d'installation sécurisée de MariaDB.
 
 #### Création d'un utilisateur
+
+pour Windows, utiliser ces lignes de commandes avec l'app : "Command Prompt MariaDB" 
+
 ```sh
 mariadb -u root -p
 CREATE USER 'tekiens_net'@'localhost' IDENTIFIED BY '[PASSWORD]';
@@ -88,6 +109,9 @@ quit
 ```
 
 #### Création de la base de données
+
+pour Windows, utiliser ces lignes de commandes avec l'app : "Command Prompt MariaDB" 
+
 ```sh
 mariadb -u tekiens_net -p
 CREATE DATABASE tekiens_net CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -105,10 +129,11 @@ MariaDB [tekiens_net]> SHOW TABLES;
 | Tables_in_tekiens_net |
 +-----------------------+
 | assos                 |
+| emails                |
 | events                |
 | sessions              |
 +-----------------------+
-3 rows in set (0.001 sec)
+4 rows in set (0,001 sec)
 ```
 
 #### Création du dotenv
@@ -142,18 +167,41 @@ Si vous voulez utiliser le serveur SMTP de gmail et utiliser votre propre adress
 
 ### Compilation du front-end
 
+#### Linux:
+
 ```sh
 $ cd front
 $ npm run build
 $ cd ..
 ```
 
+#### Windows:
+
+Powershell:
+```powershell
+PS> cd .\front
+PS> npm run build
+PS> cd ..
+```
+
 ### Exécution en mode développement
+
+#### Linux:
 
 ```sh
 $ cd back
 $ venv/bin/python3 -m flask run
 $ cd ..
+```
+
+#### Windows:
+
+Powershell:
+```powershell
+PS> cd .\back
+PS> .\venv\Scripts\activate
+PS> python -m flask run
+PS> cd ..
 ```
 
 ### Exécution en mode production avec Apache2
