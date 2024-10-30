@@ -13,7 +13,9 @@ Pour les étudiants, un système de calendrier (ICS) permet d'ajouter le flux de
 
 Le site utilise actuellement [Flask](https://flask.palletsprojects.com) pour gérer le back-end, en Python donc. 
 
-Le framework javascript [VueJS](https://vuejs.org/) est utilisé pour le back-end et la base de données est gérée en SQL (MySQL/MariaDB)
+Le framework javascript [VueJS](https://vuejs.org/) est utilisé pour le front-end.
+
+Et la base de données est gérée en SQL (MySQL/MariaDB).
 
 ## Prérequis
 
