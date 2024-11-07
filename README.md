@@ -2,12 +2,14 @@
 
 # Tekiens.net
 
-**Tekiens.net** est un site web dédié à la vie étudiante à CY Tech, créé par [Atilla](https://atilla.org). L'objectif de ce site est de centraliser les informations sur les associations et les événements à l'école.
+[**Tekiens.net**](https://tekiens.net/) est un site web dédié à la vie étudiante à CY Tech, créé par [Atilla](https://atilla.org). L'objectif de ce site est de centraliser les informations sur les associations et les événements à l'école.
 
 Il propose actuellement un profil pour chaque association permettant de répertorier toutes les informations utile sur l'association et de publier des évènements qui seront à la fois présents sur la page Association et dans la page Evènement qui récapitule tous les évènements en cours ou à venir à CY tech. 
 Le site peut aussi générer une mise en forme HTML de mail à partir de template pour aider les association dans leur communication. 
 
 Pour les étudiants, un système de calendrier (ICS) permet d'ajouter le flux des évènements d'une ou plusieurs associations à son calendrier en plus d'un flux RSS.
+
+Vous pouvez aussi rejoindre le [serveur discord](https://discord.gg/yx7ectUSUV) si vous voulez participer au projet!
 
 ## Technologies utilisées
 
@@ -59,12 +61,12 @@ pacman -S mariadb
 Installer direnv (https://direnv.net/) (optionnel)
 
 Commandes utiles :
-| Commande | Description |
-| --- | --- |
-| `direnv allow` | Autorise la configuration du shell automatique |
-| `direnv reload` | Reload le shell |
-| `devenv shell` | Configure le shell (si direnv non installé) |
-| `devenv up` | Lance tous les processus (mysql, backend, frontend) |
+| Commande        | Description                                         |
+| --------------- | --------------------------------------------------- |
+| `direnv allow`  | Autorise la configuration du shell automatique      |
+| `direnv reload` | Reload le shell                                     |
+| `devenv shell`  | Configure le shell (si direnv non installé)         |
+| `devenv up`     | Lance tous les processus (mysql, backend, frontend) |
 
 ## Installation 
 

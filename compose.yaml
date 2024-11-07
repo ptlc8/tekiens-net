@@ -11,6 +11,16 @@ services:
       DATABASE_PASS: secret
       DATABASE_NAME: tekiens-net
     restart: always
+    develop:
+      watch:
+        - action: sync
+          path: ./webserver
+          target: /
+          ignore:
+            - node_modules/
+            - venv/
+        - action: rebuild
+          path: package.json
   database:
     image: mariadb:lts
     expose:
