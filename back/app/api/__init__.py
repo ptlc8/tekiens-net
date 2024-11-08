@@ -2,11 +2,12 @@ from flask import Blueprint, request, g
 import json
 
 from . import assos
+from . import campus
 from . import emails
 from . import events
 from . import sessions
-from . import templates
 from . import socials
+from . import templates
 
 
 # api blueprint and helpers
@@ -48,6 +49,10 @@ def after_request(response):
 
 # assos
 api.register_blueprint(assos.blueprint, url_prefix='/assos')
+
+
+# campus
+api.register_blueprint(campus.blueprint, url_prefix='/campus')
 
 
 # events

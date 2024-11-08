@@ -4,7 +4,7 @@ const baseUrl = import.meta.env.VITE_BASE_URL ?? "";
 
 const Api = {
     assos: {
-        get(params={}) {
+        get(params = {}) {
             return sendApiRequest("GET", "assos", params, "Getting assos")
                 .then(assos => mapResponse(assos, parseAsso));
         },
@@ -12,16 +12,16 @@ const Api = {
             return sendApiRequest("GET", "assos/" + encodeURIComponent(id), {}, "Getting asso " + id)
                 .then(parseAsso);
         },
-        getEvents(id, params={}) {
+        getEvents(id, params = {}) {
             return sendApiRequest("GET", "assos/" + encodeURIComponent(id) + "/events", params, "Getting asso " + id + " events ")
                 .then(events => mapResponse(events, parseEvent));
         },
-        update(id, asso, session=localStorage.getItem("session")) {
+        update(id, asso, session = localStorage.getItem("session")) {
             return sendApiRequest("PUT", "assos/" + encodeURIComponent(id), { ...unparseAsso(asso), session }, "Updating asso " + id);
         },
     },
     events: {
-        get(params={}) {
+        get(params = {}) {
             return sendApiRequest("GET", "events", params, "Getting events")
                 .then(events => mapResponse(events, parseEvent));
         },
@@ -29,13 +29,13 @@ const Api = {
             return sendApiRequest("GET", "events/" + encodeURIComponent(id), {}, "Getting event " + id)
                 .then(parseEvent);
         },
-        update(id, event, session=localStorage.getItem("session")) {
+        update(id, event, session = localStorage.getItem("session")) {
             return sendApiRequest("PUT", "events/" + encodeURIComponent(id), { ...event, session }, "Updating event " + id);
         },
-        create(event, session=localStorage.getItem("session")) {
+        create(event, session = localStorage.getItem("session")) {
             return sendApiRequest("POST", "events", { ...event, session }, "Adding event");
         },
-        delete(id, session=localStorage.getItem("session")) {
+        delete(id, session = localStorage.getItem("session")) {
             return sendApiRequest("DELETE", "events/" + encodeURIComponent(id), { session }, "Deleting event " + id);
         }
     },
@@ -43,11 +43,11 @@ const Api = {
         async create(assoId, password) { //authentificate the user and return a session id if success
             //the user call the api to get a challenge
 
-            let {challenge, salt} = await sendApiRequest("POST", "sessions", { asso: assoId }, "Challenge session"); 
-            
-            
+            let { challenge, salt } = await sendApiRequest("POST", "sessions", { asso: assoId }, "Challenge session");
+
+
             let hash_password = await bcrypt.hash(password, salt);
-            
+
             let hash_challenge = await hash(challenge + hash_password);
 
             //the user send the hash of the challenge and the password
@@ -71,7 +71,7 @@ const Api = {
         getEmail(id, eventId) {
             return sendApiRequest("GET", "templates/" + encodeURIComponent(id) + "/" + encodeURIComponent(eventId), { event: eventId }, "Getting template " + id + " for event " + eventId);
         },
-        send(id, eventId, to, session=localStorage.getItem("session")) {
+        send(id, eventId, to, session = localStorage.getItem("session")) {
             return sendApiRequest("POST", "templates/" + encodeURIComponent(id) + "/" + encodeURIComponent(eventId) + "/send", { to, session }, "Sending email for event " + eventId + "with template " + id);
         }
     },
@@ -83,6 +83,11 @@ const Api = {
     socials: {
         get() {
             return sendApiRequest("GET", "socials", {}, "Getting socials");
+        }
+    },
+    campus: {
+        get() {
+            return sendApiRequest("GET", "campus", {}, "Getting campus");
         }
     }
 };
@@ -113,7 +118,7 @@ function mapResponse(arrayResponse, callbackfn) {
 }
 
 
-function sendApiRequest(method, endpoint, parameters={}, message=undefined) {
+function sendApiRequest(method, endpoint, parameters = {}, message = undefined) {
     return new Promise(function (resolve, reject) {
         if (message !== undefined) {
             console.info("[API] " + message);
@@ -158,7 +163,7 @@ function sendApiRequest(method, endpoint, parameters={}, message=undefined) {
 async function hash(string) {
     const sourceBytes = new TextEncoder().encode(string);
     const disgest = await crypto.subtle.digest("SHA-256", sourceBytes);
-    const hash = Array.from(new Uint8Array(disgest)).map(b => b.toString(16).padStart(2, "0")).join(""); 
+    const hash = Array.from(new Uint8Array(disgest)).map(b => b.toString(16).padStart(2, "0")).join("");
     return hash;
 }
 

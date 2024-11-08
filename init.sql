@@ -1,3 +1,8 @@
+CREATE TABLE IF NOT EXISTS `campus` (
+  `name` varchar(60) NOT NULL COMMENT 'campus name',
+  PRIMARY KEY (`name`)
+) ENGINE = InnoDB;
+
 CREATE TABLE IF NOT EXISTS `assos` (
   `id` varchar(24) NOT NULL COMMENT 'identifier (slug like)',
   `names` text NOT NULL COMMENT 'names separated by comma',
@@ -6,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `assos` (
   `start` int DEFAULT NULL COMMENT 'creation year',
   `end` int DEFAULT NULL COMMENT 'dissolution year',
   `theme` text NOT NULL COMMENT 'theme',
-  `campus` text NOT NULL COMMENT 'campus',
+  `campus` varchar(60) NOT NULL COMMENT 'campus',
   `room` text DEFAULT NULL COMMENT 'room',
   `socials` text NOT NULL COMMENT 'social networks separated by comma and colon',
   `description` text DEFAULT NULL COMMENT 'description',
@@ -14,6 +19,10 @@ CREATE TABLE IF NOT EXISTS `assos` (
   `challenge` char(32) COMMENT 'string generated to verify the password',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
+
+ALTER TABLE `assos`
+  ADD CONSTRAINT `campus_asso` FOREIGN KEY (`campus`) REFERENCES `campus` (`name`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
 
 CREATE TABLE IF NOT EXISTS `events` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT 'identifier',

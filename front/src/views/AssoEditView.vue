@@ -23,7 +23,8 @@ export default {
             asso: {},
             originalAsso: {},
             sendingRequest: false,
-            error: null
+            error: null,
+            campusList: []
         }
     },
     computed: {
@@ -32,7 +33,7 @@ export default {
                 return true;
             if (this.sessionStore.session === undefined || !this.originalAsso.id) // not loaded
                 return undefined;
-            return this.sessionStore.session.asso_id != this.originalAsso.id;
+                return this.sessionStore.session.asso_id != this.originalAsso.id;
         }
     },
     methods: {
@@ -40,21 +41,29 @@ export default {
             let fields = {};
             for (let field in this.asso)
                 if (this.asso[field] != this.originalAsso[field])
-                    fields[field] = this.asso[field];
+                fields[field] = this.asso[field];
             this.sendingRequest = true;
             Api.assos.update(this.originalAsso.id, fields)
                 .then(() => this.$router.push('/assos/' + encodeURIComponent(this.asso.id)))
                 .catch(error => this.error = error)
                 .finally(() => this.sendingRequest = false);
+            },
+            loadCampus() {
+                let campusList = [];
+            Api.campus.get().then(res => {
+                this.campusList = res;
+                console.error(campusList);
+            });
         }
     },
     watch: {
         isNotGranted(isNotGranted) {
             if (isNotGranted)
-                this.$router.push('/assos/' + encodeURIComponent(this.$route.params.id));
+            this.$router.push('/assos/' + encodeURIComponent(this.$route.params.id));
         }
     },
     mounted() {
+        this.loadCampus();
         if (this.isNotGranted)
             this.$router.push('/assos/' + encodeURIComponent(this.$route.params.id));
     },
@@ -90,7 +99,10 @@ export default {
                 <label for="theme">Thème</label>
                 <input v-model="asso.theme" id="theme" name="theme" type="text" required maxlength="255" placeholder="Thème intéressant" />
                 <label for="campus">Campus</label>
-                <input v-model="asso.campus" id="campus" name="campus" type="text" required maxlength="255" placeholder="Cergy" />
+                <!-- <input v-model="asso.campus" id="campus" name="campus" type="text" required maxlength="255" placeholder="Cergy" /> -->
+                <select v-model="asso.campus" id="campus" name="campus" required>
+                    <option v-for="(campus, i) in campusList" :key="i" :value="campus.name">{{ campus.name }}</option>
+                </select>
                 <label for="room">Local associatif (facultatif)</label>
                 <input v-model="asso.room" id="room" name="room" type="text" maxlength="255" placeholder="CY 211" />
                 <label for="color">Couleur</label>

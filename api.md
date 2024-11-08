@@ -17,8 +17,8 @@ Les paramètres peuvent être passés dans l'URL ou dans le corps de la requête
 
 ### Endpoints
 
-| Méthode   | URL                                                                      | Description                                                                             |
-|-----------|--------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| Méthode  | URL                                                                      | Description                                                                             |
+| -------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
 | 🔵 GET    | [/api/assos](#-get-apiassos)                                             | Récupère toutes les associations                                                        |
 | 🔵 GET    | [/api/assos/{id}](#-get-apiassosid)                                      | Récupère l'association avec l'identifiant {id}                                          |
 | 🟡 PUT    | [/api/assos/{id}](#-put-apiassosid)                                      | Met à jour l'association avec l'identifiant {id}                                        |
@@ -37,6 +37,7 @@ Les paramètres peuvent être passés dans l'URL ou dans le corps de la requête
 | 🟢 POST   | [/api/templates/{id}/{event_id}/send](#-post-apitemplatesidevent_idsend) | Envoie un email à propos de l'évenement {event_id} via la template {id}                 |
 | 🔵 GET    | [/api/socials](#-get-apisocials)                                         | Récupère la liste des réseaux sociaux supportés                                         |
 | 🔵 GET    | [/api/emails](#-get-apiemails)                                           | Récupère la liste des groupe d'emails (uniquement les noms et les ids)                  |
+| 🔵 GET    | [/api/campus](#-get-apicampus)                                           | Récupère la liste des campus (uniquement les noms)                                      |
 
 
 ## Généralités
@@ -271,3 +272,11 @@ Récupère la liste des réseaux sociaux supportés.
 
 Récupère la liste des adresses email (aka mailing list) de cy-tech
 - Fonction api.js : `Api.emails.get()`
+
+
+## Campus
+
+### 🔵 `GET /api/campus`
+
+Récupère la liste des campus de cy-tech  
+- Fonction api.js : `Api.campus.get()`

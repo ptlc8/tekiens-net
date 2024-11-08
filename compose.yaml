@@ -13,14 +13,9 @@ services:
     restart: always
     develop:
       watch:
-        - action: sync
-          path: ./webserver
-          target: /
-          ignore:
-            - node_modules/
-            - venv/
         - action: rebuild
-          path: package.json
+          path: ./
+          target: /app
   database:
     image: mariadb:lts
     expose:

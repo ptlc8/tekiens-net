@@ -2,6 +2,8 @@
 *.md
 .env
 *.example
+.vscode/
+.git/
 
 # back-end
 /back/venv

@@ -133,6 +133,7 @@ MariaDB [tekiens_net]> SHOW TABLES;
 | Tables_in_tekiens_net |
 +-----------------------+
 | assos                 |
+| campus                |
 | emails                |
 | events                |
 | sessions              |
