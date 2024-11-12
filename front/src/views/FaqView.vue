@@ -53,7 +53,7 @@ import { RouterLink } from 'vue-router';
                 Vous êtes intéressés pour découvrir le code, ou vous voulez simplement participer à l'amélioration de la plateforme ?
                 Rejoignez nous en CY307 ou sur les internets !
                 <h3 id="repo">Comment puis-je trouver le code source de tekiens.net ?</h3>
-                Le code source est disponible sur <a href="https://gitlab.com/ptlc8/tekiens-net" target="_blank">le dépôt public GitLab</a>.
+                Le code source est disponible sur <a href="https://gitlab.atilla.org/tekiens-net/tekiens-net" target="_blank">le dépôt public GitLab</a>.
                 Vous pouvez le cloner, le fork, et contribuer sur la page du projet.
                 <h3>Comment puis-je signaler un problème ou un bug ?</h3>
                 Si vous rencontrez un problème ou un bug, veuillez créer un rapport sur notre page GitLab dans la section des problèmes ou sur le serveur Discord d'Atilla.
