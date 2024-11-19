@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 
-const baseUrl = import.meta.env.VITE_BASE_URL ?? "";
+export const baseUrl = import.meta.env.VITE_BASE_URL ?? "";
+export const origin = import.meta.env.VITE_BACKEND_ORIGIN ?? "";
 
 const Api = {
     assos: {
@@ -95,7 +96,7 @@ const Api = {
 
 function parseAsso(asso) {
     if (asso.logos)
-        asso.logos = asso.logos.map(logo => baseUrl + logo);
+        asso.logos = asso.logos.map(logo => origin + baseUrl + logo);
     return asso;
 }
 
@@ -107,7 +108,7 @@ function unparseAsso(asso) {
 
 function parseEvent(event) {
     if (event.poster)
-        event.poster = baseUrl + event.poster;
+        event.poster = origin + baseUrl + event.poster;
     return event;
 }
 
@@ -144,7 +145,7 @@ function sendApiRequest(method, endpoint, parameters = {}, message = undefined) 
             options.body = urlParameters;
             options.headers = { "Content-Type": "application/x-www-form-urlencoded" };
         }
-        fetch(baseUrl + "/api/" + endpoint, options)
+        fetch(origin + baseUrl + "/api/" + endpoint, options)
             .then(res => {
                 if (res.headers.get("Content-Type") === "application/json")
                     return res.json();

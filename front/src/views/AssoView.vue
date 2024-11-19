@@ -5,17 +5,17 @@ import { mangle } from 'marked-mangle';
 import DOMPurify from 'dompurify';
 import EventPreview from '../components/EventPreview.vue';
 import SwitchButton from '../components/SwitchButton.vue';
+import WebCalLink from '../components/WebCalLink.vue';
 import { useSessionStore } from "../stores/session";
 import { RouterLink } from 'vue-router';
-
-const baseUrl = import.meta.env.VITE_BASE_URL ?? '';
 
 marked.use(mangle(), { breaks: true });
 
 export default {
     components: {
         EventPreview,
-        SwitchButton
+        SwitchButton,
+        WebCalLink
     },
     setup() {
         return {
@@ -46,8 +46,8 @@ export default {
                 return false;
             return this.sessionStore.session.asso_id == this.asso.id;
         },
-        icsUrl() {
-            return location.host + baseUrl + '/assos/' + encodeURIComponent(this.asso.id) + '/events.ics';
+        icsPath() {
+            return '/assos/' + encodeURIComponent(this.asso.id) + '/events.ics';
         },
         showPastEvents: {
             get() {
@@ -154,11 +154,7 @@ export default {
                     </a>
                     <hr />
                     <button v-if="canShare()" @click="share">Partager l'association</button>
-                    <a target="_blank" :href="'webcal://' + icsUrl">
-                        <button>Ajouter à votre agenda</button>
-                    </a>
-                    URL de l'agenda :
-                    <input type="text" :value="icsUrl" readonly />
+                    <WebCalLink :path="icsPath" />
                     <hr />
                     <span v-if="asso.names?.length > 1">{{ asso.names.length > 2 ? 'Anciens noms' : 'Ancien nom' }} :</span>
                     <ul v-if="asso.names?.length > 1">

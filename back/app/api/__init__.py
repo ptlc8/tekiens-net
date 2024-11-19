@@ -48,8 +48,9 @@ def get_arg(multidict, key):
 # CORS
 @api.after_request
 def after_request(response):
-    response.headers['Access-Control-Allow-Origin'] = "*"
-    response.headers['Access-Control-Allow-Methods'] = "GET, POST, HEAD, PUT, PATCH, DELETE"
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, HEAD, OPTIONS, PUT, PATCH, DELETE'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
     return response
 
 

@@ -2,6 +2,7 @@
 import Api from '../api';
 import EventPreview from '../components/EventPreview.vue';
 import SwitchButton from '../components/SwitchButton.vue';
+import WebCalLink from '../components/WebCalLink.vue';
 
 const baseUrl = import.meta.env.VITE_BASE_URL ?? '';
 const eventsPerPage = 50;
@@ -9,7 +10,8 @@ const eventsPerPage = 50;
 export default {
     components: {
         EventPreview,
-        SwitchButton
+        SwitchButton,
+        WebCalLink
     },
     data() {
         return {
@@ -55,7 +57,7 @@ export default {
         rssUrl() {
             return location.protocol + '//' + location.host + baseUrl + '/events.rss';
         },
-        icsUrl() {
+        icsPath() {
             return location.host + baseUrl + '/events.ics';
         }
     },
@@ -204,11 +206,9 @@ export default {
             <a target="_blank" :href="rssUrl">
                 <button>Ajouter le flux RSS</button>
             </a>
-            URL de l'agenda :
-            <input type="text" :value="icsUrl" readonly />
-            <a target="_blank" :href="'webcal://' + icsUrl">
-                <button>Ajouter tous les événements à mon agenda</button>
-            </a>
+            <WebCalLink :path="icsPath">
+                Ajouter tous les événements à mon agenda
+            </WebCalLink>
         </article>
     </section>
 </template>
@@ -251,5 +251,9 @@ export default {
 .feeds {
     display: flex;
     flex-direction: column;
+
+    button {
+        width: 100%;
+    }
 }
 </style>

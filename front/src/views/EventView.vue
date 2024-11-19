@@ -7,13 +7,15 @@ import DOMPurify from 'dompurify';
 import { useSessionStore } from '../stores/session';
 import { RouterLink } from 'vue-router';
 import QRCode from '../components/QRCode.vue'
+import DownloadButton from '../components/DownloadButton.vue';
 
 marked.use(mangle(), { breaks: true });
 
 export default {
     components: {
         RouterLink,
-        QRCode
+        QRCode,
+        DownloadButton,
     },
     setup() {
         return {
@@ -52,7 +54,7 @@ export default {
             return `${days}j ${hours}h ${minutes}min`.replace(/ 0min/, '').replace(/ 0h/, '').replace(/^0j /, '');
         },
         warning() {
-            if (this.event.status != 'programmed')
+            if (this.event && this.event.status != 'programmed')
                 return "⚠️ Attention ! Cette événement est " + getEventStatus(this.event, true) + ".";
             return undefined;
         }
@@ -146,10 +148,11 @@ export default {
                     <span v-if="event.capacity">👥 {{ event.capacity }} places</span>
                     <span>📝 Crée le {{ formatDateTime(event.createDate) }}</span>
                     <span>🔄 Dernière mise à jour le {{ formatDateTime(event.lastUpdateDate) }}</span>
-                    <a :href="event.link" target="_blank">
+                    <a v-if="event.link" :href="event.link" target="_blank">
                         <QRCode class="qr-code" :value="event.link" />
-                        <button v-if="event.link">🖇 Lien de l'événement</button>
+                        <button >🖇 Lien de l'événement</button>
                     </a>
+                    <DownloadButton :download-url="`/events/${event.id}.ics`" :file-name="event.title + '.ics'" />
                 </div>
             </div>
         </article>
