@@ -9,6 +9,10 @@ default:
   image: docker:latest
   services:
     - docker:dind
+  cache:
+    key: docker-cache
+    paths:
+      - /var/lib/docker
 
 # Job building docker image
 build-docker-job:
@@ -17,7 +21,7 @@ build-docker-job:
     - echo "Building docker image... but first logging in to $CI_REGISTRY"
     - echo $CI_JOB_TOKEN | docker login $CI_REGISTRY -u gitlab-ci-token --password-stdin
     - docker pull $CI_REGISTRY_IMAGE:latest || true
-    - docker build --cache-from $CI_REGISTRY_IMAGE:latest -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+    - docker build --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $CI_REGISTRY_IMAGE:latest -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
     - echo "Docker image built."
   rules:
@@ -59,6 +63,33 @@ lint-back-job:
         paths:
           - "back/**/*"
         compare_to: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+
+# Job testing the SQL files
+test-sql-job:
+  stage: test
+  image: mariadb:lts
+  services:
+    - name: mariadb:lts
+      alias: db
+      variables:
+        MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
+      entrypoint:
+        - /bin/sh
+        - -c
+        - cp "$CI_PROJECT_DIR"/mariadb.cnf /etc/mysql/conf.d/mariadb.cnf && docker-entrypoint.sh mariadbd
+  script:
+    - echo "Testing SQL files..."
+    - cp mariadb.cnf /etc/mysql/conf.d/mariadb.cnf
+    - mariadb -h db --skip_ssl -e "CREATE DATABASE test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+    - mariadb -h db --skip_ssl -D test < init.sql
+    - mariadb -h db --skip_ssl -D test -e "SHOW TABLES;"
+    - mariadb -h db --skip_ssl -D test < sample.sql
+    - echo "SQL files tested."
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        paths:
+          - "*.sql"
 
 # Job testing the container
 test-docker-job:
