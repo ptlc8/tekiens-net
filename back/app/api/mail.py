@@ -10,7 +10,7 @@ smtp_address = os.environ.get("SMTP_ADDRESS")
 smtp_port = os.environ.get("SMTP_PORT")
 smtp_username = os.environ.get("SMTP_USERNAME")
 smtp_password = os.environ.get("SMTP_PASSWORD")
-is_smtp_supported = smtp_address and smtp_port and smtp_username and smtp_password
+is_smtp_supported = smtp_address and smtp_port
 if not is_smtp_supported:
     print("Warning: not all required smtp related environment variables are set")
 
@@ -21,7 +21,8 @@ if is_smtp_supported:
             server = SMTP_SSL(smtp_address, smtp_port, context=ssl.create_default_context())
         else:
             server = SMTP(smtp_address, smtp_port)
-        server.login(smtp_username, smtp_password)
+        if smtp_username and smtp_password:
+            server.login(smtp_username, smtp_password)
         smtp_server = server
     except Exception as e:
         is_smtp_supported = False
