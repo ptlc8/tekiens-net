@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Install dependencies
 COPY front/package*.json ./
-RUN npm ci
+RUN npm ci --omit=dev
 
 # Copy the code
 COPY front .
