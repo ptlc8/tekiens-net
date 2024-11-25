@@ -6,7 +6,9 @@ export const eventStatus = {
     movedOnline: '🟦 Déplacé en ligne'
 };
 
-export function getEventStatus(event) {
+export function getEventStatus(event, real = false) {
+    if (real || ['cancelled', 'rescheduled'].includes(event.status))
+        return eventStatus[event.status];
     let date = Date.parse(event.date + 'Z');
     if (new Date(date + (event.duration ?? 0) * 60 * 1000) < new Date())
         return '⬛ Terminé';

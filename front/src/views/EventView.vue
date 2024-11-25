@@ -12,6 +12,7 @@ marked.use(mangle(), { breaks: true });
 
 export default {
     components: {
+        RouterLink,
         QRCode
     },
     setup() {
@@ -49,6 +50,11 @@ export default {
             var hours = Math.floor(this.event.duration / 60) % 24;
             var minutes = this.event.duration % 60;
             return `${days}j ${hours}h ${minutes}min`.replace(/ 0min/, '').replace(/ 0h/, '').replace(/^0j /, '');
+        },
+        warning() {
+            if (this.event.status != 'programmed')
+                return "⚠️ Attention ! Cette événement est " + getEventStatus(this.event, true) + ".";
+            return undefined;
         }
     },
     methods: {
@@ -103,6 +109,7 @@ export default {
 <template>
     <section>
         <article :style="{ '--accent-color': asso?.color, '--bg-color': backgroundColor }">
+            <div v-if="warning" class="warning">{{ warning }}</div>
             <div v-if="event" class="event">
                 <div class="main">
                     <h2>{{ event.title }}</h2>
@@ -150,10 +157,19 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+.warning {
+    margin-bottom: 1em;
+    padding: 1em 2em;
+    border-radius: 8px;
+    background-color: var(--warning-color);
+    text-align: center;
+    font-weight: bold;
+}
+
 .event {
     display: flex;
     gap: 1em;
-    
+
     .main {
         flex: 4;
         display: flex;
