@@ -231,6 +231,16 @@ Pour ajouter un échantillon de données, exécuter le script `sample.sql` dans 
 cp -r back/data.sample/* back/data/
 ```
 
+
 ## API
 
 Voir [api.md](api.md).
+
+
+## Infrastructure actuelle
+
+Le site est actuellement hébergé dans une VM chez [Atilla](https://atilla.org) avec un serveur web Apache2.
+
+La base de données est gérée par MySQL 8 dans une autre VM et les certificats SSL sont gérés en dehors de la VM.
+
+Pour plus d'informations, voir la page de [documentation de la VM](https://wiki.atilla.org/xwiki/bin/view/Services/Tekiens.net/).
