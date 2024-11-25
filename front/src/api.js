@@ -126,12 +126,14 @@ function sendApiRequest(method, endpoint, parameters = {}, message = undefined) 
         var urlParameters = Object.entries(parameters)
             .filter(([_, v]) => v !== undefined)
             .map(([k, v]) =>
-                v instanceof Array ?
-                    v.map(i => k + "[]=" + encodeURIComponent(i)).join("&")
-                : v instanceof Date ?
+                v instanceof Array ? (
+                    v.length == 0 ?
+                        k + "[]=%00"
+                    : v.map(i => k + "[]=" + encodeURIComponent(i)).join("&")
+                ) : v instanceof Date ?
                     k + "=" + encodeURIComponent(v.toISOString())
                 : v === null ?
-                    k + "="
+                    k + "=%00"
                 :
                     k + "=" + encodeURIComponent(v)
             ).join("&");

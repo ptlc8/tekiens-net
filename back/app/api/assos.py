@@ -3,7 +3,7 @@ from flask import Blueprint, g
 from .. import api
 from ..database import get_db
 from . import data
-from .socials import socials
+from .socials import parse_social
 from .events import parse_event
 
 
@@ -15,16 +15,8 @@ def parse_asso(asso):
     asso['names'] = asso['names'].split(',')
     asso['logos'] = ['/' + logo for logo in data.get_asso_logos_paths(asso['id'], int(asso['logos']))]
     asso_socials = []
-    for s in asso['socials'].split(','):
-        id = s.split(':')[0]
-        id = id if id in socials else 'web'
-        value = s.split(':', 1)[-1]
-        asso_socials.append({
-            'id': id,
-            'display': socials[id]['display'].format(value),
-            'link': socials[id]['link'].format(value),
-            'value': value
-        })
+    for s in (asso['socials'].split(',') if asso['socials'] else []):
+        asso_socials.append(parse_social(s))
     asso['socials'] = asso_socials
     asso['color'] = f'#{asso["color"]:0{6}x}'
     return asso

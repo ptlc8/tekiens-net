@@ -28,15 +28,21 @@ def error(message, status=400, **kwargs):
 def url_value_preprocess(endpoint, values):
     g.args = {}
     for k in request.args.keys():
-        if k.endswith('[]'):
-            g.args[k[0:-2]] = request.args.getlist(k) or None
-        else:
-            g.args[k] = request.args.get(k) or None
+        key, value = get_arg(request.args, k)
+        g.args[key] = value
     for k in request.form.keys():
-        if k.endswith('[]'):
-            g.args[k[0:-2]] = request.form.getlist(k) or None
-        else:
-            g.args[k] = request.form.get(k) or None
+        key, value = get_arg(request.form, k)
+        g.args[key] = value
+
+def get_arg(multidict, key):
+    if key.endswith('[]'):
+        if multidict.get(key) == '\x00':
+            return key[0:-2], []
+        return key[0:-2], multidict.getlist(key)
+    else:
+        if multidict.get(key) == '\x00':
+            return key, None
+        return key, multidict.get(key)
 
 
 # CORS

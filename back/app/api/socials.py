@@ -73,6 +73,18 @@ socials = {
 }
 
 
+def parse_social(social):
+    id = social.split(':')[0]
+    id = id if id in socials else 'web'
+    value = social.split(':', 1)[-1]
+    return {
+        'id': id,
+        'display': socials[id]['display'].format(value),
+        'link': socials[id]['link'].format(value),
+        'value': value
+    }
+
+
 blueprint = Blueprint('socials', __name__)
 
 @blueprint.route('', methods=['GET'])
