@@ -143,7 +143,12 @@ function sendApiRequest(method, endpoint, parameters = {}, message = undefined) 
             options.headers = { "Content-Type": "application/x-www-form-urlencoded" };
         }
         fetch(baseUrl + "/api/" + endpoint, options)
-            .then(res => res.json())
+            .then(res => {
+                if (res.headers.get("Content-Type") === "application/json")
+                    return res.json();
+                else
+                    throw new Error(res.statusText);
+            })
             .then(function (response) {
                 if (!response.success) {
                     console.error("[API] " + response.error);
