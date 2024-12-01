@@ -62,5 +62,5 @@ def get_asso_events(id):
     events = mycursor.fetchall()
     # create ics calendar
     name = asso['names'][0] + ' - Tekiens.net'
-    cal = create_ics(name, events, color=asso['color'])
+    cal = create_ics(name, events, color=asso['color'], base_url=request.url_root)
     return Response(cal, mimetype='text/calendar')

@@ -41,7 +41,7 @@ def post_session():
         password = asso['password'].split('$')
 
         salt= '$'+password[1]+'$'+password[2]+'$'+password[3][:22]
-        print(salt)
+        
         mycursor.execute("UPDATE assos SET challenge = %s WHERE id = %s", (challenge, asso_id))
 
         return api.success({'challenge' : challenge,'salt' : salt}, 201)

@@ -25,7 +25,6 @@ export default {
         mightShowSendModal() {
             const session = this.sessionStore.session
             const event = this.events.find(e => e.id === this.selectedEventId)
-            console.log(session, event)
             return session !== null && event !== undefined && session.asso_id === event.asso_id
         },
     },

@@ -52,7 +52,6 @@ export default {
                 let campusList = [];
             Api.campus.get().then(res => {
                 this.campusList = res;
-                console.error(campusList);
             });
         }
     },

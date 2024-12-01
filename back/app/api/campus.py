@@ -5,7 +5,7 @@ from .. import api
 
 blueprint = Blueprint('campus', __name__)
 
-@blueprint.route('/', methods=['GET'])
+@blueprint.route('', methods=['GET'])
 def get_campus():
     mydb = get_db()
     mycursor = mydb.cursor(dictionary=True)
