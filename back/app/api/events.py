@@ -65,6 +65,8 @@ def post_event():
     session_id = g.args.get('session')
     if not session_id:
         return api.error('Missing session')
+    if 'poster' in g.args and not data.is_valid_image(g.args.get('poster')):
+        return api.error('Invalid poster image', 400)
     new_event = unparse_event({k: v for k, v in g.args.items() if k in events_columns})
     if not all([k in new_event for k in events_needed_columns]):
         return api.error('Missing parameters')
@@ -95,6 +97,8 @@ def put_event(id):
     session_id = g.args.get('session')
     if not session_id:
         return api.error('Missing session')
+    if 'poster' in g.args and not data.is_valid_image(g.args.get('poster')):
+        return api.error('Invalid poster image', 400)
     mydb = get_db()
     mycursor = mydb.cursor(dictionary=True)
     mycursor.execute("SELECT *, (asso_id = (SELECT asso_id FROM sessions WHERE id = %s)) AS editable FROM events WHERE id = %s", (session_id, id,))

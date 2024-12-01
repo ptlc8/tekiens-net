@@ -90,6 +90,8 @@ def put_asso(id):
     session_id = g.args.get('session')
     if not session_id:
         return api.error('Missing session')
+    if 'logos' in g.args and not data.are_valid_images(g.args.get('logos')):
+        return api.error('Invalid logos images', 400)
     mydb = get_db()
     mycursor = mydb.cursor(dictionary=True)
     mycursor.execute("SELECT * FROM sessions WHERE id = %s AND asso_id = %s", (session_id, id))

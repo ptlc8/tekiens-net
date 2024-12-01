@@ -8,12 +8,37 @@ from PIL import Image
 def normalize(string):
     return re.sub(r'[^\w]+', '-', string).strip('-')
 
+
+def get_image(base64_image):
+    base64_image = re.sub(r'data:image/([\w+]+);base64,', '', base64_image).encode()
+    try:
+        return Image.open(io.BytesIO(base64.b64decode(base64_image)))
+    except Exception as e:
+        print(e)
+        return None
+
+def is_valid_image(image):
+    if image.startswith('/'):
+        image_path = re.findall(r'/data/(.*).webp$', image)
+        if image_path and os.path.exists(image_path[0]):
+            return True
+    elif get_image(image):
+            return True
+    return False
+
+def are_valid_images(images):
+    if type(images) is not list:
+        return False
+    return all(is_valid_image(image) for image in images)
+
 def create_image(path, base64_image):
-    base64_image = re.sub(r'data:image/(\w+);base64,', '', base64_image).encode()
-    image = Image.open(io.BytesIO(base64.b64decode(base64_image)))
+    image = get_image(base64_image)
+    if not image:
+        return False
     os.makedirs(os.path.dirname(path), exist_ok=True)
     image.save(path, 'webp', save_all=True)
-    return path
+    return True
+    
 
 def update_asso_folder(old_name, new_name=None):
     old_name = normalize(old_name)
@@ -64,7 +89,8 @@ def get_event_poster_path(asso, title, date):
 
 def create_event_poster(asso, title, date, base64_poster):
     path = get_event_poster_path(asso, title, date)
-    return create_image(path, base64_poster)
+    create_image(path, base64_poster)
+    return path
     
 def update_event_poster(asso, old_title, old_date, title=None, date=None):
     old_path = get_event_poster_path(asso, old_title, old_date)
