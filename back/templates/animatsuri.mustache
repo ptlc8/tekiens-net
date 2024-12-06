@@ -1,4 +1,6 @@
-
+<!DOCTYPE html>
+<html lang="fr">
+<body>
 <div style="
     background-color:#ffffff;
     background-image: url('{{site}}{{event.poster}}');
@@ -56,7 +58,7 @@
             padding: 20px;">
 
             {{#event.poster}}
-            <img style="width:90%; margin:5%; width:-webkit-fill-available;" src="{{site}}{{event.poster}}">
+            <img style="width:90%; margin:5%; width:-webkit-fill-available;" src="{{site}}{{event.poster}}" alt="{{event.title}}">
             {{/event.poster}}
 
             📌 Lieu : {{event.place}}
@@ -135,3 +137,5 @@
 
     </div>
 </div>
+</body>
+</html>

@@ -87,5 +87,5 @@ def send_email(id, event_id):
         'event': event,
         'asso': asso,
         'site': request.scheme + '://' + request.host + request.root_path
-    }))
+    }), from_name=asso['names'][0])
     return api.success(None)
