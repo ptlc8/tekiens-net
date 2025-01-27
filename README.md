@@ -1,6 +1,4 @@
-<img src="https://pic.infini.fr/9ISNflin/b9lylW93.png" alt="drawing" width="500"/>
-
-# Tekiens.net
+# ![Tekiens.net, développé par et pour les étudiants de CY Tech](banner.png)
 
 [**Tekiens.net**](https://tekiens.net/) est un site web dédié à la vie étudiante à CY Tech, créé par [Atilla](https://atilla.org). L'objectif de ce site est de centraliser les informations sur les associations et les événements à l'école.
 
