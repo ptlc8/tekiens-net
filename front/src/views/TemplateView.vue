@@ -23,9 +23,9 @@ export default {
     },
     computed: {
         mightShowSendModal() {
-            const session = this.sessionStore.session
-            const event = this.events.find(e => e.id === this.selectedEventId)
-            return session !== null && event !== undefined && session.asso_id === event.asso_id
+            const session = this.sessionStore.session;
+            const event = this.events.find(e => e.id == this.selectedEventId);
+            return session != null && event != undefined && session.asso_id == event.asso_id;
         },
     },
     methods: {
@@ -111,7 +111,7 @@ export default {
 
 <template>
     <section>
-        <dialog ref="sendDialog" v-if="mightShowSendModal">
+        <dialog ref="sendDialog">
             <form method="dialog" @submit="sendEmail">
                 <div class="buttons tabs">
                     <button type="button" :aria-current="sendToPreset" @click="sendToPreset = true">Groupe CYU</button>
