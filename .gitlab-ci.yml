@@ -85,11 +85,13 @@ test-sql-job:
     - mariadb -h db --skip_ssl -D test -e "SHOW TABLES;"
     - mariadb -h db --skip_ssl -D test < sample.sql
     - echo "SQL files tested."
+  # run this job only when changes are made to an SQL file in a merge request
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         paths:
           - "*.sql"
+        compare_to: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
 
 # Job testing the container
 test-docker-job:
