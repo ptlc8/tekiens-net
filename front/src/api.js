@@ -72,8 +72,8 @@ const Api = {
         getEmail(id, eventId) {
             return sendApiRequest("GET", "templates/" + encodeURIComponent(id) + "/" + encodeURIComponent(eventId), { event: eventId }, "Getting template " + id + " for event " + eventId);
         },
-        send(id, eventId, to, session = localStorage.getItem("session")) {
-            return sendApiRequest("POST", "templates/" + encodeURIComponent(id) + "/" + encodeURIComponent(eventId) + "/send", { to, session }, "Sending email for event " + eventId + "with template " + id);
+        send(id, eventId, recipients, session = localStorage.getItem("session")) {
+            return sendApiRequest("POST", "templates/" + encodeURIComponent(id) + "/" + encodeURIComponent(eventId) + "/send", { recipients, session }, "Sending email for event " + eventId + "with template " + id);
         }
     },
     emails: {

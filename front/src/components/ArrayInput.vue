@@ -9,6 +9,7 @@ export default {
             type: Array,
             default: null
         },
+        noOrder: Boolean,
         name: undefined,
         default: undefined
     },
@@ -60,8 +61,8 @@ export default {
         <template v-for="_, index in values" :key="index">
             <div class="value">
                 <slot :value="values[index]" :placeholder="placeholder ? placeholder[index] : null" :on-input="e => values[index] = e.target.value" :on-update="v => values[index] = v"></slot>
-                <button type="button" @click="moveUp(index)" v-if="index != 0" title="Déplacer vers le haut">⬆</button>
-                <button type="button" @click="moveDown(index)" v-if="index != values.length - 1" title="Déplacer vers le bas">⬇</button>
+                <button type="button" @click="moveUp(index)" v-if="!noOrder && index != 0" title="Déplacer vers le haut">⬆</button>
+                <button type="button" @click="moveDown(index)" v-if="!noOrder && index != values.length - 1" title="Déplacer vers le bas">⬇</button>
                 <button type="button" @click="remove(index)" title="Supprimer">✖</button>
             </div>
         </template>

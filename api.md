@@ -254,7 +254,7 @@ Envoie un email à propos de l'évenement {event_id} via la template {id}
 - Paramètres :
     - id : identifiant de la template
     - event_id : identifiant de l'événement à rendre sur la template
-    - to : l'adresse email à laquelle envoyer l'email
+    - recipients : adresses email auxquelles envoyer l'email (multiple)
 - Fonction api.js : `Api.templates.send(id, eventId, to)`
 
 

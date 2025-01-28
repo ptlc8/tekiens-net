@@ -36,10 +36,10 @@ if is_smtp_supported:
     finally:
         print(f"Info: SMTP server is {'up' if is_smtp_supported else 'down'}")
 
-def send_email(to, subject, body, from_name=None):
+def send_email(recipients, subject, body, from_name=None):
     message = EmailMessage()
     message["From"] = from_name + ' <' + smtp_from + '>' if from_name else smtp_from
-    message["To"] = to
+    message["To"] = ", ".join(recipients)
     message["Subject"] = subject
     message.set_content(body, subtype="html")
     smtp_server.send_message(message)

@@ -1,8 +1,12 @@
 <script>
 import Api from '../api';
 import { useSessionStore } from '../stores/session';
+import ArrayInput from '../components/ArrayInput.vue';
 
 export default {
+    components: {
+        ArrayInput
+    },
     setup() {
         return {
             sessionStore: useSessionStore()
@@ -17,8 +21,10 @@ export default {
             html: "",
             error: null,
             sendEmailError: null,
-            emails: [],
-            sendToPreset: true
+            presets: [],
+            usePresets: true,
+            presetRecipients: [""],
+            customRecipients: [""]
         }
     },
     computed: {
@@ -65,16 +71,13 @@ export default {
             alert('HTML copié !');
         },
         async sendEmail(e) {
-            const data = new FormData(e.target)
-            const preset = data.get('preset') ?? ''
-            const custom = data.get('custom') ?? ''
-            const email = this.sendToPreset ? preset : custom
-            if (email.length === 0) {
+            const recipients = this.usePresets ? this.presetRecipients : this.customRecipients
+            if (recipients.length == 0) {
                 e.preventDefault()
-                this.sendEmailError = "Addresse email requise"
+                this.sendEmailError = "Au moins une addresse email requise"
                 return
             }
-            Api.templates.send(this.selectedTemplate, this.selectedEventId, email)
+            Api.templates.send(this.selectedTemplate, this.selectedEventId, recipients)
                    .then(() => alert("Mail envoyé !"))
                    .catch(() => alert("Une erreur s'est produite lors de l'envoi du mail"))
         },
@@ -103,7 +106,7 @@ export default {
             view.templates = templates;
             view.selectedEventId = to.query.event ?? events[0].id;
             view.selectedTemplate = to.query.template ?? templates[0];
-            view.emails = emails;
+            view.presets = emails;
         })).catch(error => next(view => view.$state.error = error));
     }
 }
@@ -114,18 +117,22 @@ export default {
         <dialog ref="sendDialog">
             <form method="dialog" @submit="sendEmail">
                 <div class="buttons tabs">
-                    <button type="button" :aria-current="sendToPreset" @click="sendToPreset = true">Groupe CYU</button>
-                    <button type="button" :aria-current="!sendToPreset" @click="sendToPreset = false">Personnalisé</button>
+                    <button type="button" :aria-current="usePresets" @click="usePresets = true">Groupe CYU</button>
+                    <button type="button" :aria-current="!usePresets" @click="usePresets = false">Personnalisé</button>
                 </div>
-                <div v-show="sendToPreset">
-                    <label for="preset">Envoyer à un groupe CYU</label>
-                    <select id="preset" name="preset">
-                        <option v-for="email in emails" :key="email.email" :value="email.email">{{ email.name }}</option>
-                    </select>
+                <div v-if="usePresets">
+                    <label for="preset">Envoyer à des groupes CYU</label>
+                    <ArrayInput no-order v-model="presetRecipients" v-slot="{ onInput, value }" id="preset">
+                        <select @input="onInput" :value="value" required>
+                            <option v-for="email in presets" :key="email.email" :value="email.email">{{ email.name }}</option>
+                        </select>
+                    </ArrayInput>
                 </div>
-                <div v-show="!sendToPreset">
-                    <label for="custom">Adresse personnalisée</label>
-                    <input name="custom" id="custom" type="email" placeholder="foo.bar@example.com" />
+                <div v-else>
+                    <label for="custom">Adresses personnalisées</label>
+                    <ArrayInput no-order v-model="customRecipients" v-slot="{ onInput, value }" id="custom">
+                        <input @input="onInput" :value="value" type="email" required placeholder="foo.bar@example.com" />
+                    </ArrayInput>
                 </div>
                 <span v-if="sendEmailError" class="error">{{ sendEmailError }}</span>
                 <button type="submit">Envoyer</button>
@@ -165,16 +172,6 @@ export default {
     background: unset;
     color: unset;
 }
-
-/* HACK: To avoid width difference beetween tabs */
-dialog :is(select, input) {
-    width: auto;
-}
-dialog :has(>:is(select, input)) {
-    display: flex;
-    flex-direction: column;
-}
-/* End of Hack */
 
 .error {
     color: red;

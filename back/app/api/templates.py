@@ -56,9 +56,9 @@ def send_email(id, event_id):
     if not session_id:
         return api.error('Missing session')
 
-    to = g.args.get("to")
-    if not to:
-        return api.error('No receiver provided')
+    recipients = g.args.get("recipients")
+    if not recipients or type(recipients) is not list:
+        return api.error('No recipients provided')
 
     template = mail.get_template(id)
     if template is None:
@@ -83,7 +83,7 @@ def send_email(id, event_id):
     result = mycursor.fetchone()
     asso = assos.parse_asso(result)
 
-    mail.send_email(to, event['title'], mail.render(template, {
+    mail.send_email(recipients, event['title'], mail.render(template, {
         'event': event,
         'asso': asso,
         'site': request.scheme + '://' + request.host + request.root_path
