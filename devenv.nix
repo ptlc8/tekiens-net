@@ -12,7 +12,7 @@
     enable = true;
     initialDatabases = [{
       name = "tekiens_net";
-      schema = ./init.sql;
+      schema = ./db/init.sql;
     }];
     ensureUsers = [{
       name = "tekiens_net";

@@ -79,6 +79,12 @@ cd ..
 
 ### Mise en place de MariaDB
 
+Si vous ne voulez pas vous prendre la tete, vous pouvez utilise l'image docker `lunokino/dev-tekiens-db:latest` :
+```sh
+docker run --rm --name tekiens-db -p 3306:3306 lunokino/dev-tekiens-db:latest
+```
+Vous pouvez trouver les fichiers de build et les creds utilises dans [db/](db/Dockerfile)
+
 #### Installation et démarrage de MariaDB (Hors Windows)
 
 ```sh
@@ -105,8 +111,8 @@ _pour **Windows**, utiliser ces lignes de commandes avec l'app : "Command Prompt
 mariadb -u tekiens_net -p
 CREATE DATABASE tekiens_net CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE tekiens_net;
-SOURCE init.sql
-#SOURCE sample.sql # pour avoir des données d'exemple
+SOURCE db/init.sql
+#SOURCE db/sample.sql # pour avoir des données d'exemple
 SHOW TABLES;
 ```
 _pour **Windows**, utiliser ces lignes de commandes avec l'app : "Command Prompt MariaDB"_
@@ -223,11 +229,13 @@ npm run dev
 
 ## Échantillon de données
 
-Pour ajouter un échantillon de données, exécuter le script `sample.sql` dans la base de données et copier les images du dossier `back/data.sample` dans le dossier `back/data` (en veillant à ce que le propriétaire des fichiers soit celui qui exécute le serveur web) :
+Pour ajouter un échantillon de données, exécuter le script `db/sample.sql` dans la base de données et copier les images du dossier `back/data.sample` dans le dossier `back/data` (en veillant à ce que le propriétaire des fichiers soit celui qui exécute le serveur web) :
 
 ```sh
 cp -r back/data.sample/* back/data/
 ```
+
+Ou si vous utilisez docker, deux lignes en commentaires dans les Dockerfile permettent d'inclure les données d'exemple, [Dockerfile](Dockefile) et [db/Dockerfile](db/Dockerfile).
 
 
 ## API

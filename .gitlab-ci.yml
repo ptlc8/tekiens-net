@@ -64,8 +64,8 @@ lint-back-job:
           - "back/**/*"
         compare_to: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
 
-# Job testing the SQL files
-test-sql-job:
+# Job testing the database files
+test-db-job:
   stage: test
   image: mariadb:lts
   services:
@@ -76,21 +76,21 @@ test-sql-job:
       entrypoint:
         - /bin/sh
         - -c
-        - cp "$CI_PROJECT_DIR"/mariadb.cnf /etc/mysql/conf.d/mariadb.cnf && docker-entrypoint.sh mariadbd
+        - cp "$CI_PROJECT_DIR"/db/mariadb.cnf /etc/mysql/conf.d/mariadb.cnf && docker-entrypoint.sh mariadbd
   script:
     - echo "Testing SQL files..."
-    - cp mariadb.cnf /etc/mysql/conf.d/mariadb.cnf
+    - cp db/mariadb.cnf /etc/mysql/conf.d/mariadb.cnf
     - mariadb -h db --skip_ssl -e "CREATE DATABASE test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-    - mariadb -h db --skip_ssl -D test < init.sql
+    - mariadb -h db --skip_ssl -D test < db/init.sql
     - mariadb -h db --skip_ssl -D test -e "SHOW TABLES;"
-    - mariadb -h db --skip_ssl -D test < sample.sql
+    - mariadb -h db --skip_ssl -D test < db/sample.sql
     - echo "SQL files tested."
   # run this job only when changes are made to an SQL file in a merge request
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         paths:
-          - "*.sql"
+          - "db/**/*"
         compare_to: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
 
 # Job testing the container
